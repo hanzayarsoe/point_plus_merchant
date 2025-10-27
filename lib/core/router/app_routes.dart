@@ -1,0 +1,30 @@
+class AppRoutes {
+  AppRoutes._();
+  static const String initial = 'initial';
+  static const String logIn = 'logIn';
+  static const String logOut = 'logOut';
+  static const String forgetPassword = 'forgetPassword';
+  static const String createNewPassword = 'createNewPassword';
+  static const String verifyNumber = 'verifyNumber';
+  static const String resetPassword = 'resetPassword';
+  static const String terms = 'trems';
+  static const String home = 'home';
+  static const String homeHistory = 'homeHistory';
+  static const String popularMerchant = 'popularMerchants';
+  static const String promoAndRewards = 'promoAndRewards';
+  static const String promoAndRewardDetails = 'promoAndRewardDetails';
+  static const String reward = 'reward';
+  static const String wallet = 'wallet';
+  static const String merchant = 'merchant';
+  static const String profile = 'profile';
+  static const String profilePersonalInformation = 'profilePersonalInformation';
+  static const String profileChangeMobileNumber = 'profileChangeMobileNubmer';
+  static const String profileChangePassword = 'profileChangePassword';
+  static const String profileChangeLanguage = 'profileChangeLanguage';
+  static const String profileTermsAndConditions = 'profileTermsAndConditions';
+  static const String profileAboutPointPlus = 'profileAboutPointPlus';
+  static const String profileDeleteAccount = 'profileDeleteAccount';
+  static const String pointRedeemConfirmPassword = 'pointRedeemConfrimPassword';
+  static const String pointRedeemScanQrCode = 'pointRedeemScanQrCode';
+  static const String merchantDetails = 'merchantDetails';
+}

@@ -1,0 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:pinput/pinput.dart';
+
+final defaultPinTheme = PinTheme(
+  width: 56,
+  height: 56,
+  textStyle: TextStyle(
+    fontFamily: "Walone",
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+  ),
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.white),
+    borderRadius: BorderRadius.circular(10),
+  ),
+);
