@@ -105,6 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                   AppSpacing.extraLargeSizedBox,
                   IconTextFormField(
                     controller: _phoneController,
+                    keyboardType: TextInputType.phone,
                     hint: '---------',
                     prefixIcon: LucideIcons.smartphone,
                     onChanged: (_) => setState(() {}),
@@ -131,9 +132,10 @@ class _LoginPageState extends State<LoginPage> {
                           context.pushNamed(AppRoutes.forgetPassword),
                       child: Text(
                         'forgot password?',
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium!
+                            .copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                       ),
                     ),
                   ),

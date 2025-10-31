@@ -9,6 +9,7 @@ import 'package:merchant/features/auth/domain/usecases/check_auth_status_usecase
 import 'package:merchant/features/auth/domain/usecases/force_log_out_usecase.dart';
 import 'package:merchant/features/auth/domain/usecases/log_in_usecase.dart';
 import 'package:merchant/features/auth/domain/usecases/log_out_usecase.dart';
+import 'package:merchant/features/auth/domain/usecases/refresh_user_usecase.dart';
 import 'package:merchant/features/auth/domain/usecases/reset_password_usecase.dart';
 import 'package:merchant/features/auth/domain/usecases/send_otp_usecase.dart';
 import 'package:merchant/features/auth/domain/usecases/verify_otp_usecase.dart';
@@ -26,6 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SendOtpUsecase sendOtpUsecase;
   final VerifyOtpUsecase verifyOtpUsecase;
   final ResetPasswordUsecase resetPasswordUsecase;
+  final RefreshUserUsecase refreshUserUsecase;
   late final StreamSubscription _refreshFailedSub;
   late final StreamSubscription _refreshSucceededSub;
   AuthBloc(
@@ -37,6 +39,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     this.sendOtpUsecase,
     this.verifyOtpUsecase,
     this.resetPasswordUsecase,
+    this.refreshUserUsecase,
   ) : super(_Initial()) {
     _refreshFailedSub = _dioHelper.refreshFailedStream.listen((_) {
       add(AuthEvent.refreshFailed());
@@ -54,6 +57,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<_SendOtp>(_onSendOtp);
     on<_VerifyOtp>(_onVerifyOtp);
     on<_ResetPassword>(_onResetPassword);
+    on<_RefreshUser>(_onRefreshUser);
   }
 
   Future<void> _onCheckAuthStatus(
@@ -63,17 +67,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final result = await checkAuthStatusUsecase.call().run();
     result.fold(
       (failure) => emit(AuthState.unauthenticated()),
-      (user) => AuthState.authenticated(user),
+      (user) => emit(AuthState.authenticated(user)),
     );
   }
 
   Future<void> _onLogIn(_LogIn event, Emitter<AuthState> emit) async {
     emit(AuthState.loading());
     final result = await logInUsecase.call(event.phone, event.password).run();
-    result.fold(
-      (failure) => emit(AuthState.failure(failure)),
-      (user) => emit(AuthState.authenticated(user)),
-    );
+    result.fold((failure) => emit(AuthState.failure(failure)), (user) {
+      add(AuthEvent.checkAuthStatus());
+    });
   }
 
   Future<void> _onLogOut(_LogOut event, Emitter<AuthState> emit) async {
@@ -146,6 +149,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthState.resetPasswordFailed(failure)),
       (_) => emit(AuthState.resetPasswordSuccessed()),
+    );
+  }
+
+  Future<void> _onRefreshUser(
+    _RefreshUser event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthState.loading());
+    final result = await refreshUserUsecase.call().run();
+    result.fold(
+      (failure) => emit(AuthState.refreshUserFailed(failure)),
+      (user) => emit(AuthState.authenticated(user)),
     );
   }
 

@@ -9,4 +9,12 @@ class ApiUrls {
   static final String forgetPasswordVerifyOtp =
       "/api/auth/forgot-password/verify-otp";
   static final String forgetPasswordReset = "/api/auth/forgot-password/reset";
+  static final String searchCustomerByAccountNumber =
+      "/api/branch/customers/{accountNumber}";
+  static final String givePointByAccountNumber =
+      "/api/branch/points/give-by-account";
+  static final String givePointByQr = "/api/branch/points/give-by-qr";
+  static final String claimPointByAccountNumber =
+      "/api/branch/points/claim-by-account";
+  static final String claimPointByQr = "/api/branch/points/claim-by-qr";
 }

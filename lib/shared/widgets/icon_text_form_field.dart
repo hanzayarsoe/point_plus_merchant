@@ -47,7 +47,7 @@ class IconTextFormField extends StatelessWidget {
       validator: validator,
       style: Theme.of(
         context,
-      ).textTheme.bodyMedium!.copyWith(color: Theme.of(context).hintColor),
+      ).textTheme.bodyLarge!.copyWith(color: Theme.of(context).hintColor),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.zero,
         hintText: hint,

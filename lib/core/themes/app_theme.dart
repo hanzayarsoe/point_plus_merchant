@@ -16,6 +16,9 @@ class AppTheme {
     colorScheme: ColorScheme.dark(
       primary: DarkTheme.primaryColor,
       primaryContainer: DarkTheme.primaryContainerColor,
+      onPrimaryContainer: DarkTheme.onPrimaryContainerColor,
+      primaryFixed: DarkTheme.primaryFixed,
+      surfaceBright: DarkTheme.surfaceBright,
       secondary: DarkTheme.secondaryColor,
       surface: DarkTheme.surfaceColor,
       onSurface: DarkTheme.onSurfaceColor,
@@ -25,6 +28,7 @@ class AppTheme {
       error: DarkTheme.errorColor,
     ),
     textTheme: textTheme,
+
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         overlayColor: Colors.transparent,
@@ -35,13 +39,23 @@ class AppTheme {
     ),
     elevatedButtonTheme: darkElevatedButtonTheme,
     inputDecorationTheme: InputDecorationTheme(
-      hintStyle: TextStyle(color: DarkTheme.hintColor),
+      labelStyle: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Walone',
+      ),
+      hintStyle: TextStyle(
+        color: DarkTheme.hintColor,
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Walone',
+      ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: DarkTheme.borderColor),
         borderRadius: BorderRadius.circular(12),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: DarkTheme.borderColor, width: 1),
+        borderSide: BorderSide(color: DarkTheme.primaryColor, width: 1),
         borderRadius: BorderRadius.circular(12),
       ),
       border: OutlineInputBorder(
@@ -57,6 +71,8 @@ class AppTheme {
         gradientStart: DarkTheme.homeCardGradientStart,
         gradientEnd: DarkTheme.homeCardGradientEnd,
         buttonGradient: DarkTheme.elevatedButtonSecondaryColor,
+        pointTransferCardBorderColor: DarkTheme.transferPointCardBorderColor,
+        pointTransferBalanceColor: DarkTheme.transferPointBalanceColor,
       ),
     ],
   );

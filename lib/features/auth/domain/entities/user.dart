@@ -1,16 +1,22 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:merchant/features/auth/domain/entities/manager.dart';
 
 part 'user.freezed.dart';
 
 @freezed
 abstract class User with _$User {
   const factory User({
-    required int userId,
+    required int id,
     required String name,
-    String? email,
-    String? phoneNumber,
     required String accountNumber,
-    required int pointsBalance,
-    String? gender,
+    String? primaryPhoneNumber,
+    String? email,
+    required String? openTime,
+    required String? closeTime,
+    required int branchAmount,
+    required String branchAddress,
+    required int merchantId,
+    required String merchantName,
+    required Manager manager,
   }) = _User;
 }

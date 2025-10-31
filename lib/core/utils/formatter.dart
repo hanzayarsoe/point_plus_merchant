@@ -25,7 +25,7 @@ class Formatter {
     return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 
-  static String formatNumber(double number) {
+  static String formatNumber(int number) {
     return NumberFormat('#,###').format(number);
   }
 
@@ -33,5 +33,10 @@ class Formatter {
     final RegExp regex = RegExp(r'.{1,4}');
     final Iterable<Match> matches = regex.allMatches(number);
     return matches.map((match) => match.group(0)!).join(' ');
+  }
+
+  static String fromNumberAsHidden(int number) {
+    final hiddenText = '*' * number.toString().length;
+    return hiddenText;
   }
 }

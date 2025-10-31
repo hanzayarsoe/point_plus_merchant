@@ -13,3 +13,5 @@ enum Gender with DisplayNameEnum {
 }
 
 enum DialogType { confirm, delete }
+
+enum TransactionType { transfer, receive, withdraw, recharge }

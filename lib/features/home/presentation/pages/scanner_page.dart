@@ -1,0 +1,229 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:merchant/core/constants/app_assets.dart';
+import 'package:merchant/core/constants/app_spacing.dart';
+import 'package:merchant/core/router/app_routes.dart';
+import 'package:merchant/core/utils/toast.dart';
+import 'package:merchant/features/auth/presentation/widgets/gradient_elevated_button.dart';
+import 'package:merchant/features/home/data/models/point_transfer_model.dart';
+import 'package:merchant/features/home/presentation/widgets/custom_icon.dart';
+import 'package:merchant/shared/widgets/custom_app_bar.dart';
+import 'package:merchant/shared/widgets/loading_overlay.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:toastification/toastification.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+
+class ScannerPage extends StatefulWidget {
+  const ScannerPage({super.key});
+
+  @override
+  State<ScannerPage> createState() => _ScannerPageState();
+}
+
+class _ScannerPageState extends State<ScannerPage> {
+  final MobileScannerController _controller = MobileScannerController(
+    autoStart: true,
+  );
+  String? _scannedValue;
+  bool _isScanning = false;
+
+  @override
+  void dispose() {
+    _controller.stop();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickImageAndScan() async {
+    final picker = ImagePicker();
+    final XFile? pickedImage = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedImage == null) return;
+    setState(() {
+      _isScanning = true;
+    });
+    final BarcodeCapture? capture = await _controller.analyzeImage(
+      pickedImage.path,
+    );
+
+    if (capture != null && capture.barcodes.isNotEmpty) {
+      _scannedValue = capture.barcodes.first.rawValue;
+      showToast(
+        message: _scannedValue.toString(),
+        type: ToastificationType.success,
+      );
+    } else {
+      _isScanning = false;
+      showToast(
+        message: "can't scan your image! please try again!",
+        type: ToastificationType.info,
+      );
+    }
+  }
+
+  void _handleLiveScan(BarcodeCapture capture) {
+    if (capture.barcodes.isNotEmpty) {
+      _controller.stop();
+      _scannedValue = capture.barcodes.first.rawValue;
+      showToast(
+        message: _scannedValue.toString(),
+        type: ToastificationType.success,
+      );
+      log(_scannedValue.toString());
+      _handleQrScan(_scannedValue!);
+    }
+  }
+
+  void _handleQrScan(String scannedValue) {
+    try {
+      final Map<String, dynamic> jsonMap = jsonDecode(scannedValue);
+      var data = PointTransferModel.fromJson(jsonMap);
+      context.pushNamed(AppRoutes.pointTransfer, extra: data.toEntity());
+    } catch (e) {
+      showToast(message: 'qr code is invalid', type: ToastificationType.error);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LoadingOverlay(
+      isLoading: _isScanning,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: CustomAppBar(automaticallyImplyLeading: true),
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(AppAssets.scannerPageBackgroundImage),
+              colorFilter: ColorFilter.mode(
+                Color.fromRGBO(37, 37, 37, 0.5),
+                BlendMode.dstOut,
+              ),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: AppSpacing.defaultPadding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Add QR Code',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  AppSpacing.extraLargeSizedBox,
+                  AppSpacing.extraLargeSizedBox,
+                  Text(
+                    'Scan the QR code to transfer and receive points',
+                    style: Theme.of(context).textTheme.titleMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  AppSpacing.extraLargeSizedBox,
+                  Center(
+                    child: AspectRatio(
+                      aspectRatio: 1.2,
+                      child: ClipRRect(
+                        borderRadius: AppSpacing.normalBorderRadiusCircular,
+                        child: VisibilityDetector(
+                          key: const Key('mobile-scanner'),
+                          onVisibilityChanged: (info) {
+                            if (info.visibleFraction == 0) {
+                              _controller.stop();
+                            } else {
+                              _controller.start();
+                            }
+                          },
+                          child: IgnorePointer(
+                            ignoring: false,
+                            child: MobileScanner(
+                              controller: _controller,
+                              onDetect: (result) => _handleLiveScan(result),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  AppSpacing.extraLargeSizedBox,
+                  Row(
+                    spacing: AppSpacing.largeSpacing,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () async {
+                          await _controller.toggleTorch();
+                          setState(() {});
+                        },
+                        child: CustomIcon(
+                          icon: Icon(
+                            _controller.torchEnabled
+                                ? LucideIcons.zap
+                                : LucideIcons.zapOff,
+                            size: 24,
+                            color: Theme.of(context).colorScheme.inverseSurface,
+                          ),
+                          padding: AppSpacing.normalPadding,
+                          paddingColor: Colors.black,
+                          linearGradientColor: [
+                            Theme.of(context).colorScheme.primary,
+                            Theme.of(context).colorScheme.onPrimaryContainer,
+                          ],
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () => _pickImageAndScan(),
+                        child: CustomIcon(
+                          icon: Icon(
+                            LucideIcons.image,
+                            size: 24,
+                            color: Theme.of(context).colorScheme.inverseSurface,
+                          ),
+                          padding: AppSpacing.normalPadding,
+                          paddingColor: Colors.black,
+                          linearGradientColor: [
+                            Theme.of(context).colorScheme.primary,
+                            Theme.of(context).colorScheme.onPrimaryContainer,
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  AppSpacing.extraLargeSizedBox,
+                  Row(
+                    children: [
+                      Expanded(child: Divider()),
+                      Padding(
+                        padding: AppSpacing.smallPadding,
+                        child: Text(
+                          'or',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                          softWrap: true,
+                        ),
+                      ),
+                      Expanded(child: Divider()),
+                    ],
+                  ),
+                  AppSpacing.extraLargeSizedBox,
+                  GradientElevatedButton(
+                    onPressed: () =>
+                        context.pushNamed(AppRoutes.searchAccount, extra: '0'),
+                    text: 'Search With Account Number',
+                    isDisabled: false,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

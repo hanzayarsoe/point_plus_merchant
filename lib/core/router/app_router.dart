@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/router/app_routes.dart';
@@ -11,6 +12,15 @@ import 'package:merchant/features/auth/presentation/pages/login_page.dart';
 import 'package:merchant/features/auth/presentation/pages/reset_password_page.dart';
 import 'package:merchant/features/auth/presentation/pages/verify_otp_page.dart';
 import 'package:merchant/features/auth/presentation/pages/welcome_page.dart';
+import 'package:merchant/features/home/domain/entities/point_transfer_entity.dart';
+import 'package:merchant/features/home/presentation/bloc/point_transfer_bloc/point_transfer_bloc.dart';
+import 'package:merchant/features/home/presentation/pages/history_page.dart';
+import 'package:merchant/features/home/presentation/pages/home_page.dart';
+import 'package:merchant/features/home/presentation/pages/point_transfer_page.dart';
+import 'package:merchant/features/home/presentation/pages/profile_page.dart';
+import 'package:merchant/features/home/presentation/pages/scanner_page.dart';
+import 'package:merchant/features/home/presentation/pages/search_with_account_number_page.dart';
+import 'package:merchant/features/home/presentation/pages/store_page.dart';
 import 'package:merchant/shared/widgets/bottom_navigation_bar.dart';
 
 class AppRouter {
@@ -27,6 +37,7 @@ class AppRouter {
 
         final publicRoutes = [
           '/',
+          '/login',
           '/forget-password',
           '/verify-otp',
           '/reset-password',
@@ -105,24 +116,92 @@ class AppRouter {
             );
           },
         ),
-      ],
-    );
-    StatefulShellRoute(
-      branches: [StatefulShellBranch(routes: [
-                
+        GoRoute(
+          name: AppRoutes.scanner,
+          path: '/scanner',
+          pageBuilder: (context, state) =>
+              NoTransitionPage(child: ScannerPage()),
+        ),
+        GoRoute(
+          name: AppRoutes.searchAccount,
+          path: '/search-account',
+          pageBuilder: (context, state) {
+            final String index = state.extra as String;
+            final int initialIndex = int.tryParse(index) ?? 1;
+            return NoTransitionPage(
+              child: SearchWithAccountNumberPage(initialInde: initialIndex),
+            );
+          },
+        ),
+        GoRoute(
+          name: AppRoutes.pointTransfer,
+          path: '/point-transfer',
+          pageBuilder: (context, state) {
+            final transferType = state.extra as PointTransferEntity;
+            return NoTransitionPage(
+              child: BlocProvider(
+                create: (context) => PointTransferBloc(sl()),
+                child: PointTransferPage(pointTransferEntity: transferType),
+              ),
+            );
+          },
+        ),
+        StatefulShellRoute(
+          branches: [
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  name: AppRoutes.home,
+                  path: '/home',
+                  pageBuilder: (context, state) =>
+                      NoTransitionPage(child: HomePage()),
+                ),
               ],
-            )],
-      navigatorContainerBuilder: (context, navigationShell, children) {
-        return children[navigationShell.currentIndex];
-      },
-      builder: (context, state, navigationShell) {
-        return Scaffold(
-          body: navigationShell,
-          bottomNavigationBar: CustomBottomNavigationBar(
-            navigationShell: navigationShell,
-          ),
-        );
-      },
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  name: AppRoutes.history,
+                  path: '/history',
+                  pageBuilder: (context, state) =>
+                      NoTransitionPage(child: HistoryPage()),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  name: AppRoutes.store,
+                  path: '/store',
+                  pageBuilder: (context, state) =>
+                      NoTransitionPage(child: StorePage()),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  name: AppRoutes.profile,
+                  path: '/profile',
+                  pageBuilder: (context, state) =>
+                      NoTransitionPage(child: ProfilePage()),
+                ),
+              ],
+            ),
+          ],
+          navigatorContainerBuilder: (context, navigationShell, children) {
+            return children[navigationShell.currentIndex];
+          },
+          builder: (context, state, navigationShell) {
+            return Scaffold(
+              body: navigationShell,
+              bottomNavigationBar: CustomBottomNavigationBar(
+                navigationShell: navigationShell,
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

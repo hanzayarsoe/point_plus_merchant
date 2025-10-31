@@ -14,6 +14,7 @@ import 'package:merchant/core/utils/device_info.dart';
 import 'package:merchant/core/utils/helper_function.dart';
 import 'package:merchant/core/utils/validation.dart';
 import 'package:merchant/features/auth/di/auth_injection.dart';
+import 'package:merchant/features/home/di/home_injection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -68,4 +69,7 @@ Future<void> serviceLocater() async {
 
   // Auth
   AuthInjection.init(sl);
+
+  // Home
+  HomeInjection.init(sl);
 }

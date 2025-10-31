@@ -23,17 +23,17 @@ final TextTheme textTheme = TextTheme(
   ),
   bodyLarge: TextStyle(
     fontFamily: "Walone",
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: FontWeight.normal,
   ),
   bodyMedium: TextStyle(
     fontFamily: "Walone",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: FontWeight.normal,
   ),
   bodySmall: TextStyle(
     fontFamily: "Walone",
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: FontWeight.normal,
   ),
   labelLarge: TextStyle(

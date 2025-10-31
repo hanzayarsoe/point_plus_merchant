@@ -79,10 +79,12 @@ class AppSpacing {
 
   static BorderRadius extraSmallCircularBorderRadius = BorderRadius.circular(5);
 
-  static const EdgeInsets historyTabBarPadding = EdgeInsets.only(
+  static const EdgeInsets customTabBarPadding = EdgeInsets.only(
     left: 20,
     right: 20,
   );
+
+  static const EdgeInsets customTabBarMargin = EdgeInsets.only(top: 35);
 
   static const EdgeInsets transitionTilePadding = EdgeInsets.symmetric(
     horizontal: 20,

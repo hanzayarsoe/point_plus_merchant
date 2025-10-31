@@ -68,9 +68,11 @@ class _WelcomePageState extends State<WelcomePage> {
 
   Future<void> _startSplash() async {
     await Future.delayed(const Duration(milliseconds: 2000), () {});
-    setState(() {
-      _showSplash = false;
-    });
+    if (mounted) {
+      setState(() {
+        _showSplash = false;
+      });
+    }
   }
 
   @override

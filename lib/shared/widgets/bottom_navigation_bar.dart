@@ -14,39 +14,46 @@ class CustomBottomNavigationBar extends StatefulWidget {
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: widget.navigationShell.currentIndex,
-      onTap: (value) => widget.navigationShell.goBranch(value),
-      items: [
-        BottomNavigationBarItem(
-          icon: Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 4),
-            child: Icon(LucideIcons.house),
-          ),
-          label: 'Home',
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(color: Theme.of(context).colorScheme.primaryFixed),
         ),
-        BottomNavigationBarItem(
-          icon: Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 4),
-            child: Icon(LucideIcons.history),
+      ),
+      child: BottomNavigationBar(
+        currentIndex: widget.navigationShell.currentIndex,
+        onTap: (value) => widget.navigationShell.goBranch(value),
+        items: [
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 4),
+              child: Icon(LucideIcons.house),
+            ),
+            label: 'Home',
           ),
-          label: 'History',
-        ),
-        BottomNavigationBarItem(
-          icon: Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 4),
-            child: Icon(LucideIcons.store),
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 4),
+              child: Icon(LucideIcons.history),
+            ),
+            label: 'History',
           ),
-          label: 'Store',
-        ),
-        BottomNavigationBarItem(
-          icon: Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 4),
-            child: Icon(LucideIcons.user),
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 4),
+              child: Icon(LucideIcons.store),
+            ),
+            label: 'Store',
           ),
-          label: 'Profile',
-        ),
-      ],
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 4),
+              child: Icon(LucideIcons.user),
+            ),
+            label: 'Profile',
+          ),
+        ],
+      ),
     );
   }
 }

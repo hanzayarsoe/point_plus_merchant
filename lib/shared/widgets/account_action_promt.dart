@@ -21,7 +21,7 @@ class AccountActionPromt extends StatelessWidget {
     return Row(
       mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.center,
       children: [
-        Text(title, style: Theme.of(context).textTheme.bodyMedium),
+        Text(title, style: Theme.of(context).textTheme.bodyLarge),
         SizedBox(width: AppSpacing.extraSmallSpacing),
         TextButton(
           style: ButtonStyle(padding: WidgetStateProperty.all(EdgeInsets.zero)),

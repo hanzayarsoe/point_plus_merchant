@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          lazy: false,
           create: (context) => _authBloc..add(AuthEvent.checkAuthStatus()),
         ),
       ],

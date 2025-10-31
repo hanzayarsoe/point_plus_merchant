@@ -8,6 +8,7 @@ import 'package:merchant/features/auth/domain/usecases/check_auth_status_usecase
 import 'package:merchant/features/auth/domain/usecases/force_log_out_usecase.dart';
 import 'package:merchant/features/auth/domain/usecases/log_in_usecase.dart';
 import 'package:merchant/features/auth/domain/usecases/log_out_usecase.dart';
+import 'package:merchant/features/auth/domain/usecases/refresh_user_usecase.dart';
 import 'package:merchant/features/auth/domain/usecases/reset_password_usecase.dart';
 import 'package:merchant/features/auth/domain/usecases/send_otp_usecase.dart';
 import 'package:merchant/features/auth/domain/usecases/verify_otp_usecase.dart';
@@ -25,17 +26,18 @@ class AuthInjection {
     // -- domain --
     sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
 
-    sl.registerSingleton(() => CheckAuthStatusUsecase(sl()));
+    sl.registerLazySingleton(() => CheckAuthStatusUsecase(sl()));
     sl.registerLazySingleton(() => LogInUsecase(sl()));
     sl.registerLazySingleton(() => LogOutUsecase(sl()));
     sl.registerLazySingleton(() => ForceLogOutUsecase(sl()));
     sl.registerLazySingleton(() => SendOtpUsecase(sl()));
     sl.registerLazySingleton(() => VerifyOtpUsecase(sl()));
     sl.registerLazySingleton(() => ResetPasswordUsecase(sl()));
+    sl.registerLazySingleton(() => RefreshUserUsecase(sl()));
 
     // -- presentation --
     sl.registerLazySingleton(
-      () => AuthBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()),
+      () => AuthBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()),
     );
 
     // -- Router --

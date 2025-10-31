@@ -14,4 +14,6 @@ class AuthState with _$AuthState {
   const factory AuthState.resetPasswordSuccessed() = _ResetPasswordSuccessed;
   const factory AuthState.resetPasswordFailed(Failure failure) =
       _ResetPasswordFailed;
+  const factory AuthState.refreshUserFailed(Failure failure) =
+      _RefreshUserFailed;
 }

@@ -31,9 +31,9 @@ class CustomPinPutField extends StatelessWidget {
         if (titleText != null)
           Text(
             titleText!,
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-              color: Theme.of(context).hintColor,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge!.copyWith(color: Theme.of(context).hintColor),
           ),
         Pinput(
           keyboardType: TextInputType.number,
@@ -42,7 +42,7 @@ class CustomPinPutField extends StatelessWidget {
           length: length,
           errorText: errorText,
           forceErrorState: errorText != null,
-          errorTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+          errorTextStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
             color: Theme.of(context).colorScheme.error,
           ),
           validator: validator,

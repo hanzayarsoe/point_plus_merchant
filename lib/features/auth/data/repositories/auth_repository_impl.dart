@@ -19,8 +19,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  TaskEither<Failure, User> logIn(String phone, String password) {
-    return authDatasource.logIn(phone, password).map((user) => user.toEntity());
+  TaskEither<Failure, void> logIn(String phone, String password) {
+    return authDatasource.logIn(phone, password);
   }
 
   @override
@@ -44,5 +44,10 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   TaskEither<Failure, void> verifyOtp(String phoneNumber, String otp) {
     return authDatasource.verifyOtp(phoneNumber, otp);
+  }
+
+  @override
+  TaskEither<Failure, User> refreshUser() {
+    return authDatasource.refreshUser().map((user) => user.toEntity());
   }
 }

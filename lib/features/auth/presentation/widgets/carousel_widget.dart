@@ -17,7 +17,7 @@ class CarouselWidget extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-          flex: 8,
+          flex: 6,
           child: Padding(
             padding: EdgeInsets.only(top: screenHeight * 0.2),
             child: Image.asset(image),
@@ -35,7 +35,7 @@ class CarouselWidget extends StatelessWidget {
               SizedBox(height: AppSpacing.defaultSpacing),
               Text(
                 body,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodyLarge,
                 textAlign: TextAlign.center,
               ),
             ],

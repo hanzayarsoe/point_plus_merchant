@@ -79,4 +79,11 @@ class AppValidator {
     }
     return null;
   }
+
+  String? validateAccountNumber(String accountNumber) {
+    if (accountNumber.length != 16) {
+      return 'invalide account number';
+    }
+    return null;
+  }
 }

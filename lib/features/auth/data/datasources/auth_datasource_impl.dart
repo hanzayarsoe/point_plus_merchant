@@ -27,7 +27,7 @@ class AuthDatasourceImpl implements AuthDatasource {
   }
 
   @override
-  TaskEither<Failure, UserModel> logIn(String phone, String password) {
+  TaskEither<Failure, void> logIn(String phone, String password) {
     return tryCatchWithFailure(() async {
       final deviceType = await sl<DeviceInfo>().getDeviceName();
       final response = await dioHelper.post(ApiUrls.logIn, {
@@ -35,8 +35,14 @@ class AuthDatasourceImpl implements AuthDatasource {
         "password": password,
         "deviceType": deviceType,
       });
-      final data = response.data['data']['userData'];
-      return UserModel.fromJson(data);
+      final String? accessToken =
+          response.data['data']?['tokens']?['accessToken'];
+      final String? refreshToken =
+          response.data['data']?['tokens']?['refreshToken'];
+      if (accessToken != null && refreshToken != null) {
+        final secureStorage = sl<SecureStorage>();
+        await secureStorage.saveTokens(accessToken, refreshToken);
+      }
     });
   }
 
@@ -81,6 +87,15 @@ class AuthDatasourceImpl implements AuthDatasource {
         "identifier": phoneNumber,
         "otp": otp,
       });
+    });
+  }
+
+  @override
+  TaskEither<Failure, UserModel> refreshUser() {
+    return tryCatchWithFailure(() async {
+      final response = await dioHelper.get(ApiUrls.me, {});
+      final data = response.data['data'];
+      return UserModel.fromJson(data);
     });
   }
 }

@@ -4,7 +4,7 @@ import 'package:merchant/features/auth/domain/entities/user.dart';
 
 abstract interface class AuthRepository {
   TaskEither<Failure, User> checkAuthStatus();
-  TaskEither<Failure, User> logIn(String phone, String password);
+  TaskEither<Failure, void> logIn(String phone, String password);
   TaskEither<Failure, void> logOut();
   Future<void> forceLogOut();
   TaskEither<Failure, void> sendOtp(String phoneNumber);
@@ -13,4 +13,5 @@ abstract interface class AuthRepository {
     String phoneNumber,
     String newPassword,
   );
+  TaskEither<Failure, User> refreshUser();
 }
