@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:merchant/core/constants/app_constants.dart';
 import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/router/app_routes.dart';
 import 'package:merchant/core/utils/toast.dart';
@@ -106,14 +107,14 @@ class _LoginPageState extends State<LoginPage> {
                   IconTextFormField(
                     controller: _phoneController,
                     keyboardType: TextInputType.phone,
-                    hint: '---------',
+                    hint: AppConstants.mobileTextFieldHintText,
                     prefixIcon: LucideIcons.smartphone,
                     onChanged: (_) => setState(() {}),
                   ),
                   AppSpacing.extraLargeSizedBox,
                   IconTextFormField(
                     controller: _passwordController,
-                    hint: '---------',
+                    hint: AppConstants.mobileTextFieldHintText,
                     prefixIcon: LucideIcons.lock,
                     isObsurce: _isObsurce,
                     suffixIcon: _isObsurce

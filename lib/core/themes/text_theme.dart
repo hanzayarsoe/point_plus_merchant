@@ -16,6 +16,11 @@ final TextTheme textTheme = TextTheme(
     fontSize: 16,
     fontWeight: FontWeight.bold,
   ),
+  headlineLarge: TextStyle(
+    fontFamily: "Proxima",
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  ),
   headlineMedium: TextStyle(
     fontFamily: "Proxima",
     fontSize: 16,

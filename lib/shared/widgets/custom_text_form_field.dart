@@ -13,6 +13,9 @@ class CustomTextFormField extends StatelessWidget {
   final int? maxLength;
   final FocusNode? focusNode;
   final String? errorText;
+  final bool? readOnly;
+  final bool? enabled;
+  final Function()? onTap;
 
   const CustomTextFormField({
     super.key,
@@ -26,6 +29,9 @@ class CustomTextFormField extends StatelessWidget {
     this.focusNode,
     this.textInputFormatters,
     this.errorText,
+    this.readOnly,
+    this.enabled,
+    this.onTap,
   });
 
   @override
@@ -38,6 +44,7 @@ class CustomTextFormField extends StatelessWidget {
           AppSpacing.extraSmallSizedBox,
         ],
         TextFormField(
+          enabled: enabled,
           controller: controller,
           keyboardType: inputType,
           inputFormatters: textInputFormatters,
@@ -46,10 +53,12 @@ class CustomTextFormField extends StatelessWidget {
             counterText: '',
             errorText: errorText,
           ),
+          onTap: onTap,
           onChanged: onChanged,
           validator: validator,
           maxLength: maxLength,
           focusNode: focusNode,
+          readOnly: readOnly ?? false,
         ),
       ],
     );

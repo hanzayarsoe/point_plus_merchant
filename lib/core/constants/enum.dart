@@ -12,6 +12,8 @@ enum Gender with DisplayNameEnum {
   const Gender(this.displayName);
 }
 
+enum ApiMethod { get, put, post, patch }
+
 enum DialogType { confirm, delete }
 
 enum TransactionType { transfer, receive, withdraw, recharge }

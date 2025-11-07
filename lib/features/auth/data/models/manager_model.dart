@@ -14,6 +14,8 @@ abstract class ManagerModel with _$ManagerModel {
     required String? phoneNumber,
     required String? gender,
     required String? dob,
+    required String? profileUrl,
+    String? address,
     required NrcModel nrc,
   }) = _ManagerModel;
 
@@ -31,6 +33,24 @@ extension ManagerModelX on ManagerModel {
       gender: gender,
       dob: dob,
       nrc: nrc.toEntity(),
+      profileUrl: profileUrl,
+      address: address,
+    );
+  }
+}
+
+extension ManagerX on Manager {
+  ManagerModel toModel() {
+    return ManagerModel(
+      id: id,
+      name: name,
+      email: email,
+      phoneNumber: phoneNumber,
+      gender: gender,
+      dob: dob,
+      nrc: nrc.toModel(),
+      profileUrl: profileUrl,
+      address: address,
     );
   }
 }

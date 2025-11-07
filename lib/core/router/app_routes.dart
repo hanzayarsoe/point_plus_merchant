@@ -17,4 +17,14 @@ class AppRoutes {
   static const String recharge = 'recharge';
   static const String searchAccount = 'searchAccount';
   static const String pointTransfer = 'pointTransfer';
+  static const String personalInformation = 'personalInformation';
+  static const String changeMobileNumber = 'changeMobileNumber';
+  static const String changeMobileNumberVerifyOtp =
+      'changeMobileNumberVerifyOtp';
+
+  static const String devices = 'devices';
+  static const String changePassword = 'changePassword';
+  static const String changeLanguage = 'changeLanguage';
+  static const String privacyPolicies = 'privacyPolicies';
+  static const String aboutApp = 'aboutApp';
 }

@@ -12,6 +12,8 @@ abstract class Manager with _$Manager {
     required String? phoneNumber,
     required String? gender,
     required String? dob,
+    required String? profileUrl,
+    String? address,
     required Nrc nrc,
   }) = _Manager;
 }

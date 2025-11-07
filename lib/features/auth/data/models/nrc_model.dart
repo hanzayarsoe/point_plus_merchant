@@ -29,3 +29,15 @@ extension NrcModelX on NrcModel {
     );
   }
 }
+
+extension NrcX on Nrc {
+  NrcModel toModel() {
+    return NrcModel(
+      id: id,
+      stateNumber: stateNumber,
+      township: township,
+      citizenType: citizenType,
+      code: code,
+    );
+  }
+}

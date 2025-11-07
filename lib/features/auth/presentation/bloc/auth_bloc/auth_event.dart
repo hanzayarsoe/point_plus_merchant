@@ -16,4 +16,5 @@ class AuthEvent with _$AuthEvent {
     String newPassword,
   ) = _ResetPassword;
   const factory AuthEvent.refreshUser() = _RefreshUser;
+  const factory AuthEvent.updateUserData(User updatedUser) = _UpdateUserData;
 }

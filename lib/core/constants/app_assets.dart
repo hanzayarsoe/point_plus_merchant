@@ -8,6 +8,8 @@ class AppAssets {
   // icons
   static const String starIcon = "$iconPath/star.svg";
   static const String circleCheckFillIcon = "$iconPath/circle_check_fill.svg";
+  static const String enIcon = "$iconPath/en_icon.svg";
+  static const String myIcon = "$iconPath/my_icon.svg";
 
   // images
   static const String dashboardFirst = "$imagePath/dashboard_first.png";

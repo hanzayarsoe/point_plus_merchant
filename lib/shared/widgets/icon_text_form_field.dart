@@ -16,6 +16,7 @@ class IconTextFormField extends StatelessWidget {
   final bool? isObsurce;
   final Color? borderColor;
   final List<TextInputFormatter>? inputFormatter;
+  final int? maxLength;
 
   const IconTextFormField({
     super.key,
@@ -32,6 +33,7 @@ class IconTextFormField extends StatelessWidget {
     this.isObsurce,
     this.borderColor,
     this.inputFormatter,
+    this.maxLength,
   });
 
   @override
@@ -42,6 +44,7 @@ class IconTextFormField extends StatelessWidget {
       obscureText: isObsurce ?? false,
       obscuringCharacter: '*',
       inputFormatters: inputFormatter,
+      maxLength: maxLength,
       onChanged: onChanged,
       onSaved: onSaved,
       validator: validator,

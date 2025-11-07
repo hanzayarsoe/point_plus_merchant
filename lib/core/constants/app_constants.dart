@@ -9,4 +9,5 @@ class AppConstants {
   static const int maxPhoneNumber = 11;
   static const int maxShownItem = 5;
   static const int qrCodeExpireTime = 30;
+  static const String mobileTextFieldHintText = '- - - - - - - - - - -';
 }

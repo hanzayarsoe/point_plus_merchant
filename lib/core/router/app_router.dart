@@ -17,10 +17,18 @@ import 'package:merchant/features/home/presentation/bloc/point_transfer_bloc/poi
 import 'package:merchant/features/home/presentation/pages/history_page.dart';
 import 'package:merchant/features/home/presentation/pages/home_page.dart';
 import 'package:merchant/features/home/presentation/pages/point_transfer_page.dart';
-import 'package:merchant/features/home/presentation/pages/profile_page.dart';
 import 'package:merchant/features/home/presentation/pages/scanner_page.dart';
 import 'package:merchant/features/home/presentation/pages/search_with_account_number_page.dart';
 import 'package:merchant/features/home/presentation/pages/store_page.dart';
+import 'package:merchant/features/profile/presentation/pages/about_app_page.dart';
+import 'package:merchant/features/profile/presentation/pages/change_language_page.dart';
+import 'package:merchant/features/profile/presentation/pages/change_mobile_number_page.dart';
+import 'package:merchant/features/profile/presentation/pages/change_mobile_number_verify_otp_page.dart';
+import 'package:merchant/features/profile/presentation/pages/change_password_page.dart';
+import 'package:merchant/features/profile/presentation/pages/devices_page.dart';
+import 'package:merchant/features/profile/presentation/pages/personal_information_page.dart';
+import 'package:merchant/features/profile/presentation/pages/privacy_policies_page.dart';
+import 'package:merchant/features/profile/presentation/pages/profile_page.dart';
 import 'package:merchant/shared/widgets/bottom_navigation_bar.dart';
 
 class AppRouter {
@@ -38,8 +46,8 @@ class AppRouter {
         final publicRoutes = [
           '/',
           '/login',
-          '/forget-password',
           '/verify-otp',
+          '/forget-password',
           '/reset-password',
         ];
 
@@ -100,7 +108,7 @@ class AppRouter {
           name: AppRoutes.verifyNumber,
           path: '/verify-otp',
           pageBuilder: (context, state) {
-            final String phoneNumber = state.extra as String;
+            final phoneNumber = state.extra as String;
             return NoTransitionPage(
               child: VerifyOtpPage(phoneNumber: phoneNumber),
             );
@@ -146,6 +154,16 @@ class AppRouter {
             );
           },
         ),
+        GoRoute(
+          name: AppRoutes.changeMobileNumberVerifyOtp,
+          path: '/change-mobile-number-verify-otp',
+          pageBuilder: (context, state) {
+            final phoneNumber = state.extra as String;
+            return NoTransitionPage(
+              child: ChangeMobileNumberVerifyOtpPage(phoneNumber: phoneNumber),
+            );
+          },
+        ),
         StatefulShellRoute(
           branches: [
             StatefulShellBranch(
@@ -185,6 +203,50 @@ class AppRouter {
                   path: '/profile',
                   pageBuilder: (context, state) =>
                       NoTransitionPage(child: ProfilePage()),
+                  routes: [
+                    GoRoute(
+                      name: AppRoutes.personalInformation,
+                      path: 'personal-information,',
+                      pageBuilder: (context, state) =>
+                          NoTransitionPage(child: PersonalInformationPage()),
+                    ),
+                    GoRoute(
+                      name: AppRoutes.changeMobileNumber,
+                      path: 'change-mobile-number',
+                      pageBuilder: (context, state) =>
+                          NoTransitionPage(child: ChangeMobileNumberPage()),
+                    ),
+                    GoRoute(
+                      name: AppRoutes.devices,
+                      path: 'devices',
+                      pageBuilder: (context, state) =>
+                          NoTransitionPage(child: DevicesPage()),
+                    ),
+                    GoRoute(
+                      name: AppRoutes.changePassword,
+                      path: 'change-password',
+                      pageBuilder: (context, state) =>
+                          NoTransitionPage(child: ChangePasswordPage()),
+                    ),
+                    GoRoute(
+                      name: AppRoutes.changeLanguage,
+                      path: 'change-language',
+                      pageBuilder: (context, state) =>
+                          NoTransitionPage(child: ChangeLanguagePage()),
+                    ),
+                    GoRoute(
+                      name: AppRoutes.privacyPolicies,
+                      path: 'privacy-policies',
+                      pageBuilder: (context, state) =>
+                          NoTransitionPage(child: PrivacyPoliciesPage()),
+                    ),
+                    GoRoute(
+                      name: AppRoutes.aboutApp,
+                      path: 'about-app',
+                      pageBuilder: (context, state) =>
+                          NoTransitionPage(child: AboutAppPage()),
+                    ),
+                  ],
                 ),
               ],
             ),

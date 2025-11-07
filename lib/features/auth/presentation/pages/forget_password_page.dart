@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:merchant/core/constants/app_constants.dart';
 import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/router/app_routes.dart';
@@ -56,10 +57,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         state.maybeWhen(
           orElse: () {},
           sentOtpFailed: (failure) => showToast(message: failure.message),
-          sentOtpSuccessed: () => context.pushNamed(
-            AppRoutes.verifyNumber,
-            extra: _phoneController.text.trim(),
-          ),
+          sentOtpSuccessed: () {
+            context.pushNamed(
+              AppRoutes.verifyNumber,
+              extra: _phoneController.text.trim(),
+            );
+          },
         );
       },
       builder: (context, state) {
@@ -95,7 +98,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     prefixIcon: LucideIcons.smartphone,
                     keyboardType: TextInputType.phone,
                     errorText: _errorText,
-                    hint: '- - - - - - - - - - -',
+                    hint: AppConstants.mobileTextFieldHintText,
                     onChanged: (_) => setState(() {
                       if (_errorText != null) {
                         _errorText = null;
@@ -110,7 +113,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               child: GradientElevatedButton(
                 onPressed: _sendOtp,
                 text: 'Next',
-                isDisabled: _phoneController.text.trim().isEmpty,
+                isDisabled:
+                    _phoneController.text.trim().isEmpty ||
+                    _phoneController.text.length != AppConstants.maxPhoneNumber,
               ),
             ),
           ),

@@ -58,6 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<_VerifyOtp>(_onVerifyOtp);
     on<_ResetPassword>(_onResetPassword);
     on<_RefreshUser>(_onRefreshUser);
+    on<_UpdateUserData>(_onUpdateUserData);
   }
 
   Future<void> _onCheckAuthStatus(
@@ -162,6 +163,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (failure) => emit(AuthState.refreshUserFailed(failure)),
       (user) => emit(AuthState.authenticated(user)),
     );
+  }
+
+  Future<void> _onUpdateUserData(
+    _UpdateUserData event,
+    Emitter<AuthState> emit,
+  ) async {
+    if (state is _Authenticated) {
+      emit(AuthState.authenticated(event.updatedUser));
+    }
   }
 
   @override

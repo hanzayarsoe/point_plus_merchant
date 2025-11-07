@@ -11,6 +11,7 @@ final ElevatedButtonThemeData darkElevatedButtonTheme = ElevatedButtonThemeData(
     disabledForegroundColor: DarkTheme.disabledForegroundColor,
     disabledBackgroundColor: DarkTheme.disabledBackgroundColor,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+    minimumSize: Size(double.infinity, 48),
     textStyle: TextStyle(
       fontFamily: 'Walone',
       fontSize: 16,

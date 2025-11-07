@@ -42,3 +42,20 @@ extension UserModelX on UserModel {
     );
   }
 }
+
+extension UserX on User {
+  UserModel toModel() {
+    return UserModel(
+      id: id,
+      name: name,
+      accountNumber: accountNumber,
+      openTime: openTime,
+      closeTime: closeTime,
+      branchAmount: branchAmount,
+      branchAddress: branchAddress,
+      merchantId: merchantId,
+      merchantName: merchantName,
+      manager: manager.toModel(),
+    );
+  }
+}

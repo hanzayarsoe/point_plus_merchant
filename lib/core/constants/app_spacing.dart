@@ -19,6 +19,7 @@ class AppSpacing {
   static const double defaultSpacing = 12.0;
   static const double paragraphSpacing = 28.0;
   static const double megaLargeSpacing = 38.0;
+  static const double extraLargeSpacing = 24.0;
   static const double largeSpacing = 20.0;
   static const double mediumSpacing = 16.0;
   static const double smallSpacing = 10.0;

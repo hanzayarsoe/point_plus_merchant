@@ -8,6 +8,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? titleColor;
   final List<Widget>? actions;
   final PreferredSizeWidget? bottom;
+  final bool? isTitleLarge;
   const CustomAppBar({
     super.key,
     this.title,
@@ -15,6 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.automaticallyImplyLeading,
     this.titleColor,
     this.bottom,
+    this.isTitleLarge = false,
   });
 
   @override
@@ -46,13 +48,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     child: Padding(
                       padding: EdgeInsets.only(
                         top: AppSpacing.extraSmallSpacing,
-                        left: AppSpacing.extraSmallSpacing,
+                        left:
+                            AppSpacing.extraSmallSpacing +
+                            (automaticallyImplyLeading == null
+                                ? AppSpacing.largeSpacing
+                                : 0),
                       ),
                       child: Text(
                         title!,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.titleMedium!.copyWith(color: titleColor),
+                        style: (isTitleLarge != null && isTitleLarge!)
+                            ? Theme.of(context).textTheme.titleLarge!.copyWith(
+                                color: titleColor,
+                              )
+                            : Theme.of(context).textTheme.titleMedium!.copyWith(
+                                color: titleColor,
+                              ),
                       ),
                     ),
                   ),

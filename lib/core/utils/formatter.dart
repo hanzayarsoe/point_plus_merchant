@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:merchant/features/auth/domain/entities/nrc.dart';
 
 class Formatter {
   Formatter._();
@@ -38,5 +39,18 @@ class Formatter {
   static String fromNumberAsHidden(int number) {
     final hiddenText = '*' * number.toString().length;
     return hiddenText;
+  }
+
+  static String formateNrcToString(Nrc nrc) {
+    return '${nrc.stateNumber}/${nrc.township}${nrc.citizenType}${nrc.code}';
+  }
+
+  static String formateDateOfBirth(DateTime dob) {
+    return DateFormat('d MMMM yyyy').format(dob);
+  }
+
+  static String formateStringToDateOfBirth(String dob) {
+    final parsedDate = DateTime.parse(dob);
+    return DateFormat('d MMMM yyyy').format(parsedDate);
   }
 }

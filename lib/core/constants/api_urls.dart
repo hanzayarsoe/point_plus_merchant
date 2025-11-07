@@ -17,4 +17,9 @@ class ApiUrls {
   static final String claimPointByAccountNumber =
       "/api/branch/points/claim-by-account";
   static final String claimPointByQr = "/api/branch/points/claim-by-qr";
+  static final String updateManagerInfo = "/api/branch/me/manager";
+  static final String changeMobileNumberSendOtp =
+      "/api/branch/me/change-phone/send-otp";
+  static final String changeMobileNumber = "/api/branch/me/change-phone";
+  static final String changePassword = "/api/branch/me/change-password";
 }

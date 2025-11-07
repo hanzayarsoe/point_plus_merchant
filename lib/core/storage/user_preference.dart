@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreference {
   final String _themeKey = 'theme_mode';
+  final String _languageKey = 'language_code';
   final String _rememberKey = 'remember_me';
   final String _notiKey = 'push_notification';
   // final FirebaseMessaging _fcm;
@@ -17,6 +18,14 @@ class UserPreference {
 
   Future<bool> setThemeMode(ThemeMode themeMode) async {
     return await _pref.setInt(_themeKey, themeMode.index);
+  }
+
+  String getLanguageCode() {
+    return _pref.getString(_languageKey) ?? AppConstants.defaultLanguageCode;
+  }
+
+  Future<bool> setLanguageCode(String langaugeCode) async {
+    return await _pref.setString(_languageKey, langaugeCode);
   }
 
   bool getRememberMe() {

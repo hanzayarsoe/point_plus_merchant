@@ -49,7 +49,12 @@ class AuthDatasourceImpl implements AuthDatasource {
   @override
   TaskEither<Failure, void> logOut() {
     return tryCatchWithFailure(() async {
-      await dioHelper.post(ApiUrls.logOut, {});
+      final refreshToken = await secureStorage.getRefreshToken();
+      await dioHelper.post(
+        ApiUrls.logOut,
+        {},
+        queryParameters: {"refreshToken": refreshToken},
+      );
     });
   }
 
