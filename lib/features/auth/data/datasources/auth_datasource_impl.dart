@@ -7,14 +7,14 @@ import 'package:merchant/core/storage/secure_storage.dart';
 import 'package:merchant/core/utils/device_info.dart';
 import 'package:merchant/core/utils/task_either_helpers.dart';
 import 'package:merchant/features/auth/data/datasources/auth_datasource.dart';
-import 'package:merchant/features/auth/data/models/user_model.dart';
+import 'package:merchant/features/auth/data/models/branch_model.dart';
 
 class AuthDatasourceImpl implements AuthDatasource {
   final DioHelper dioHelper;
   final SecureStorage secureStorage;
   AuthDatasourceImpl(this.dioHelper, this.secureStorage);
   @override
-  TaskEither<Failure, UserModel> checkAuthStatus() {
+  TaskEither<Failure, BranchModel> checkAuthStatus() {
     return tryCatchWithFailure(() async {
       final accessToken = await secureStorage.getAccessToken();
       if (accessToken == null) {
@@ -22,7 +22,7 @@ class AuthDatasourceImpl implements AuthDatasource {
       }
       final response = await dioHelper.get(ApiUrls.me, {});
       final data = response.data['data'];
-      return UserModel.fromJson(data);
+      return BranchModel.fromJson(data);
     });
   }
 
@@ -96,11 +96,11 @@ class AuthDatasourceImpl implements AuthDatasource {
   }
 
   @override
-  TaskEither<Failure, UserModel> refreshUser() {
+  TaskEither<Failure, BranchModel> refreshUser() {
     return tryCatchWithFailure(() async {
       final response = await dioHelper.get(ApiUrls.me, {});
       final data = response.data['data'];
-      return UserModel.fromJson(data);
+      return BranchModel.fromJson(data);
     });
   }
 }

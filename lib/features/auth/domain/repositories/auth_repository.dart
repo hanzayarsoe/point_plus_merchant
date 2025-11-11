@@ -1,9 +1,9 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:merchant/core/failure/failure.dart';
-import 'package:merchant/features/auth/domain/entities/user.dart';
+import 'package:merchant/features/auth/domain/entities/branch.dart';
 
 abstract interface class AuthRepository {
-  TaskEither<Failure, User> checkAuthStatus();
+  TaskEither<Failure, Branch> checkAuthStatus();
   TaskEither<Failure, void> logIn(String phone, String password);
   TaskEither<Failure, void> logOut();
   Future<void> forceLogOut();
@@ -13,5 +13,5 @@ abstract interface class AuthRepository {
     String phoneNumber,
     String newPassword,
   );
-  TaskEither<Failure, User> refreshUser();
+  TaskEither<Failure, Branch> refreshUser();
 }

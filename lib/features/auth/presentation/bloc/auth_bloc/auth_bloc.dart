@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:merchant/core/failure/failure.dart';
 import 'package:merchant/core/network/dio_helper.dart';
-import 'package:merchant/features/auth/domain/entities/user.dart';
+import 'package:merchant/features/auth/domain/entities/branch.dart';
 import 'package:merchant/features/auth/domain/usecases/check_auth_status_usecase.dart';
 import 'package:merchant/features/auth/domain/usecases/force_log_out_usecase.dart';
 import 'package:merchant/features/auth/domain/usecases/log_in_usecase.dart';
@@ -58,7 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<_VerifyOtp>(_onVerifyOtp);
     on<_ResetPassword>(_onResetPassword);
     on<_RefreshUser>(_onRefreshUser);
-    on<_UpdateUserData>(_onUpdateUserData);
+    on<_UpdateBranchInfo>(_onUpdateBranchInfo);
   }
 
   Future<void> _onCheckAuthStatus(
@@ -68,7 +68,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final result = await checkAuthStatusUsecase.call().run();
     result.fold(
       (failure) => emit(AuthState.unauthenticated()),
-      (user) => emit(AuthState.authenticated(user)),
+      (branch) => emit(AuthState.authenticated(branch)),
     );
   }
 
@@ -165,8 +165,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  Future<void> _onUpdateUserData(
-    _UpdateUserData event,
+  Future<void> _onUpdateBranchInfo(
+    _UpdateBranchInfo event,
     Emitter<AuthState> emit,
   ) async {
     if (state is _Authenticated) {

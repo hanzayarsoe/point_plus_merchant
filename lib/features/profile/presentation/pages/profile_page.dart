@@ -6,7 +6,7 @@ import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/router/app_routes.dart';
 import 'package:merchant/core/utils/toast.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
-import 'package:merchant/features/profile/presentation/bloc/bloc/user_bloc.dart';
+import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
 import 'package:merchant/features/profile/presentation/cubits/locale_cubit/locale_cubit.dart';
 import 'package:merchant/features/profile/presentation/cubits/noti_cubit/noti_cubit.dart';
 import 'package:merchant/features/profile/presentation/widgets/custom_switch.dart';
@@ -33,21 +33,21 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final localeCode = context.watch<LocaleCubit>().state.locale.languageCode;
     final isNotiEnabled = context.watch<NotiCubit>().state;
-    return BlocConsumer<UserBloc, UserState>(
+    return BlocConsumer<BranchBloc, BranchState>(
       listenWhen: (previous, current) => current.maybeWhen(
         orElse: () => false,
-        updateUserFailed: (failure) => true,
-        updateUserSuccessed: (updatedUser) => true,
+        updateBranchFailed: (failure) => true,
+        updateBranchSuccessed: (updatedUser) => true,
       ),
       listener: (context, state) {
         state.maybeWhen(
           orElse: () {},
-          updateUserFailed: (failure) => showToast(
+          updateBranchFailed: (failure) => showToast(
             message: failure.message,
             type: ToastificationType.error,
           ),
-          updateUserSuccessed: (updatedUser) => context.read<AuthBloc>().add(
-            AuthEvent.updateUserData(updatedUser),
+          updateBranchSuccessed: (updatedUser) => context.read<AuthBloc>().add(
+            AuthEvent.updateBranchInfo(updatedUser),
           ),
         );
       },

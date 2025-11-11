@@ -16,6 +16,7 @@ import 'package:merchant/core/utils/validation.dart';
 import 'package:merchant/features/auth/di/auth_injection.dart';
 import 'package:merchant/features/home/di/home_injection.dart';
 import 'package:merchant/features/profile/di/profile_injection.dart';
+import 'package:merchant/features/store/di/store_injection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -76,4 +77,7 @@ Future<void> serviceLocater() async {
 
   // Profile
   ProfileInjection.init(sl);
+
+  // Store
+  StoreInjection.init(sl);
 }

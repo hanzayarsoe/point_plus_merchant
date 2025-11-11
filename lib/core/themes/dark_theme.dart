@@ -27,5 +27,6 @@ class DarkTheme {
   static final Color dialogBorderColor = Color.fromRGBO(145, 145, 145, 0.3);
   static final Color elevatedButtonSecondaryColor = Color(0xffC1902D);
   static final Color transferPointCardBorderColor = Color(0xffDACBAD);
-  static final Color transferPointBalanceColor = Color(0xff5C98F1);
+  static final Color softBlueColor = Color(0xff5C98F1);
+  static final Color actionBlueColor = Color(0xff2573E8);
 }

@@ -53,4 +53,20 @@ class Formatter {
     final parsedDate = DateTime.parse(dob);
     return DateFormat('d MMMM yyyy').format(parsedDate);
   }
+
+  static DateTime formateAmPmToDateTime(String time) {
+    return DateFormat('hh:mm a').parse(time);
+  }
+
+  static String formateDateTimeToAmPm(DateTime time) {
+    return DateFormat('hh:mm a').format(time);
+  }
+
+  static DateTime parseTime(String timeString) {
+    try {
+      return DateFormat('hh:mm a').parse(timeString);
+    } catch (e) {
+      return DateTime.now();
+    }
+  }
 }

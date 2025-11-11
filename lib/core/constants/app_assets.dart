@@ -10,6 +10,7 @@ class AppAssets {
   static const String circleCheckFillIcon = "$iconPath/circle_check_fill.svg";
   static const String enIcon = "$iconPath/en_icon.svg";
   static const String myIcon = "$iconPath/my_icon.svg";
+  static const String pointIcon = "$iconPath/point.svg";
 
   // images
   static const String dashboardFirst = "$imagePath/dashboard_first.png";
@@ -21,6 +22,8 @@ class AppAssets {
   static const String profileErrorImage = "$imagePath/error_profile_image.png";
   static const String placeHolderImage = "$imagePath/place_holder_image.png";
   static const String errorImage = "$imagePath/error_image.png";
+  static const String mapImage = "$imagePath/map.jpg";
+  static const String storeProfileImage = "$imagePath/store_profile.png";
 
   // logo
   static const String appLogo = "$logoPath/app_logo.png";

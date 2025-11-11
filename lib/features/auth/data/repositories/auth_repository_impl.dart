@@ -1,15 +1,15 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:merchant/core/failure/failure.dart';
 import 'package:merchant/features/auth/data/datasources/auth_datasource.dart';
-import 'package:merchant/features/auth/data/models/user_model.dart';
-import 'package:merchant/features/auth/domain/entities/user.dart';
+import 'package:merchant/features/auth/data/models/branch_model.dart';
+import 'package:merchant/features/auth/domain/entities/branch.dart';
 import 'package:merchant/features/auth/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDatasource authDatasource;
   AuthRepositoryImpl(this.authDatasource);
   @override
-  TaskEither<Failure, User> checkAuthStatus() {
+  TaskEither<Failure, Branch> checkAuthStatus() {
     return authDatasource.checkAuthStatus().map((user) => user.toEntity());
   }
 
@@ -47,7 +47,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  TaskEither<Failure, User> refreshUser() {
+  TaskEither<Failure, Branch> refreshUser() {
     return authDatasource.refreshUser().map((user) => user.toEntity());
   }
 }

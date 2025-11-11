@@ -19,7 +19,6 @@ import 'package:merchant/features/home/presentation/pages/home_page.dart';
 import 'package:merchant/features/home/presentation/pages/point_transfer_page.dart';
 import 'package:merchant/features/home/presentation/pages/scanner_page.dart';
 import 'package:merchant/features/home/presentation/pages/search_with_account_number_page.dart';
-import 'package:merchant/features/home/presentation/pages/store_page.dart';
 import 'package:merchant/features/profile/presentation/pages/about_app_page.dart';
 import 'package:merchant/features/profile/presentation/pages/change_language_page.dart';
 import 'package:merchant/features/profile/presentation/pages/change_mobile_number_page.dart';
@@ -29,6 +28,12 @@ import 'package:merchant/features/profile/presentation/pages/devices_page.dart';
 import 'package:merchant/features/profile/presentation/pages/personal_information_page.dart';
 import 'package:merchant/features/profile/presentation/pages/privacy_policies_page.dart';
 import 'package:merchant/features/profile/presentation/pages/profile_page.dart';
+import 'package:merchant/features/store/domain/entities/item_entity.dart';
+import 'package:merchant/features/store/presentation/pages/edit_store_profile_page.dart';
+import 'package:merchant/features/store/presentation/pages/item_details_page.dart';
+import 'package:merchant/features/store/presentation/pages/see_all_items_page.dart';
+import 'package:merchant/features/store/presentation/pages/see_all_promo_page.dart';
+import 'package:merchant/features/store/presentation/pages/store_page.dart';
 import 'package:merchant/shared/widgets/bottom_navigation_bar.dart';
 
 class AppRouter {
@@ -193,6 +198,36 @@ class AppRouter {
                   path: '/store',
                   pageBuilder: (context, state) =>
                       NoTransitionPage(child: StorePage()),
+                  routes: [
+                    GoRoute(
+                      name: AppRoutes.editStoreProfile,
+                      path: 'edit-store-profile',
+                      pageBuilder: (context, state) =>
+                          NoTransitionPage(child: EditStoreProfilePage()),
+                    ),
+                    GoRoute(
+                      name: AppRoutes.seeAllPromos,
+                      path: 'see-all-promos',
+                      pageBuilder: (context, state) =>
+                          NoTransitionPage(child: SeeAllPromoPage()),
+                    ),
+                    GoRoute(
+                      name: AppRoutes.seeAllItems,
+                      path: 'see-all-items',
+                      pageBuilder: (context, state) =>
+                          NoTransitionPage(child: SeeAllItemsPage()),
+                    ),
+                    GoRoute(
+                      name: AppRoutes.itemDetails,
+                      path: 'item-details',
+                      pageBuilder: (context, state) {
+                        final item = state.extra as ItemEntity;
+                        return NoTransitionPage(
+                          child: ItemDetailsPage(item: item),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

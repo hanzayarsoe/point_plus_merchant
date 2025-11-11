@@ -8,7 +8,7 @@ import 'package:merchant/core/router/app_routes.dart';
 import 'package:merchant/core/themes/extensions/app_colors.dart';
 import 'package:merchant/core/utils/formatter.dart';
 import 'package:merchant/core/utils/toast.dart';
-import 'package:merchant/features/auth/domain/entities/user.dart';
+import 'package:merchant/features/auth/domain/entities/branch.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:merchant/features/auth/presentation/widgets/gradient_elevated_button.dart';
 import 'package:merchant/features/home/domain/entities/point_transfer_entity.dart';
@@ -59,7 +59,7 @@ class _PointTransferPageState extends State<PointTransferPage> {
     super.dispose();
   }
 
-  bool _inSufficientBalance(User? user) {
+  bool _inSufficientBalance(Branch? user) {
     final int amountToSend = int.tryParse(_pointController.text.trim()) ?? 0;
 
     final int currentBalance = user?.branchAmount ?? 0;
@@ -111,9 +111,11 @@ class _PointTransferPageState extends State<PointTransferPage> {
     final bool isTypeRequest = widget.pointTransferEntity.type
         .toLowerCase()
         .contains('request');
-    final userState = context.watch<AuthBloc>().state;
-    final User? user = userState.whenOrNull(authenticated: (user) => user);
-    final bool isUserLoading = userState.maybeWhen(
+    final branchState = context.watch<AuthBloc>().state;
+    final Branch? branch = branchState.whenOrNull(
+      authenticated: (user) => user,
+    );
+    final bool isUserLoading = branchState.maybeWhen(
       orElse: () => false,
       loading: () => true,
     );
@@ -177,7 +179,7 @@ class _PointTransferPageState extends State<PointTransferPage> {
                         errorText: _errorText,
                         onChanged: (_) {
                           setState(() {
-                            if (isTypeRequest && _inSufficientBalance(user)) {
+                            if (isTypeRequest && _inSufficientBalance(branch)) {
                               _errorText = 'InSufficient Balance';
                             } else {
                               _errorText = null;
@@ -187,11 +189,11 @@ class _PointTransferPageState extends State<PointTransferPage> {
                       ),
                       AppSpacing.smallSizedBox,
                       Text(
-                        'Your Point Balance : ${user?.branchAmount} pts',
+                        'Your Point Balance : ${branch?.branchAmount} pts',
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           color: Theme.of(
                             context,
-                          ).extension<AppColors>()!.pointTransferBalanceColor,
+                          ).extension<AppColors>()!.softBlueColor,
                         ),
                       ),
                       AppSpacing.extraLargeSizedBox,

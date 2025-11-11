@@ -72,7 +72,8 @@ class AppTheme {
         gradientEnd: DarkTheme.homeCardGradientEnd,
         buttonGradient: DarkTheme.elevatedButtonSecondaryColor,
         pointTransferCardBorderColor: DarkTheme.transferPointCardBorderColor,
-        pointTransferBalanceColor: DarkTheme.transferPointBalanceColor,
+        softBlueColor: DarkTheme.softBlueColor,
+        actionBlueColor: DarkTheme.actionBlueColor,
       ),
     ],
   );

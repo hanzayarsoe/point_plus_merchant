@@ -11,7 +11,7 @@ import 'package:merchant/core/utils/formatter.dart';
 import 'package:merchant/core/utils/validation.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:merchant/features/home/presentation/widgets/custom_icon.dart';
-import 'package:merchant/features/profile/presentation/bloc/bloc/user_bloc.dart';
+import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/custom_cached_network_image.dart';
 import 'package:merchant/shared/widgets/custom_drop_down.dart';
@@ -99,11 +99,11 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
   Widget build(BuildContext context) {
     final authState = context.watch<AuthBloc>().state;
     final user = authState.whenOrNull(authenticated: (user) => user);
-    return BlocConsumer<UserBloc, UserState>(
+    return BlocConsumer<BranchBloc, BranchState>(
       listenWhen: (previous, current) => current.maybeWhen(
         orElse: () => false,
-        updateUserFailed: (failure) => true,
-        updateUserSuccessed: (updatedUser) => true,
+        updateBranchFailed: (failure) => true,
+        updateBranchSuccessed: (updatedUser) => true,
       ),
       listener: (context, state) {
         // TODO: implement listener

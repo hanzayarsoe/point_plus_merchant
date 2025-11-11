@@ -4,7 +4,7 @@ part of 'auth_bloc.dart';
 class AuthState with _$AuthState {
   const factory AuthState.initial() = _Initial;
   const factory AuthState.loading() = _Loading;
-  const factory AuthState.authenticated(User user) = _Authenticated;
+  const factory AuthState.authenticated(Branch branch) = _Authenticated;
   const factory AuthState.unauthenticated() = _UnAuthenticated;
   const factory AuthState.failure(Failure failure) = _Failure;
   const factory AuthState.sentOtpSuccessed() = _SentOtpSuccess;

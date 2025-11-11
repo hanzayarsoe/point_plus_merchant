@@ -27,4 +27,9 @@ class AppRoutes {
   static const String changeLanguage = 'changeLanguage';
   static const String privacyPolicies = 'privacyPolicies';
   static const String aboutApp = 'aboutApp';
+
+  static const String editStoreProfile = 'editStoreProfile';
+  static const String seeAllItems = 'seeAllItems';
+  static const String seeAllPromos = 'seeAllPromos';
+  static const String itemDetails = 'itemDetails';
 }

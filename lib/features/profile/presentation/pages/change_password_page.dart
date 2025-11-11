@@ -6,7 +6,7 @@ import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/utils/toast.dart';
 import 'package:merchant/core/utils/validation.dart';
 import 'package:merchant/features/auth/presentation/widgets/gradient_elevated_button.dart';
-import 'package:merchant/features/profile/presentation/bloc/bloc/user_bloc.dart';
+import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/custom_text_form_field.dart';
 import 'package:merchant/shared/widgets/show_success_toast.dart';
@@ -49,8 +49,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   }
 
   void _changePassword() {
-    context.read<UserBloc>().add(
-      UserEvent.changePassword(
+    context.read<BranchBloc>().add(
+      BranchEvent.changePassword(
         _currentPasswordController.text.trim(),
         _newPasswordController.text.trim(),
       ),
@@ -59,7 +59,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<UserBloc, UserState>(
+    return BlocConsumer<BranchBloc, BranchState>(
       listenWhen: (previous, current) => current.maybeWhen(
         orElse: () => false,
         changePasswordFailed: (failure) => true,

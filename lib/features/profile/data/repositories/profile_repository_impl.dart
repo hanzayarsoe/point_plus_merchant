@@ -1,10 +1,9 @@
-import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:merchant/core/failure/failure.dart';
-import 'package:merchant/features/auth/data/models/user_model.dart';
-import 'package:merchant/features/auth/domain/entities/user.dart';
+import 'package:merchant/features/auth/data/models/branch_model.dart';
+import 'package:merchant/features/auth/domain/entities/branch.dart';
 import 'package:merchant/features/profile/data/datasources/profile_datasource.dart';
 import 'package:merchant/features/profile/domain/repositories/profile_repository.dart';
 
@@ -22,15 +21,15 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  TaskEither<Failure, User> updateUserProfile(User user, File? profileImage) {
+  TaskEither<Failure, Branch> updateBranchInfo(Branch updatedBranch) {
     return profileDatasource
-        .updateUserProfile(user.toModel(), profileImage)
+        .updateBranchInfo(updatedBranch.toModel())
         .map((model) => model.toEntity());
   }
 
   @override
-  TaskEither<Failure, User> getUser() {
-    return profileDatasource.getUser().map((user) => user.toEntity());
+  TaskEither<Failure, Branch> getBranchInfo() {
+    return profileDatasource.getBranchInfo().map((user) => user.toEntity());
   }
 
   @override

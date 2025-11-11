@@ -22,4 +22,6 @@ class ApiUrls {
       "/api/branch/me/change-phone/send-otp";
   static final String changeMobileNumber = "/api/branch/me/change-phone";
   static final String changePassword = "/api/branch/me/change-password";
+  static final String items = "/api/branch/items";
+  static final String editBranchInfo = "/api/branch/me";
 }

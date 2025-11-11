@@ -1,37 +1,44 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:merchant/features/auth/data/models/manager_model.dart';
-import 'package:merchant/features/auth/domain/entities/user.dart';
+import 'package:merchant/features/auth/domain/entities/branch.dart';
 
-part 'user_model.freezed.dart';
-part 'user_model.g.dart';
+part 'branch_model.freezed.dart';
+part 'branch_model.g.dart';
 
 @freezed
-abstract class UserModel with _$UserModel {
-  const factory UserModel({
+abstract class BranchModel with _$BranchModel {
+  const factory BranchModel({
     required int id,
     required String name,
     required String accountNumber,
     String? primaryPhoneNumber,
+    String? secondaryPhoneNumber,
     String? email,
     required String? openTime,
     required String? closeTime,
     required int branchAmount,
     required String branchAddress,
+    String? about,
+    String? profileUrl,
     required int merchantId,
     required String merchantName,
     required ManagerModel manager,
-  }) = _UserModel;
+  }) = _BranchModel;
 
-  factory UserModel.fromJson(Map<String, dynamic> json) =>
-      _$UserModelFromJson(json);
+  factory BranchModel.fromJson(Map<String, dynamic> json) =>
+      _$BranchModelFromJson(json);
 }
 
-extension UserModelX on UserModel {
-  User toEntity() {
-    return User(
+extension BranchModelX on BranchModel {
+  Branch toEntity() {
+    return Branch(
       id: id,
       name: name,
       accountNumber: accountNumber,
+      primaryPhoneNumber: primaryPhoneNumber,
+      secondaryPhoneNumber: secondaryPhoneNumber,
+      about: about,
+      profileUrl: profileUrl,
       openTime: openTime,
       closeTime: closeTime,
       branchAmount: branchAmount,
@@ -43,12 +50,16 @@ extension UserModelX on UserModel {
   }
 }
 
-extension UserX on User {
-  UserModel toModel() {
-    return UserModel(
+extension BranchX on Branch {
+  BranchModel toModel() {
+    return BranchModel(
       id: id,
       name: name,
       accountNumber: accountNumber,
+      primaryPhoneNumber: primaryPhoneNumber,
+      secondaryPhoneNumber: secondaryPhoneNumber,
+      about: about,
+      profileUrl: profileUrl,
       openTime: openTime,
       closeTime: closeTime,
       branchAmount: branchAmount,

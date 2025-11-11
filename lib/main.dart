@@ -5,7 +5,7 @@ import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/router/app_router.dart';
 import 'package:merchant/core/themes/app_theme.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
-import 'package:merchant/features/profile/presentation/bloc/bloc/user_bloc.dart';
+import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
 import 'package:merchant/features/profile/presentation/cubits/locale_cubit/locale_cubit.dart';
 import 'package:merchant/features/profile/presentation/cubits/noti_cubit/noti_cubit.dart';
 import 'package:toastification/toastification.dart';
@@ -18,7 +18,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final AppRouter _appRouter = sl<AppRouter>();
   final AuthBloc _authBloc = sl<AuthBloc>();
-  final UserBloc _userBloc = sl<UserBloc>();
+  final BranchBloc _userBloc = sl<BranchBloc>();
   final NotiCubit _notiCubit = sl<NotiCubit>();
   final LocaleCubit _locale = sl<LocaleCubit>();
   MyApp({super.key});
@@ -32,7 +32,8 @@ class MyApp extends StatelessWidget {
           create: (context) => _authBloc..add(AuthEvent.checkAuthStatus()),
         ),
         BlocProvider(
-          create: (context) => _userBloc..add(UserEvent.getUser()),
+          lazy: false,
+          create: (context) => _userBloc..add(BranchEvent.getBranchInfo()),
           child: Container(),
         ),
         BlocProvider(create: (context) => _locale..loadInitialLocale()),

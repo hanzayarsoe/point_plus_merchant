@@ -1,6 +1,4 @@
-import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:merchant/core/constants/api_urls.dart';
@@ -8,7 +6,7 @@ import 'package:merchant/core/failure/failure.dart';
 import 'package:merchant/core/network/dio_helper.dart';
 import 'package:merchant/core/storage/user_preference.dart';
 import 'package:merchant/core/utils/task_either_helpers.dart';
-import 'package:merchant/features/auth/data/models/user_model.dart';
+import 'package:merchant/features/auth/data/models/branch_model.dart';
 import 'package:merchant/features/profile/data/datasources/profile_datasource.dart';
 
 class ProfileDatasourceImpl implements ProfileDatasource {
@@ -26,41 +24,27 @@ class ProfileDatasourceImpl implements ProfileDatasource {
   }
 
   @override
-  TaskEither<Failure, UserModel> updateUserProfile(
-    UserModel user,
-    File? profileImage,
-  ) {
+  TaskEither<Failure, BranchModel> updateBranchInfo(BranchModel updatedBranch) {
     return tryCatchWithFailure(() async {
-      final formData = FormData();
-      formData.fields.addAll([
-        MapEntry('name', user.name),
-        MapEntry('email', user.email ?? ''),
-        MapEntry('phoneNumber', user.manager.phoneNumber ?? ''),
-        MapEntry('address', user.manager.address ?? ''),
-        MapEntry('dob', user.manager.dob ?? ''),
-        MapEntry('gender', user.manager.gender!.toUpperCase()),
-      ]);
-      if (profileImage != null) {
-        final fileName = profileImage.path.split('/').last;
-        formData.files.add(
-          MapEntry(
-            'profileUrl',
-            await MultipartFile.fromFile(profileImage.path, filename: fileName),
-          ),
-        );
-      }
-      final response = await dioHelper.put(ApiUrls.me, formData);
+      final response = await dioHelper.put(ApiUrls.editBranchInfo, {
+        "name": updatedBranch.name,
+        "secondaryPhoneNumber": updatedBranch.secondaryPhoneNumber,
+        "openTime": updatedBranch.openTime,
+        "closeTime": updatedBranch.closeTime,
+        "branchAddress": updatedBranch.branchAddress,
+      });
+
       final data = response.data['data'];
-      return UserModel.fromJson(data);
+      return BranchModel.fromJson(data);
     });
   }
 
   @override
-  TaskEither<Failure, UserModel> getUser() {
+  TaskEither<Failure, BranchModel> getBranchInfo() {
     return tryCatchWithFailure(() async {
       final response = await dioHelper.get(ApiUrls.me, {});
       final data = response.data['data'];
-      return UserModel.fromJson(data);
+      return BranchModel.fromJson(data);
     });
   }
 
