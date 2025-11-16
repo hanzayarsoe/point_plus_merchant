@@ -17,5 +17,9 @@ abstract class TransactionEntity with _$TransactionEntity {
     required String createdAt,
     required String? description,
     String? direction,
+    String? toAccountName,
+    String? toAccountType,
+    String? fromAccountName,
+    String? fromAccountType,
   }) = _TransactionEntity;
 }

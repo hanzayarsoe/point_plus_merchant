@@ -74,6 +74,7 @@ class AppTheme {
         pointTransferCardBorderColor: DarkTheme.transferPointCardBorderColor,
         softBlueColor: DarkTheme.softBlueColor,
         actionBlueColor: DarkTheme.actionBlueColor,
+        dimGrayColor: DarkTheme.dimGrayColor,
       ),
     ],
   );

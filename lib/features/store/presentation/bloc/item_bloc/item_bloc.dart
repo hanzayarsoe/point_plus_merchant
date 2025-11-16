@@ -21,7 +21,7 @@ class ItemBloc extends Bloc<ItemEvent, PagingState<int, ItemEntity>> {
       return;
     }
     try {
-      final pageKey = (currentState.keys?.lastOrNull ?? 0) + 1;
+      final pageKey = currentState.keys?.length ?? 0;
       final result = await getItemsUsecase
           .call(
             page: pageKey,

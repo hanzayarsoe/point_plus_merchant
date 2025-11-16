@@ -32,4 +32,5 @@ class AppRoutes {
   static const String seeAllItems = 'seeAllItems';
   static const String seeAllPromos = 'seeAllPromos';
   static const String itemDetails = 'itemDetails';
+  static const String transactionDetail = 'transactionDetail';
 }

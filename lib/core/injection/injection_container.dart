@@ -14,6 +14,7 @@ import 'package:merchant/core/utils/device_info.dart';
 import 'package:merchant/core/utils/helper_function.dart';
 import 'package:merchant/core/utils/validation.dart';
 import 'package:merchant/features/auth/di/auth_injection.dart';
+import 'package:merchant/features/history/di/history_injection.dart';
 import 'package:merchant/features/home/di/home_injection.dart';
 import 'package:merchant/features/profile/di/profile_injection.dart';
 import 'package:merchant/features/store/di/store_injection.dart';
@@ -80,4 +81,7 @@ Future<void> serviceLocater() async {
 
   // Store
   StoreInjection.init(sl);
+
+  // History
+  HistoryInjection.init(sl);
 }

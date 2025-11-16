@@ -76,6 +76,16 @@ class AppSpacing {
     vertical: 16,
   );
 
+  static const EdgeInsets historyTransactionPadding = EdgeInsets.symmetric(
+    horizontal: 20,
+    vertical: 10,
+  );
+
+  static const EdgeInsets transactionDetailCardPadding = EdgeInsets.symmetric(
+    horizontal: 10,
+    vertical: 20,
+  );
+
   static BorderRadius smallCircularBorderRadius = BorderRadius.circular(10);
 
   static BorderRadius extraSmallCircularBorderRadius = BorderRadius.circular(5);

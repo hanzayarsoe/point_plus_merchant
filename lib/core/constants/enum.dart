@@ -14,6 +14,17 @@ enum Gender with DisplayNameEnum {
 
 enum ApiMethod { get, put, post, patch }
 
+enum ActiveDateField { start, end }
+
 enum DialogType { confirm, delete }
 
-enum TransactionType { transfer, receive, withdraw, recharge }
+enum HistoryTransactionType with DisplayNameEnum {
+  all('All'),
+  inflow('Inflow'),
+  outflow('Outflow'),
+  pointsflow('Pointsflow');
+
+  @override
+  final String displayName;
+  const HistoryTransactionType(this.displayName);
+}

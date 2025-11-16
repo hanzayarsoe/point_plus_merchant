@@ -24,4 +24,6 @@ class ApiUrls {
   static final String changePassword = "/api/branch/me/change-password";
   static final String items = "/api/branch/items";
   static final String editBranchInfo = "/api/branch/me";
+  static final String historyTransaction = "/api/branch/transactions/grouped";
+  static final String transactionDetail = "/api/branch/transactions/{id}";
 }

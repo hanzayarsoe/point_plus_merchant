@@ -16,6 +16,9 @@ class CustomTextFormField extends StatelessWidget {
   final bool? readOnly;
   final bool? enabled;
   final Function()? onTap;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final bool? isDense;
 
   const CustomTextFormField({
     super.key,
@@ -32,6 +35,9 @@ class CustomTextFormField extends StatelessWidget {
     this.readOnly,
     this.enabled,
     this.onTap,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.isDense,
   });
 
   @override
@@ -52,6 +58,9 @@ class CustomTextFormField extends StatelessWidget {
             hintText: hintText,
             counterText: '',
             errorText: errorText,
+            prefixIcon: prefixIcon,
+            suffixIcon: suffixIcon,
+            isDense: isDense ?? false,
           ),
           onTap: onTap,
           onChanged: onChanged,

@@ -41,24 +41,24 @@ class Formatter {
     return hiddenText;
   }
 
-  static String formateNrcToString(Nrc nrc) {
+  static String formatNrcToString(Nrc nrc) {
     return '${nrc.stateNumber}/${nrc.township}${nrc.citizenType}${nrc.code}';
   }
 
-  static String formateDateOfBirth(DateTime dob) {
+  static String formatDateOfBirth(DateTime dob) {
     return DateFormat('d MMMM yyyy').format(dob);
   }
 
-  static String formateStringToDateOfBirth(String dob) {
+  static String formatStringToDateOfBirth(String dob) {
     final parsedDate = DateTime.parse(dob);
     return DateFormat('d MMMM yyyy').format(parsedDate);
   }
 
-  static DateTime formateAmPmToDateTime(String time) {
+  static DateTime formatAmPmToDateTime(String time) {
     return DateFormat('hh:mm a').parse(time);
   }
 
-  static String formateDateTimeToAmPm(DateTime time) {
+  static String formatDateTimeToAmPm(DateTime time) {
     return DateFormat('hh:mm a').format(time);
   }
 
@@ -68,5 +68,90 @@ class Formatter {
     } catch (e) {
       return DateTime.now();
     }
+  }
+
+  static String getOrdinalSuffix(int day) {
+    if (day >= 11 && day <= 13) return 'th';
+    switch (day % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  }
+
+  static String formatDateToHistoryDate(DateTime date) {
+    String day = date.day.toString();
+    String suffix = getOrdinalSuffix(date.day);
+    String monthYear = DateFormat('MMMM, y').format(date);
+    return "$day$suffix $monthYear";
+  }
+
+  static String formatDateToStringDate(DateTime? date) {
+    if (date == null) {
+      return '';
+    }
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
+
+  static String formatUtcTimeToHistoryTransactionDateTime(String utcTime) {
+    final DateTime parsedTime = DateTime.parse(utcTime);
+    final DateTime localTime = parsedTime.toLocal();
+    final DateFormat formatter = DateFormat('MMM d, y . hh:mm a');
+    final String formattedString = formatter.format(localTime);
+    return formattedString;
+  }
+
+  static String formatUtcTimeToHistoryTransactionDate(String utcTime) {
+    final DateTime parsedTime = DateTime.parse(utcTime);
+    final DateTime localTime = parsedTime.toLocal();
+    final DateFormat formatter = DateFormat('MMM d, y');
+    final String formattedString = formatter.format(localTime);
+    return formattedString;
+  }
+
+  static String formatUtcTimeToHistoryTransactionTime(String utcTime) {
+    final DateTime parsedTime = DateTime.parse(utcTime);
+    final DateTime localTime = parsedTime.toLocal();
+    final DateFormat formatter = DateFormat('hh:mm a');
+    final String formattedString = formatter.format(localTime);
+    return formattedString;
+  }
+
+  static String maskAndChunkString(
+    String text, {
+    int visibleChars = 4,
+    int chunkSize = 4,
+    String maskChar = '*',
+  }) {
+    if (text.isEmpty) {
+      return "";
+    }
+
+    String visible = text
+        .substring(0, (text.length < visibleChars ? text.length : visibleChars))
+        .padRight(visibleChars, maskChar);
+
+    String masked;
+    if (text.length <= visibleChars) {
+      masked = "";
+    } else {
+      masked = maskChar * (text.length - visibleChars);
+    }
+
+    String combined = visible + masked;
+
+    List<String> chunks = [];
+    for (int i = 0; i < combined.length; i += chunkSize) {
+      int end = (i + chunkSize < combined.length)
+          ? i + chunkSize
+          : combined.length;
+      chunks.add(combined.substring(i, end));
+    }
+    return chunks.join(' ');
   }
 }

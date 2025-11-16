@@ -87,8 +87,9 @@ class _EditStoreProfilePageState extends State<EditStoreProfilePage> {
                 TextButton(
                   onPressed: () {
                     // 4. User clicked "Done". Now, format and save the time.
-                    final String formattedTime =
-                        Formatter.formateDateTimeToAmPm(newSelectedTime);
+                    final String formattedTime = Formatter.formatDateTimeToAmPm(
+                      newSelectedTime,
+                    );
                     setState(() {
                       if (isOPenTime) {
                         _openTimeController.text = formattedTime;

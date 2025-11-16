@@ -56,7 +56,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     );
     if (date != null) {
       setState(() {
-        _dobController.text = Formatter.formateDateOfBirth(date);
+        _dobController.text = Formatter.formatDateOfBirth(date);
       });
     }
   }
@@ -72,11 +72,11 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     final user = authState.whenOrNull(authenticated: (user) => user);
     if (user != null) {
       _nameController.text = user.manager.name;
-      _nrcController.text = Formatter.formateNrcToString(user.manager.nrc);
+      _nrcController.text = Formatter.formatNrcToString(user.manager.nrc);
       _mobileController.text = user.manager.phoneNumber ?? '';
       _emialController.text = user.manager.email ?? '';
       _genderController.text = user.manager.gender ?? '';
-      _dobController.text = Formatter.formateStringToDateOfBirth(
+      _dobController.text = Formatter.formatStringToDateOfBirth(
         user.manager.dob ?? '',
       );
       _addressController.text = user.manager.address ?? '';

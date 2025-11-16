@@ -10,6 +10,8 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
     this.isScrollable,
     this.padding,
     this.margin,
+    this.dividerColor,
+    this.dividerHeight,
   });
 
   final TabController? tabController;
@@ -19,6 +21,8 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
   final bool? isScrollable;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
+  final Color? dividerColor;
+  final double? dividerHeight;
 
   @override
   Size get preferredSize {
@@ -38,6 +42,8 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
         indicatorWeight: 2.0,
         tabs: tabs,
         onTap: onTap,
+        dividerColor: dividerColor,
+        dividerHeight: dividerHeight,
       ),
     );
   }

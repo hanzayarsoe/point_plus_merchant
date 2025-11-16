@@ -12,9 +12,10 @@ import 'package:merchant/features/auth/presentation/pages/login_page.dart';
 import 'package:merchant/features/auth/presentation/pages/reset_password_page.dart';
 import 'package:merchant/features/auth/presentation/pages/verify_otp_page.dart';
 import 'package:merchant/features/auth/presentation/pages/welcome_page.dart';
+import 'package:merchant/features/history/presentation/pages/history_page.dart';
+import 'package:merchant/features/history/presentation/pages/transaction_detail_page.dart';
 import 'package:merchant/features/home/domain/entities/point_transfer_entity.dart';
 import 'package:merchant/features/home/presentation/bloc/point_transfer_bloc/point_transfer_bloc.dart';
-import 'package:merchant/features/home/presentation/pages/history_page.dart';
 import 'package:merchant/features/home/presentation/pages/home_page.dart';
 import 'package:merchant/features/home/presentation/pages/point_transfer_page.dart';
 import 'package:merchant/features/home/presentation/pages/scanner_page.dart';
@@ -188,6 +189,21 @@ class AppRouter {
                   path: '/history',
                   pageBuilder: (context, state) =>
                       NoTransitionPage(child: HistoryPage()),
+                  routes: [
+                    GoRoute(
+                      name: AppRoutes.transactionDetail,
+                      path: 'transaction-detail/:id',
+                      pageBuilder: (context, state) {
+                        final String? transactionId =
+                            state.pathParameters['id'];
+                        return NoTransitionPage(
+                          child: TransactionDetailPage(
+                            transactionId: transactionId ?? '1',
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

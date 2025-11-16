@@ -7,6 +7,7 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color? pointTransferCardBorderColor;
   final Color? softBlueColor;
   final Color? actionBlueColor;
+  final Color? dimGrayColor;
 
   const AppColors({
     required this.gradientStart,
@@ -15,6 +16,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.pointTransferCardBorderColor,
     required this.softBlueColor,
     required this.actionBlueColor,
+    required this.dimGrayColor,
   });
 
   @override
@@ -25,6 +27,7 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? pointTransferCardBorderColor,
     Color? softBlueColor,
     Color? actionBlueColor,
+    Color? dimGrayColor,
   }) {
     return AppColors(
       gradientStart: gradientStart ?? this.gradientStart,
@@ -34,6 +37,7 @@ class AppColors extends ThemeExtension<AppColors> {
           pointTransferCardBorderColor ?? this.pointTransferCardBorderColor,
       softBlueColor: softBlueColor ?? this.softBlueColor,
       actionBlueColor: actionBlueColor ?? this.actionBlueColor,
+      dimGrayColor: dimGrayColor ?? this.dimGrayColor,
     );
   }
 
@@ -54,6 +58,7 @@ class AppColors extends ThemeExtension<AppColors> {
       ),
       softBlueColor: Color.lerp(softBlueColor, other.softBlueColor, t),
       actionBlueColor: Color.lerp(actionBlueColor, other.actionBlueColor, t),
+      dimGrayColor: Color.lerp(dimGrayColor, other.dimGrayColor, t),
     );
   }
 }

@@ -19,6 +19,10 @@ abstract class TransactionModel with _$TransactionModel {
     required String createdAt,
     required String? description,
     String? direction,
+    String? toAccountName,
+    String? toAccountType,
+    String? fromAccountName,
+    String? fromAccountType,
   }) = _TransactionModel;
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) =>
@@ -39,6 +43,10 @@ extension TransactionModelX on TransactionModel {
       merchantName: merchantName,
       createdAt: createdAt,
       description: description,
+      toAccountName: toAccountName,
+      toAccountType: toAccountType,
+      fromAccountName: fromAccountName,
+      fromAccountType: fromAccountType,
     );
   }
 }

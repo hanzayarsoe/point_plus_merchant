@@ -17,6 +17,7 @@ class IconTextFormField extends StatelessWidget {
   final Color? borderColor;
   final List<TextInputFormatter>? inputFormatter;
   final int? maxLength;
+  final bool? isPrefixDivider;
 
   const IconTextFormField({
     super.key,
@@ -34,6 +35,7 @@ class IconTextFormField extends StatelessWidget {
     this.borderColor,
     this.inputFormatter,
     this.maxLength,
+    this.isPrefixDivider,
   });
 
   @override
@@ -64,7 +66,8 @@ class IconTextFormField extends StatelessWidget {
                   SizedBox(width: AppSpacing.defaultSpacing),
                   Icon(prefixIcon, size: 24),
                   SizedBox(width: AppSpacing.defaultSpacing),
-                  Container(width: 0.3, height: 40, color: Colors.white),
+                  if (isPrefixDivider ?? true)
+                    Container(width: 0.3, height: 40, color: Colors.white),
                   SizedBox(width: AppSpacing.defaultSpacing),
                 ],
               )

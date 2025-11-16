@@ -5,6 +5,7 @@ import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/router/app_router.dart';
 import 'package:merchant/core/themes/app_theme.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:merchant/features/history/presentation/cubit/cubit/history_filter_cubit.dart';
 import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
 import 'package:merchant/features/profile/presentation/cubits/locale_cubit/locale_cubit.dart';
 import 'package:merchant/features/profile/presentation/cubits/noti_cubit/noti_cubit.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
   final BranchBloc _userBloc = sl<BranchBloc>();
   final NotiCubit _notiCubit = sl<NotiCubit>();
   final LocaleCubit _locale = sl<LocaleCubit>();
+  final HistoryFilterCubit _historyFilterCubit = sl<HistoryFilterCubit>();
   MyApp({super.key});
 
   @override
@@ -38,6 +40,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(create: (context) => _locale..loadInitialLocale()),
         BlocProvider(create: (context) => _notiCubit..loadNoti()),
+        BlocProvider(create: (context) => _historyFilterCubit),
       ],
       child: MaterialApp.router(
         theme: AppTheme.darkTheme,

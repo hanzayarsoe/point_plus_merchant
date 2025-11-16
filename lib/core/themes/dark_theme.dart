@@ -29,4 +29,5 @@ class DarkTheme {
   static final Color transferPointCardBorderColor = Color(0xffDACBAD);
   static final Color softBlueColor = Color(0xff5C98F1);
   static final Color actionBlueColor = Color(0xff2573E8);
+  static final Color dimGrayColor = Color(0xff6F6E66);
 }
