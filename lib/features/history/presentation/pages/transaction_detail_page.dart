@@ -2,10 +2,11 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/injection/injection_container.dart';
@@ -51,18 +52,25 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
     }
   }
 
-  Future<void> _capterWidgetAndSave(
+  Future<void> _captureWidgetAndSave(
     BuildContext context,
     String transactionId,
   ) async {
     try {
-      PermissionStatus status;
-      if (Platform.isIOS) {
-        status = await Permission.photos.request();
-      } else {
-        status = await Permission.storage.request();
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.storage,
+        Permission.photos,
+      ].request();
+
+      bool isGranted =
+          (statuses[Permission.storage]?.isGranted ?? false) ||
+          (statuses[Permission.photos]?.isGranted ?? false);
+
+      if (!isGranted && Platform.isIOS) {
+        isGranted = (statuses[Permission.photos]?.isLimited ?? false);
       }
-      if (status.isGranted) {
+
+      if (isGranted) {
         final Uint8List? imageBytes = await _captureWidget();
         if (imageBytes == null) {
           showToast(
@@ -73,11 +81,13 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         }
         final String fileName =
             "$transactionId/${DateTime.now().millisecondsSinceEpoch}.png";
-        final result = await ImageGallerySaver.saveImage(
+
+        final result = await ImageGallerySaverPlus.saveImage(
           imageBytes,
           name: fileName,
           quality: 90,
         );
+
         if (result['isSuccess'] == true) {
           if (!context.mounted) return;
           showSuccessToast(context, 'Image saved successfully!');
@@ -89,10 +99,12 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         }
       } else {
         showToast(
-          message: 'Error: Storage Permission Denied',
+          message: 'Error: Storage or Photos Permission Denied',
           type: ToastificationType.error,
         );
-        if (status.isPermanentlyDenied) {
+        if (statuses[Permission.storage] ==
+                PermissionStatus.permanentlyDenied ||
+            statuses[Permission.photos] == PermissionStatus.permanentlyDenied) {
           openAppSettings();
         }
       }
@@ -119,7 +131,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           final transaction = state.whenOrNull(
             loaded: (transaction) => transaction,
           );
-          if (transaction == null) return SizedBox.shrink();
+          if (transaction == null) {
+            return Center(child: CupertinoActivityIndicator());
+          }
           final isWithdraw = transaction.type.toLowerCase().contains(
             'withdraw',
           );
@@ -134,13 +148,13 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 title: 'Transaction Detail',
                 automaticallyImplyLeading: true,
               ),
-              body: RepaintBoundary(
-                key: _globalKey,
-                child: SingleChildScrollView(
-                  padding: AppSpacing.defaultPadding,
-                  child: Column(
-                    children: [
-                      Container(
+              body: SingleChildScrollView(
+                padding: AppSpacing.defaultPadding,
+                child: Column(
+                  children: [
+                    RepaintBoundary(
+                      key: _globalKey,
+                      child: Container(
                         padding: AppSpacing.transactionDetailCardPadding,
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -256,15 +270,15 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                           ],
                         ),
                       ),
-                      AppSpacing.largeSizedBox,
-                      SaveReceiptButton(
-                        onPressed: () => _capterWidgetAndSave(
-                          context,
-                          transaction.id.toString(),
-                        ),
+                    ),
+                    AppSpacing.largeSizedBox,
+                    SaveReceiptButton(
+                      onPressed: () => _captureWidgetAndSave(
+                        context,
+                        transaction.id.toString(),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

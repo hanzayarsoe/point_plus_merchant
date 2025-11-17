@@ -26,6 +26,7 @@ class HistoryBloc
     if (currentState.isLoading || !currentState.hasNextPage) {
       return;
     }
+    emit(currentState.copyWith(isLoading: true));
     try {
       final pageKey = currentState.keys?.length ?? 0;
       final result = await getHistoriesUsecase
