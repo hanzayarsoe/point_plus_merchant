@@ -8,18 +8,21 @@ class SaveReceiptButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: onPressed,
       child: Container(
         width: 180,
         height: 40,
         decoration: BoxDecoration(
           color: Colors.transparent,
           border: Border.all(color: Theme.of(context).colorScheme.primary),
-          borderRadius: AppSpacing.normalBorderRadiusCircular,
+          borderRadius: AppSpacing.smallCircularBorderRadius,
         ),
-        child: Text(
-          'Save Receipt',
-          style: Theme.of(context).textTheme.labelMedium!.copyWith(
-            color: Theme.of(context).colorScheme.primary,
+        child: Center(
+          child: Text(
+            'Save Receipt',
+            style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
         ),
       ),
