@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/injection/injection_container.dart';
-import 'package:merchant/features/home/presentation/cubits/cubit/search_customer_cubit.dart';
+import 'package:merchant/features/home/presentation/cubits/search_customer_cubit/search_customer_cubit.dart';
 import 'package:merchant/features/home/presentation/widgets/custom_tab_bar.dart';
 import 'package:merchant/features/home/presentation/widgets/search_account.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';

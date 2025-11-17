@@ -9,7 +9,7 @@ import 'package:merchant/core/utils/toast.dart';
 import 'package:merchant/core/utils/validation.dart';
 import 'package:merchant/features/auth/presentation/widgets/gradient_elevated_button.dart';
 import 'package:merchant/features/home/domain/entities/point_transfer_entity.dart';
-import 'package:merchant/features/home/presentation/cubits/cubit/search_customer_cubit.dart';
+import 'package:merchant/features/home/presentation/cubits/search_customer_cubit/search_customer_cubit.dart';
 import 'package:merchant/shared/widgets/custom_text_form_field.dart';
 import 'package:merchant/shared/widgets/loading_overlay.dart';
 import 'package:toastification/toastification.dart';

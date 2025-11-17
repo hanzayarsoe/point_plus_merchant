@@ -28,3 +28,13 @@ enum HistoryTransactionType with DisplayNameEnum {
   final String displayName;
   const HistoryTransactionType(this.displayName);
 }
+
+enum RequestTransactionType with DisplayNameEnum {
+  all('All'),
+  recharge('Recharge'),
+  withdraw('Withdraw');
+
+  @override
+  final String displayName;
+  const RequestTransactionType(this.displayName);
+}

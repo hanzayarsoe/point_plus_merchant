@@ -7,18 +7,19 @@ import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/features/history/presentation/bloc/history_bloc/history_bloc.dart';
 import 'package:merchant/features/history/presentation/cubit/cubit/history_filter_cubit.dart';
 import 'package:merchant/features/history/presentation/widgets/custom_bottom_sheet.dart';
-import 'package:merchant/features/history/presentation/widgets/history_group_list.dart';
+import 'package:merchant/features/home/presentation/cubits/request_transaction_cubit/cubit/request_transaction_cubit.dart';
 import 'package:merchant/features/home/presentation/widgets/custom_tab_bar.dart';
+import 'package:merchant/features/home/presentation/widgets/request_transaction.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 
-class HistoryPage extends StatefulWidget {
-  const HistoryPage({super.key});
+class YourRequestPag extends StatefulWidget {
+  const YourRequestPag({super.key});
 
   @override
-  State<HistoryPage> createState() => _HistoryPageState();
+  State<YourRequestPag> createState() => _YourRequestPageState();
 }
 
-class _HistoryPageState extends State<HistoryPage>
+class _YourRequestPageState extends State<YourRequestPag>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -26,7 +27,7 @@ class _HistoryPageState extends State<HistoryPage>
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: HistoryTransactionType.values.length,
+      length: RequestTransactionType.values.length,
       vsync: this,
     );
     _tabController.addListener(_onTabChanged);
@@ -41,8 +42,8 @@ class _HistoryPageState extends State<HistoryPage>
 
   void _onTabChanged() {
     if (!_tabController.indexIsChanging) {
-      final selectedType = HistoryTransactionType.values[_tabController.index];
-      context.read<HistoryFilterCubit>().updateFilters(type: selectedType);
+      final selectedType = RequestTransactionType.values[_tabController.index];
+      context.read<RequestTransactionCubit>().updateFilters(type: selectedType);
     }
   }
 
@@ -84,7 +85,7 @@ class _HistoryPageState extends State<HistoryPage>
             tabController: _tabController,
             padding: EdgeInsets.only(top: AppSpacing.defaultSpacing),
             tabs: [
-              ...HistoryTransactionType.values.map(
+              ...RequestTransactionType.values.map(
                 (tab) => Text(tab.displayName),
               ),
             ],
@@ -98,8 +99,8 @@ class _HistoryPageState extends State<HistoryPage>
         ),
         body: TabBarView(
           controller: _tabController,
-          children: HistoryTransactionType.values.map((_) {
-            return HistoryGroupList();
+          children: RequestTransactionType.values.map((_) {
+            return RequestTransaction();
           }).toList(),
         ),
       ),

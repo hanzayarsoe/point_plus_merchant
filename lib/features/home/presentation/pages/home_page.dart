@@ -7,6 +7,7 @@ import 'package:merchant/features/home/presentation/widgets/home_point_balance_c
 import 'package:merchant/features/home/presentation/widgets/home_profile_card.dart';
 import 'package:merchant/features/home/presentation/widgets/quick_actions.dart';
 import 'package:go_router/go_router.dart';
+import 'package:merchant/features/home/presentation/widgets/recent_transaction.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,27 +46,7 @@ class _HomePageState extends State<HomePage> {
               QuickActions(quickActions: quickActions),
               AppSpacing.largeSizedBox,
               HomeHeadLineText(title: 'Recent'),
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                child: Column(
-                  children: [
-                    ListView.separated(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return null;
-
-                        // final recent =
-                        // return
-                      },
-                      separatorBuilder: (context, index) => Divider(),
-                      itemCount: 2,
-                    ),
-                  ],
-                ),
-              ),
+              RecentTransactions(),
             ],
           ),
         ),
