@@ -14,12 +14,18 @@ import 'package:merchant/features/auth/presentation/pages/verify_otp_page.dart';
 import 'package:merchant/features/auth/presentation/pages/welcome_page.dart';
 import 'package:merchant/features/history/presentation/pages/history_page.dart';
 import 'package:merchant/features/history/presentation/pages/transaction_detail_page.dart';
+import 'package:merchant/features/home/domain/entities/point_request_entity.dart';
 import 'package:merchant/features/home/domain/entities/point_transfer_entity.dart';
 import 'package:merchant/features/home/presentation/bloc/point_transfer_bloc/point_transfer_bloc.dart';
 import 'package:merchant/features/home/presentation/pages/home_page.dart';
+import 'package:merchant/features/home/presentation/pages/noti_page.dart';
 import 'package:merchant/features/home/presentation/pages/point_transfer_page.dart';
+import 'package:merchant/features/home/presentation/pages/recharge_page.dart';
+import 'package:merchant/features/home/presentation/pages/request_transaction_detail_page.dart';
 import 'package:merchant/features/home/presentation/pages/scanner_page.dart';
 import 'package:merchant/features/home/presentation/pages/search_with_account_number_page.dart';
+import 'package:merchant/features/home/presentation/pages/withdraw_page.dart';
+import 'package:merchant/features/home/presentation/pages/your_request_page.dart';
 import 'package:merchant/features/profile/presentation/pages/about_app_page.dart';
 import 'package:merchant/features/profile/presentation/pages/change_language_page.dart';
 import 'package:merchant/features/profile/presentation/pages/change_mobile_number_page.dart';
@@ -161,6 +167,18 @@ class AppRouter {
           },
         ),
         GoRoute(
+          name: AppRoutes.withdraw,
+          path: '/withdraw',
+          pageBuilder: (context, state) =>
+              NoTransitionPage(child: WithdrawPage()),
+        ),
+        GoRoute(
+          name: AppRoutes.recharge,
+          path: '/recharge',
+          pageBuilder: (context, state) =>
+              NoTransitionPage(child: RechargePage()),
+        ),
+        GoRoute(
           name: AppRoutes.changeMobileNumberVerifyOtp,
           path: '/change-mobile-number-verify-otp',
           pageBuilder: (context, state) {
@@ -179,6 +197,36 @@ class AppRouter {
                   path: '/home',
                   pageBuilder: (context, state) =>
                       NoTransitionPage(child: HomePage()),
+                  routes: [
+                    GoRoute(
+                      name: AppRoutes.noti,
+                      path: 'noti',
+                      pageBuilder: (context, state) {
+                        return NoTransitionPage(child: NotiPage());
+                      },
+                    ),
+                    GoRoute(
+                      name: AppRoutes.request,
+                      path: 'request-transaction',
+                      pageBuilder: (context, state) =>
+                          NoTransitionPage(child: YourRequestPag()),
+                      routes: [
+                        GoRoute(
+                          name: AppRoutes.requestTransactionDetail,
+                          path: 'request-transaction-detail',
+                          pageBuilder: (context, state) {
+                            final PointRequestEntity request =
+                                state.extra as PointRequestEntity;
+                            return NoTransitionPage(
+                              child: RequestTransactionDetailPage(
+                                request: request,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),

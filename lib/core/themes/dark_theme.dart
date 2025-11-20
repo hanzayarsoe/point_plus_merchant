@@ -30,4 +30,6 @@ class DarkTheme {
   static final Color softBlueColor = Color(0xff5C98F1);
   static final Color actionBlueColor = Color(0xff2573E8);
   static final Color dimGrayColor = Color(0xff6F6E66);
+  static final Color pendingColor = Color(0xffF98918);
+  static final Color lightGray = Color(0xffD1D1CF);
 }

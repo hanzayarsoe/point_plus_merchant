@@ -33,4 +33,6 @@ class AppRoutes {
   static const String seeAllPromos = 'seeAllPromos';
   static const String itemDetails = 'itemDetails';
   static const String transactionDetail = 'transactionDetail';
+  static const String requestTransactionDetail = 'requestTransactionDetail';
+  static const String noti = "noti";
 }

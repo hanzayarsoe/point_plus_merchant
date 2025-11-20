@@ -9,7 +9,7 @@ abstract class PointTransferModel with _$PointTransferModel {
     required String accountNumber,
     required String name,
     required String? profileUrl,
-    String? amount,
+    int? amount,
     String? customerQrCode,
     required String type,
   }) = _PointTransferModel;
@@ -24,7 +24,7 @@ extension PointTransferModelX on PointTransferModel {
       accountNumber: accountNumber,
       name: name,
       profileUrl: profileUrl,
-      amount: amount,
+      amount: amount.toString(),
       customerQrCode: customerQrCode,
       type: type,
     );

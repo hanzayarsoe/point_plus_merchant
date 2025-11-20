@@ -3,7 +3,8 @@ import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/features/history/presentation/widgets/points_flow_text.dart';
 
 class TransactionHeader extends StatelessWidget {
-  final String groupTitle, inflow, outflow;
+  final String groupTitle;
+  final String? inflow, outflow;
   const TransactionHeader({
     super.key,
     required this.groupTitle,
@@ -28,12 +29,16 @@ class TransactionHeader extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              PointsFlowText(title: 'Inflow', amount: inflow),
-              PointsFlowText(
-                title: 'Outflow',
-                amount: outflow,
-                textAlign: TextAlign.end,
-              ),
+              if (inflow != null && int.parse(inflow ?? '') > 0)
+                PointsFlowText(title: 'Inflow', amount: inflow!),
+              if (outflow != null && int.parse(outflow ?? '') > 0)
+                PointsFlowText(
+                  title: 'Outflow',
+                  amount: outflow!,
+                  textAlign: (inflow != null && int.parse(inflow ?? '') > 0)
+                      ? TextAlign.end
+                      : TextAlign.start,
+                ),
             ],
           ),
         ],

@@ -26,5 +26,8 @@ class ApiUrls {
   static final String editBranchInfo = "/api/branch/me";
   static final String historyTransaction = "/api/branch/transactions/grouped";
   static final String transactionDetail = "/api/branch/transactions/{id}";
-  static final String requestTransactionHistory = "";
+  static final String requestHistory = "/api/branch/point-requests/grouped";
+  static final String requestPoints = "/api/branch/point-requests";
+  static final String requestDetail = "/api/branch/point-requests/{id}";
+  static final String noti = "/api/notifications/me/grouped";
 }

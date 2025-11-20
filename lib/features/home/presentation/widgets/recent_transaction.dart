@@ -18,9 +18,10 @@ class RecentTransactions extends StatelessWidget {
         ),
       child: BlocBuilder<HistoryBloc, PagingState<int, HistoryListItemEntity>>(
         builder: (context, state) {
-          return PagedListView(
-            state: state,
-            fetchNextPage: () => {},
+          final modifiedState = state.copyWith(hasNextPage: false);
+          return PagedSliverList(
+            state: modifiedState,
+            fetchNextPage: () {},
             builderDelegate: PagedChildBuilderDelegate<HistoryListItemEntity>(
               itemBuilder: (context, item, index) {
                 return item.maybeWhen(
@@ -31,6 +32,7 @@ class RecentTransactions extends StatelessWidget {
                       date: date,
                       amount: amount.toString(),
                       party: party,
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
                     );
                   },
                 );

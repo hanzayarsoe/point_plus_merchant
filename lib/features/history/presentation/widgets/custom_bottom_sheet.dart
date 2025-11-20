@@ -9,16 +9,19 @@ import 'package:merchant/core/utils/formatter.dart';
 import 'package:merchant/features/auth/presentation/widgets/gradient_elevated_button.dart';
 import 'package:merchant/features/history/presentation/cubit/cubit/history_filter_cubit.dart';
 import 'package:merchant/features/history/presentation/widgets/custom_date_chip.dart';
+import 'package:merchant/features/home/presentation/cubits/request_filter_cubit/cubit/request_filter_cubit.dart';
 import 'package:merchant/shared/widgets/custom_text_form_field.dart';
 
 class CustomBottomSheet extends StatefulWidget {
   final DateTime? startDate;
   final DateTime? endDate;
   final int initialChipIndex;
+  final bool isHistoryFilter;
   const CustomBottomSheet({
     super.key,
     this.startDate,
     this.endDate,
+    required this.isHistoryFilter,
     required this.initialChipIndex,
   });
 
@@ -113,11 +116,19 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
   }
 
   void _applyFilters() {
-    context.read<HistoryFilterCubit>().updateFilters(
-      selectedChipIndex: selectedIndexChip,
-      startDate: _selectedStartDate,
-      endDate: _selectedEndDate,
-    );
+    if (widget.isHistoryFilter) {
+      context.read<HistoryFilterCubit>().updateFilters(
+        selectedChipIndex: selectedIndexChip,
+        startDate: _selectedStartDate,
+        endDate: _selectedEndDate,
+      );
+    } else {
+      context.read<RequestFilterCubit>().updateFilters(
+        selectedChipIndex: selectedIndexChip,
+        startDate: _selectedStartDate,
+        endDate: _selectedEndDate,
+      );
+    }
     context.pop();
   }
 

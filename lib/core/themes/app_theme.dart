@@ -75,6 +75,8 @@ class AppTheme {
         softBlueColor: DarkTheme.softBlueColor,
         actionBlueColor: DarkTheme.actionBlueColor,
         dimGrayColor: DarkTheme.dimGrayColor,
+        pendingColor: DarkTheme.pendingColor,
+        lightGray: DarkTheme.lightGray,
       ),
     ],
   );

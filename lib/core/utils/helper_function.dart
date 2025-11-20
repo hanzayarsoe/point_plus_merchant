@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class HelperFunction {
   static String getGreeting() {
     final hour = DateTime.now().hour;
@@ -10,5 +12,17 @@ class HelperFunction {
     } else {
       return 'Good Night';
     }
+  }
+
+  static bool isNotiDateHeadIsToday(String date) {
+    final format = DateFormat("MMM d yyyy");
+
+    final inputDate = format.parse(date);
+
+    final now = DateTime.now();
+
+    return inputDate.year == now.year &&
+        inputDate.month == now.month &&
+        inputDate.day == now.day;
   }
 }

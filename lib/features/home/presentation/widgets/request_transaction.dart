@@ -5,13 +5,11 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/router/app_routes.dart';
 import 'package:merchant/core/utils/formatter.dart';
-import 'package:merchant/features/history/domain/entities/history_list_item_entity.dart';
-import 'package:merchant/features/history/presentation/bloc/history_bloc/history_bloc.dart';
-import 'package:merchant/features/history/presentation/cubit/cubit/history_filter_cubit.dart';
 import 'package:merchant/features/history/presentation/widgets/transaction_header.dart';
-import 'package:merchant/features/history/presentation/widgets/transaction_row.dart';
-import 'package:merchant/features/home/presentation/cubits/request_transaction_cubit/cubit/request_transaction_cubit.dart';
-import 'package:merchant/shared/widgets/loading_overlay.dart';
+import 'package:merchant/features/home/domain/entities/point_request_entity.dart';
+import 'package:merchant/features/home/presentation/bloc/request_history_bloc/request_history_bloc.dart';
+import 'package:merchant/features/home/presentation/cubits/request_filter_cubit/cubit/request_filter_cubit.dart';
+import 'package:merchant/features/home/presentation/widgets/request_transaction_row.dart';
 
 class RequestTransaction extends StatefulWidget {
   const RequestTransaction({super.key});
@@ -21,22 +19,22 @@ class RequestTransaction extends StatefulWidget {
 }
 
 class _RequestTransactionState extends State<RequestTransaction> {
-  late HistoryBloc _historyBloc;
+  late RequestHistoryBloc _requestHistoryBloc;
   @override
   void initState() {
     super.initState();
-    _historyBloc = context.read<HistoryBloc>();
+    _requestHistoryBloc = context.read<RequestHistoryBloc>();
     _fetchPage(isFirstFetch: true);
   }
 
   void _fetchPage({required bool isFirstFetch}) {
     if (isFirstFetch) {
-      _historyBloc.add(HistoryEvent.reset());
+      _requestHistoryBloc.add(RequestHistoryEvent.reset());
     }
-    final filterState = context.read<HistoryFilterCubit>().state;
-    _historyBloc.add(
-      HistoryEvent.getHistories(
-        type: filterState.type,
+    final filterState = context.read<RequestFilterCubit>().state;
+    _requestHistoryBloc.add(
+      RequestHistoryEvent.getRequestHistories(
+        requestType: filterState.type,
         startDate: Formatter.formatDateToStringDate(filterState.startDate),
         endDate: Formatter.formatDateToStringDate(filterState.endDate),
       ),
@@ -45,61 +43,68 @@ class _RequestTransactionState extends State<RequestTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HistoryBloc, PagingState<int, HistoryListItemEntity>>(
+    return BlocBuilder<
+      RequestHistoryBloc,
+      PagingState<int, PointRequestEntity>
+    >(
       builder: (context, state) {
-        return BlocListener<RequestTransactionCubit, RequestTransactionState>(
+        return BlocListener<RequestFilterCubit, RequestFilterState>(
           listener: (context, state) {
             _fetchPage(isFirstFetch: true);
           },
-          child: LoadingOverlay(
-            isLoading: state.isLoading,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.largeSpacing,
-              ),
-              child: CustomScrollView(
-                slivers: [
-                  PagedSliverList(
-                    state: state,
-                    fetchNextPage: () => {},
-                    builderDelegate:
-                        PagedChildBuilderDelegate<HistoryListItemEntity>(
-                          itemBuilder: (context, item, index) {
-                            return item.when(
-                              monthHeader: (type, groupTitle, inflow, outflow) {
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                    top: AppSpacing.largeSpacing,
-                                  ),
-                                  child: TransactionHeader(
-                                    groupTitle: groupTitle,
-                                    inflow: inflow,
-                                    outflow: outflow,
-                                  ),
-                                );
-                              },
-                              transaction:
-                                  (id, date, amount, type, title, party) {
-                                    if (title == null) return SizedBox.shrink();
-                                    return InkWell(
-                                      onTap: () => context.pushNamed(
-                                        AppRoutes.transactionDetail,
-                                        pathParameters: {'id': id.toString()},
-                                      ),
-                                      child: TransactionRow(
-                                        title: title,
-                                        date: date,
-                                        amount: amount.toString(),
-                                        party: party,
-                                      ),
-                                    );
-                                  },
-                            );
-                          },
-                        ),
-                  ),
-                ],
-              ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.largeSpacing),
+            child: CustomScrollView(
+              slivers: [
+                PagedSliverList(
+                  state: state,
+                  fetchNextPage: () => _fetchPage(isFirstFetch: false),
+                  builderDelegate:
+                      PagedChildBuilderDelegate<PointRequestEntity>(
+                        itemBuilder: (context, item, index) {
+                          return item.when(
+                            monthHeader: (groupTitle, type) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  top: AppSpacing.largeSpacing,
+                                ),
+                                child: TransactionHeader(
+                                  groupTitle: groupTitle,
+                                  inflow: null,
+                                  outflow: null,
+                                ),
+                              );
+                            },
+                            transaction:
+                                (
+                                  createdAt,
+                                  note,
+                                  amount,
+                                  requestType,
+                                  type,
+                                  branchName,
+                                  id,
+                                  merchantName,
+                                  status,
+                                ) {
+                                  return InkWell(
+                                    onTap: () => context.pushNamed(
+                                      AppRoutes.requestTransactionDetail,
+                                      extra: item,
+                                    ),
+                                    child: RequestTransactionRow(
+                                      title: requestType,
+                                      date: createdAt,
+                                      amount: amount.toString(),
+                                      status: status,
+                                    ),
+                                  );
+                                },
+                          );
+                        },
+                      ),
+                ),
+              ],
             ),
           ),
         );

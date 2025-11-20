@@ -1,11 +1,13 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:merchant/core/constants/enum.dart';
 import 'package:merchant/core/failure/failure.dart';
-import 'package:merchant/features/history/data/models/history_list_item_model.dart';
-import 'package:merchant/features/history/domain/entities/history_list_item_entity.dart';
 import 'package:merchant/features/home/data/datasources/home_datasource.dart';
 import 'package:merchant/features/home/data/models/customer_model.dart';
+import 'package:merchant/features/home/data/models/noti_model.dart';
+import 'package:merchant/features/home/data/models/point_request_model.dart';
 import 'package:merchant/features/home/domain/entities/customer_entity.dart';
+import 'package:merchant/features/home/domain/entities/noti_entity.dart';
+import 'package:merchant/features/home/domain/entities/point_request_entity.dart';
 import 'package:merchant/features/home/domain/entities/point_transfer_entity.dart';
 import 'package:merchant/features/home/domain/repositories/home_repository.dart';
 
@@ -27,7 +29,7 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  TaskEither<Failure, List<HistoryListItemEntity>> getRequestHistory(
+  TaskEither<Failure, List<PointRequestEntity>> getRequestHistory(
     int page,
     int limit,
     RequestTransactionType? type,
@@ -37,5 +39,29 @@ class HomeRepositoryImpl implements HomeRepository {
     return homeDatasource
         .getRequestHistories(page, limit, type, startDate, endDate)
         .map((items) => items.map((item) => item.toEntity()).toList());
+  }
+
+  @override
+  TaskEither<Failure, void> requestPoints(
+    RequestTransactionType type,
+    int points,
+  ) {
+    return homeDatasource.requestPoints(points, type);
+  }
+
+  @override
+  TaskEither<Failure, PointRequestEntity> getRequestDetail(int id) {
+    // TODO: implement getRequestDetail
+    throw UnimplementedError();
+  }
+
+  @override
+  TaskEither<Failure, List<NotiEntity>> getNotifs({
+    required int page,
+    required int limit,
+  }) {
+    return homeDatasource
+        .getNotifs(page, limit)
+        .map((notifs) => notifs.map((noti) => noti.toEntity()).toList());
   }
 }

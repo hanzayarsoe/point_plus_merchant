@@ -22,4 +22,8 @@ class HistoryFilterCubit extends Cubit<HistoryFilterState> {
       ),
     );
   }
+
+  void clearFilters() {
+    emit(HistoryFilterState());
+  }
 }

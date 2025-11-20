@@ -8,6 +8,8 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color? softBlueColor;
   final Color? actionBlueColor;
   final Color? dimGrayColor;
+  final Color? pendingColor;
+  final Color? lightGray;
 
   const AppColors({
     required this.gradientStart,
@@ -17,6 +19,8 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.softBlueColor,
     required this.actionBlueColor,
     required this.dimGrayColor,
+    required this.pendingColor,
+    required this.lightGray,
   });
 
   @override
@@ -28,6 +32,8 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? softBlueColor,
     Color? actionBlueColor,
     Color? dimGrayColor,
+    Color? pendingColor,
+    Color? lightGray,
   }) {
     return AppColors(
       gradientStart: gradientStart ?? this.gradientStart,
@@ -38,6 +44,8 @@ class AppColors extends ThemeExtension<AppColors> {
       softBlueColor: softBlueColor ?? this.softBlueColor,
       actionBlueColor: actionBlueColor ?? this.actionBlueColor,
       dimGrayColor: dimGrayColor ?? this.dimGrayColor,
+      pendingColor: pendingColor ?? this.pendingColor,
+      lightGray: lightGray ?? this.lightGray,
     );
   }
 
@@ -59,6 +67,8 @@ class AppColors extends ThemeExtension<AppColors> {
       softBlueColor: Color.lerp(softBlueColor, other.softBlueColor, t),
       actionBlueColor: Color.lerp(actionBlueColor, other.actionBlueColor, t),
       dimGrayColor: Color.lerp(dimGrayColor, other.dimGrayColor, t),
+      pendingColor: Color.lerp(pendingColor, other.pendingColor, t),
+      lightGray: Color.lerp(lightGray, other.lightGray, t),
     );
   }
 }

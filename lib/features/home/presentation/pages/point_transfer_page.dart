@@ -45,7 +45,9 @@ class _PointTransferPageState extends State<PointTransferPage> {
       'request',
     );
     _requestAmount = widget.pointTransferEntity.amount;
-    if (_requestAmount != null && _requestAmount!.isNotEmpty) {
+    if (_requestAmount != null &&
+        _requestAmount!.isNotEmpty &&
+        _requestAmount != 'null') {
       setState(() {
         _pointController.text = _requestAmount!;
       });

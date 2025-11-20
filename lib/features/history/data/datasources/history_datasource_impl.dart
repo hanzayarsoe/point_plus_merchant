@@ -33,7 +33,7 @@ class HistoryDatasourceImpl implements HistoryDatasource {
         {},
         queryParameters: {
           "page": page,
-          "limit": limit,
+          "size": limit,
           if (apiType != null && apiType.isNotEmpty) "type": apiType,
           if (startDate != null && startDate.isNotEmpty) "startDate": startDate,
           if (endDate != null && endDate.isNotEmpty) "endDate": endDate,

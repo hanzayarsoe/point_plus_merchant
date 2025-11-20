@@ -21,33 +21,36 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late HistoryFilterCubit _historyFilterCubit;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: HistoryTransactionType.values.length,
+      length: HistoryTransactionType.values.take(5).length,
       vsync: this,
     );
     _tabController.addListener(_onTabChanged);
+    _historyFilterCubit = context.read<HistoryFilterCubit>();
   }
 
   @override
   void dispose() {
     _tabController.removeListener(_onTabChanged);
     _tabController.dispose();
+    _historyFilterCubit.clearFilters();
     super.dispose();
   }
 
   void _onTabChanged() {
     if (!_tabController.indexIsChanging) {
       final selectedType = HistoryTransactionType.values[_tabController.index];
-      context.read<HistoryFilterCubit>().updateFilters(type: selectedType);
+      _historyFilterCubit.updateFilters(type: selectedType);
     }
   }
 
   Future<void> _filterDate() async {
-    final currentFilters = context.read<HistoryFilterCubit>().state;
+    final currentFilters = _historyFilterCubit.state;
     showModalBottomSheet(
       context: context,
       isDismissible: true,
@@ -63,6 +66,7 @@ class _HistoryPageState extends State<HistoryPage>
           initialChipIndex: currentFilters.selectedChipIndex,
           startDate: currentFilters.startDate,
           endDate: currentFilters.endDate,
+          isHistoryFilter: true,
         );
       },
     );
@@ -80,13 +84,13 @@ class _HistoryPageState extends State<HistoryPage>
             isScrollable: true,
             tabAlignment: TabAlignment.center,
             dividerColor: Theme.of(context).colorScheme.onSurface,
-            dividerHeight: 1,
+            dividerHeight: 0.5,
             tabController: _tabController,
             padding: EdgeInsets.only(top: AppSpacing.defaultSpacing),
             tabs: [
-              ...HistoryTransactionType.values.map(
-                (tab) => Text(tab.displayName),
-              ),
+              ...HistoryTransactionType.values
+                  .take(5)
+                  .map((tab) => Text(tab.displayName)),
             ],
           ),
           actions: [

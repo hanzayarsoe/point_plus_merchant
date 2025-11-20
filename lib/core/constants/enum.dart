@@ -38,3 +38,12 @@ enum RequestTransactionType with DisplayNameEnum {
   final String displayName;
   const RequestTransactionType(this.displayName);
 }
+
+enum NotiType with DisplayNameEnum {
+  transaction('Transaction'),
+  systemnotice('System Notice');
+
+  @override
+  final String displayName;
+  const NotiType(this.displayName);
+}

@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:merchant/features/auth/domain/entities/nrc.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class Formatter {
   Formatter._();
@@ -91,9 +92,9 @@ class Formatter {
     return "$day$suffix $monthYear";
   }
 
-  static String formatDateToStringDate(DateTime? date) {
+  static String? formatDateToStringDate(DateTime? date) {
     if (date == null) {
-      return '';
+      return null;
     }
     return DateFormat('yyyy-MM-dd').format(date);
   }
@@ -153,5 +154,11 @@ class Formatter {
       chunks.add(combined.substring(i, end));
     }
     return chunks.join(' ');
+  }
+
+  static String formatUtcTimeToTimeago(DateTime dateTime) {
+    DateTime localTime = dateTime.toLocal();
+
+    return timeago.format(localTime);
   }
 }

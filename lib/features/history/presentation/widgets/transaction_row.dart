@@ -6,13 +6,17 @@ import 'package:merchant/core/utils/formatter.dart';
 import 'package:merchant/features/home/presentation/widgets/custom_icon.dart';
 
 class TransactionRow extends StatelessWidget {
-  final String title, date, amount, party;
+  final String title, date, amount;
+  final String? party, status;
+  final Color? backgroundColor;
   const TransactionRow({
     super.key,
     required this.title,
     required this.date,
     required this.amount,
-    required this.party,
+    this.party,
+    this.status,
+    this.backgroundColor,
   });
 
   @override
@@ -23,6 +27,7 @@ class TransactionRow extends StatelessWidget {
     return Container(
       padding: AppSpacing.historyTransactionPadding,
       decoration: BoxDecoration(
+        color: backgroundColor,
         border: Border(
           left: BorderSide(color: Theme.of(context).colorScheme.secondary),
           right: BorderSide(color: Theme.of(context).colorScheme.secondary),
@@ -90,17 +95,23 @@ class TransactionRow extends StatelessWidget {
                     textAlign: TextAlign.end,
                   ),
                   AppSpacing.smallSizedBox,
-                  Text(
-                    party,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Theme.of(
-                        context,
-                      ).extension<AppColors>()!.dimGrayColor,
+                  if (party != null)
+                    Text(
+                      party!,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(
+                          context,
+                        ).extension<AppColors>()!.dimGrayColor,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.end,
-                  ),
+                  if (status != null)
+                    Text(
+                      status!,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                 ],
               ),
             ),

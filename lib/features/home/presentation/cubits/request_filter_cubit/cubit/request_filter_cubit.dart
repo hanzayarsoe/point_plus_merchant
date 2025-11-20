@@ -2,12 +2,11 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:merchant/core/constants/enum.dart';
 
-part 'request_transaction_state.dart';
-part 'request_transaction_cubit.freezed.dart';
+part 'request_filter_state.dart';
+part 'request_filter_cubit.freezed.dart';
 
-class RequestTransactionCubit extends Cubit<RequestTransactionState> {
-  RequestTransactionCubit() : super(RequestTransactionState());
-
+class RequestFilterCubit extends Cubit<RequestFilterState> {
+  RequestFilterCubit() : super(RequestFilterState());
   void updateFilters({
     RequestTransactionType? type,
     int? selectedChipIndex,
@@ -22,5 +21,9 @@ class RequestTransactionCubit extends Cubit<RequestTransactionState> {
         endDate: endDate,
       ),
     );
+  }
+
+  void clearFilters() {
+    emit(RequestFilterState());
   }
 }

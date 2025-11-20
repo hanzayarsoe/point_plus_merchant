@@ -96,6 +96,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   flutter_rating_bar: ^4.0.1
   image_gallery_saver_plus: ^4.0.1
+  timeago: ^3.7.1
 
 dev_dependencies:
   flutter_test:

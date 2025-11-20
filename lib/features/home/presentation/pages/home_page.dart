@@ -26,29 +26,51 @@ class _HomePageState extends State<HomePage> {
         icon: LucideIcons.scan,
         onPressed: () => context.pushNamed(AppRoutes.scanner),
       ),
-      (title: 'Your Request', icon: LucideIcons.history, onPressed: () {}),
-      (title: 'Withdraw', icon: LucideIcons.squareStar, onPressed: () {}),
-      (title: 'Recharge', icon: LucideIcons.walletMinimal, onPressed: () {}),
+      (
+        title: 'Your Request',
+        icon: LucideIcons.history,
+        onPressed: () => context.pushNamed(AppRoutes.request),
+      ),
+      (
+        title: 'Withdraw',
+        icon: LucideIcons.squareStar,
+        onPressed: () => context.pushNamed(AppRoutes.withdraw),
+      ),
+      (
+        title: 'Recharge',
+        icon: LucideIcons.walletMinimal,
+        onPressed: () => context.pushNamed(AppRoutes.recharge),
+      ),
     ];
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: AppSpacing.defaultPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              HomeProfileCard(),
-              AppSpacing.extraLargeSizedBox,
-              HomePointBalanceCard(),
-              AppSpacing.largeSizedBox,
-              HomeHeadLineText(title: 'Quick Actions'),
-              AppSpacing.largeSizedBox,
-              QuickActions(quickActions: quickActions),
-              AppSpacing.largeSizedBox,
-              HomeHeadLineText(title: 'Recent'),
-              RecentTransactions(),
-            ],
-          ),
+        child: CustomScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: AppSpacing.defaultPadding,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    HomeProfileCard(),
+                    AppSpacing.extraLargeSizedBox,
+                    HomePointBalanceCard(),
+                    AppSpacing.largeSizedBox,
+                    HomeHeadLineText(title: 'Quick Actions'),
+                    AppSpacing.largeSizedBox,
+                    QuickActions(quickActions: quickActions),
+                    AppSpacing.largeSizedBox,
+                    HomeHeadLineText(title: 'Recent'),
+                  ],
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: AppSpacing.defaultPadding,
+              sliver: RecentTransactions(),
+            ),
+          ],
         ),
       ),
     );

@@ -4,10 +4,9 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/constants/enum.dart';
 import 'package:merchant/core/injection/injection_container.dart';
-import 'package:merchant/features/history/presentation/bloc/history_bloc/history_bloc.dart';
-import 'package:merchant/features/history/presentation/cubit/cubit/history_filter_cubit.dart';
 import 'package:merchant/features/history/presentation/widgets/custom_bottom_sheet.dart';
-import 'package:merchant/features/home/presentation/cubits/request_transaction_cubit/cubit/request_transaction_cubit.dart';
+import 'package:merchant/features/home/presentation/bloc/request_history_bloc/request_history_bloc.dart';
+import 'package:merchant/features/home/presentation/cubits/request_filter_cubit/cubit/request_filter_cubit.dart';
 import 'package:merchant/features/home/presentation/widgets/custom_tab_bar.dart';
 import 'package:merchant/features/home/presentation/widgets/request_transaction.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
@@ -22,6 +21,7 @@ class YourRequestPag extends StatefulWidget {
 class _YourRequestPageState extends State<YourRequestPag>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late RequestFilterCubit _requestFilterCubit;
 
   @override
   void initState() {
@@ -31,24 +31,26 @@ class _YourRequestPageState extends State<YourRequestPag>
       vsync: this,
     );
     _tabController.addListener(_onTabChanged);
+    _requestFilterCubit = context.read<RequestFilterCubit>();
   }
 
   @override
   void dispose() {
     _tabController.removeListener(_onTabChanged);
     _tabController.dispose();
+    _requestFilterCubit.clearFilters();
     super.dispose();
   }
 
   void _onTabChanged() {
     if (!_tabController.indexIsChanging) {
       final selectedType = RequestTransactionType.values[_tabController.index];
-      context.read<RequestTransactionCubit>().updateFilters(type: selectedType);
+      _requestFilterCubit.updateFilters(type: selectedType);
     }
   }
 
   Future<void> _filterDate() async {
-    final currentFilters = context.read<HistoryFilterCubit>().state;
+    final currentFilters = _requestFilterCubit.state;
     showModalBottomSheet(
       context: context,
       isDismissible: true,
@@ -64,6 +66,7 @@ class _YourRequestPageState extends State<YourRequestPag>
           initialChipIndex: currentFilters.selectedChipIndex,
           startDate: currentFilters.startDate,
           endDate: currentFilters.endDate,
+          isHistoryFilter: false,
         );
       },
     );
@@ -72,18 +75,21 @@ class _YourRequestPageState extends State<YourRequestPag>
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HistoryBloc(sl()),
+      create: (context) => RequestHistoryBloc(sl()),
       child: Scaffold(
         appBar: CustomAppBar(
-          title: 'History',
+          title: 'Your Request',
           isTitleLarge: true,
+          automaticallyImplyLeading: true,
           bottom: CustomTabBar(
-            isScrollable: true,
-            tabAlignment: TabAlignment.center,
+            tabAlignment: TabAlignment.start,
             dividerColor: Theme.of(context).colorScheme.onSurface,
-            dividerHeight: 1,
+            dividerHeight: 0.5,
             tabController: _tabController,
-            padding: EdgeInsets.only(top: AppSpacing.defaultSpacing),
+            padding: EdgeInsets.only(
+              top: AppSpacing.defaultSpacing,
+              left: AppSpacing.defaultSpacing,
+            ),
             tabs: [
               ...RequestTransactionType.values.map(
                 (tab) => Text(tab.displayName),

@@ -54,10 +54,12 @@ class _ScannerPageState extends State<ScannerPage> {
 
     if (capture != null && capture.barcodes.isNotEmpty) {
       _scannedValue = capture.barcodes.first.rawValue;
-      showToast(
-        message: _scannedValue.toString(),
-        type: ToastificationType.success,
-      );
+      if (_scannedValue != null && _scannedValue!.isNotEmpty) {
+        setState(() {
+          _isScanning = false;
+        });
+        _handleQrScan(_scannedValue!);
+      }
     } else {
       _isScanning = false;
       showToast(
@@ -71,10 +73,6 @@ class _ScannerPageState extends State<ScannerPage> {
     if (capture.barcodes.isNotEmpty) {
       _controller.stop();
       _scannedValue = capture.barcodes.first.rawValue;
-      showToast(
-        message: _scannedValue.toString(),
-        type: ToastificationType.success,
-      );
       log(_scannedValue.toString());
       _handleQrScan(_scannedValue!);
     }
@@ -141,12 +139,9 @@ class _ScannerPageState extends State<ScannerPage> {
                               _controller.start();
                             }
                           },
-                          child: IgnorePointer(
-                            ignoring: false,
-                            child: MobileScanner(
-                              controller: _controller,
-                              onDetect: (result) => _handleLiveScan(result),
-                            ),
+                          child: MobileScanner(
+                            controller: _controller,
+                            onDetect: (result) => _handleLiveScan(result),
                           ),
                         ),
                       ),
