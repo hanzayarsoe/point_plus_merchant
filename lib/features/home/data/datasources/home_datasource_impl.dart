@@ -108,15 +108,10 @@ class HomeDatasourceImpl implements HomeDatasource {
     RequestTransactionType type,
   ) {
     return tryCatchWithFailure(() async {
-      await dioHelper.get(
-        ApiUrls.requestPoints,
-        {},
-        queryParameters: {
-          "amount": points,
-          "type": type.name.toUpperCase(),
-          "note": null,
-        },
-      );
+      await dioHelper.post(ApiUrls.requestPoints, {
+        "amount": points,
+        "type": type.name.toUpperCase(),
+      });
     });
   }
 
