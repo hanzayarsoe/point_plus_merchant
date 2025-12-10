@@ -1,8 +1,8 @@
-
 import 'package:flutter/widgets.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:merchant/core/failure/failure.dart';
 import 'package:merchant/features/auth/data/models/branch_model.dart';
+import 'package:merchant/features/auth/domain/entities/manager.dart';
 
 abstract interface class ProfileDatasource {
   Future<String> loadLocale();
@@ -16,4 +16,5 @@ abstract interface class ProfileDatasource {
     String currentPassword,
     String newPassword,
   );
+  TaskEither<Failure, void> updateManagerInfo(Manager updatedManger);
 }

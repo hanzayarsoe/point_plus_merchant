@@ -1,4 +1,4 @@
-
+import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:merchant/core/constants/api_urls.dart';
@@ -7,6 +7,7 @@ import 'package:merchant/core/network/dio_helper.dart';
 import 'package:merchant/core/storage/user_preference.dart';
 import 'package:merchant/core/utils/task_either_helpers.dart';
 import 'package:merchant/features/auth/data/models/branch_model.dart';
+import 'package:merchant/features/auth/domain/entities/manager.dart';
 import 'package:merchant/features/profile/data/datasources/profile_datasource.dart';
 
 class ProfileDatasourceImpl implements ProfileDatasource {
@@ -84,6 +85,33 @@ class ProfileDatasourceImpl implements ProfileDatasource {
         "oldPassword": currentPassword,
         "newPassword": newPassword,
       });
+    });
+  }
+
+  @override
+  TaskEither<Failure, void> updateManagerInfo(Manager updatedManger) {
+    return tryCatchWithFailure(() async {
+      final formData = FormData.fromMap({
+        "name": updatedManger.name,
+        "email": updatedManger.email,
+        "phoneNumber": updatedManger.phoneNumber,
+        "address": updatedManger.address,
+        "gender": updatedManger.gender!.toUpperCase(),
+        "dob": updatedManger.dob,
+      });
+
+      if (updatedManger.profileUrl != null &&
+          updatedManger.profileUrl!.isNotEmpty &&
+          !updatedManger.profileUrl!.startsWith('http')) {
+        formData.files.add(
+          MapEntry(
+            "profile",
+            await MultipartFile.fromFile(updatedManger.profileUrl!),
+          ),
+        );
+      }
+
+      await dioHelper.put(ApiUrls.manager, formData);
     });
   }
 }

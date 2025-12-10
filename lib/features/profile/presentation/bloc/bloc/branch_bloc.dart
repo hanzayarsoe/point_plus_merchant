@@ -2,11 +2,13 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:merchant/core/failure/failure.dart';
 import 'package:merchant/features/auth/domain/entities/branch.dart';
+import 'package:merchant/features/auth/domain/entities/manager.dart';
 import 'package:merchant/features/profile/domain/usecases/change_mobile_number_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/change_password_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/get_branch_info_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/send_otp_to_change_number_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/update_branch_info_usecase.dart';
+import 'package:merchant/features/profile/domain/usecases/update_manager_info_usecase.dart';
 
 part 'branch_event.dart';
 part 'branch_state.dart';
@@ -18,12 +20,14 @@ class BranchBloc extends Bloc<BranchEvent, BranchState> {
   final SendOtpToChangeNumberUsecase sendOtpToChangeNumberUsecase;
   final ChangeMobileNumberUsecase changeMobileNumberUsecase;
   final ChangePasswordUsecase changePasswordUsecase;
+  final UpdateManagerInfoUsecase updateManagerInfoUsecase;
   BranchBloc(
     this.getBranchInfoUsecase,
     this.updateBranchInfoUsecase,
     this.sendOtpToChangeNumberUsecase,
     this.changeMobileNumberUsecase,
     this.changePasswordUsecase,
+    this.updateManagerInfoUsecase,
   ) : super(_Initial()) {
     on<_GetBranchInfo>(_onGetBranchInfo);
     on<_UpdateBranchInfo>(_onUpdateBranchInfo);
@@ -31,6 +35,7 @@ class BranchBloc extends Bloc<BranchEvent, BranchState> {
     on<_ChangeMobileNumber>(_onChangeMobileNumber);
     on<_ChangePassword>(_onChangePassword);
     on<_RefreshBranchData>(_onRefreshBranchData);
+    on<_UpdateManagerInfo>(_onUpdateManagerInfo);
   }
   Future<void> _onGetBranchInfo(
     _GetBranchInfo event,
@@ -106,5 +111,19 @@ class BranchBloc extends Bloc<BranchEvent, BranchState> {
   ) async {
     emit(BranchState.loading());
     add(BranchEvent.getBranchInfo());
+  }
+
+  Future<void> _onUpdateManagerInfo(
+    _UpdateManagerInfo event,
+    Emitter<BranchState> emit,
+  ) async {
+    emit(BranchState.loading());
+    final result = await updateManagerInfoUsecase
+        .call(event.updatedManager)
+        .run();
+    result.fold(
+      (failure) => emit(BranchState.updatedManagerFailed(failure)),
+      (_) => emit(BranchState.updatedManagerSuccessful()),
+    );
   }
 }

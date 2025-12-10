@@ -10,6 +10,7 @@ import 'package:merchant/features/profile/domain/usecases/get_branch_info_usecas
 import 'package:merchant/features/profile/domain/usecases/load_locale.dart';
 import 'package:merchant/features/profile/domain/usecases/send_otp_to_change_number_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/update_branch_info_usecase.dart';
+import 'package:merchant/features/profile/domain/usecases/update_manager_info_usecase.dart';
 import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
 import 'package:merchant/features/profile/presentation/cubits/locale_cubit/locale_cubit.dart';
 import 'package:merchant/features/profile/presentation/cubits/noti_cubit/noti_cubit.dart';
@@ -31,8 +32,11 @@ class ProfileInjection {
       ..registerLazySingleton(() => UpdateBranchInfoUsecase(sl()))
       ..registerLazySingleton(() => ChangePasswordUsecase(sl()))
       ..registerLazySingleton(() => ChangeLocaleUseCase(sl()))
+      ..registerLazySingleton(() => UpdateManagerInfoUsecase(sl()))
       ..registerLazySingleton(() => LocaleCubit(sl(), sl()))
       ..registerLazySingleton(() => NotiCubit(sl()))
-      ..registerLazySingleton(() => BranchBloc(sl(), sl(), sl(), sl(), sl()));
+      ..registerLazySingleton(
+        () => BranchBloc(sl(), sl(), sl(), sl(), sl(), sl()),
+      );
   }
 }

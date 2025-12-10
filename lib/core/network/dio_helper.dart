@@ -41,63 +41,75 @@ class DioHelper {
               !isAuthEndPoint(error.requestOptions.path) &&
               !error.requestOptions.path.contains(ApiUrls.refresh)) {
             try {
+              // 1. Attempt to refresh the token
               await _refreshAccessTokenSafely();
               final newAccessToken = await _secureStorage.getAccessToken();
+
               if (newAccessToken != null) {
-                error.requestOptions.headers['Authorization'] =
-                    'Bearer $newAccessToken';
-                dynamic requestData = error.requestOptions.data;
+                // 2. Token refreshed! Now try to retry the request
+                try {
+                  error.requestOptions.headers['Authorization'] =
+                      'Bearer $newAccessToken';
+                  dynamic requestData = error.requestOptions.data;
 
-                // ✅ Rebuild FormData if needed
-                if (requestData is FormData) {
-                  final newFormData = FormData();
+                  // ✅ Rebuild FormData if needed
+                  if (requestData is FormData) {
+                    final newFormData = FormData();
 
-                  // Copy fields
-                  for (var field in requestData.fields) {
-                    newFormData.fields.add(MapEntry(field.key, field.value));
-                  }
-
-                  // Rebuild files
-                  for (var entry in requestData.files) {
-                    final MultipartFile originalFile = entry.value;
-
-                    // NOTE: Recreate the file using fromFile if you have path,
-                    // otherwise you must use fromBytes if you stored bytes.
-
-                    // If originalFile was created from a file path
-                    final String? filePath = originalFile.filename != null
-                        ? (originalFile as dynamic).filePath as String?
-                        : null;
-
-                    if (filePath != null) {
-                      final newFile = await MultipartFile.fromFile(
-                        filePath,
-                        filename: originalFile.filename,
-                        contentType: originalFile.contentType,
-                      );
-
-                      newFormData.files.add(MapEntry(entry.key, newFile));
-                    } else {
-                      throw Exception(
-                        "Cannot recreate MultipartFile for retry without file path.",
-                      );
+                    // Copy fields
+                    for (var field in requestData.fields) {
+                      newFormData.fields.add(MapEntry(field.key, field.value));
                     }
+
+                    // Rebuild files
+                    for (var entry in requestData.files) {
+                      final MultipartFile originalFile = entry.value;
+
+                      String? filePath;
+                      try {
+                        // Attempt to get filePath dynamically
+                        filePath = (originalFile as dynamic).filePath as String?;
+                      } catch (_) {
+                        // Ignore NoSuchMethodError or casting errors
+                      }
+
+                      if (filePath != null) {
+                        final newFile = await MultipartFile.fromFile(
+                          filePath,
+                          filename: originalFile.filename,
+                          contentType: originalFile.contentType,
+                        );
+
+                        newFormData.files.add(MapEntry(entry.key, newFile));
+                      } else {
+                        // If we can't get the path, we can't retry the upload automatically.
+                        // We throw here to fall into the retry-catch block.
+                        throw Exception(
+                          "Cannot recreate MultipartFile for retry: filePath not available.",
+                        );
+                      }
+                    }
+
+                    requestData = newFormData;
                   }
 
-                  requestData = newFormData;
+                  final response = await _dio.request(
+                    error.requestOptions.path,
+                    data: requestData,
+                    queryParameters: error.requestOptions.queryParameters,
+                    options: Options(
+                      method: error.requestOptions.method,
+                      headers: error.requestOptions.headers,
+                      contentType: error.requestOptions.contentType,
+                    ),
+                  );
+                  return handler.resolve(response);
+                } catch (retryError) {
+                  log('⚠️ Retry failed after successful refresh: $retryError');
+                  // Do NOT logout here. The token is valid, just the retry failed.
+                  // Return the original error so the UI can handle it (e.g. user presses Save again).
+                  return handler.next(error);
                 }
-
-                final response = await _dio.request(
-                  error.requestOptions.path,
-                  data: requestData,
-                  queryParameters: error.requestOptions.queryParameters,
-                  options: Options(
-                    method: error.requestOptions.method,
-                    headers: error.requestOptions.headers,
-                    contentType: error.requestOptions.contentType,
-                  ),
-                );
-                return handler.resolve(response);
               } else {
                 throw Exception('No access token after refresh');
               }

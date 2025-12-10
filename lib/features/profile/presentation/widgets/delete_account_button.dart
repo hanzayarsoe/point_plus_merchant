@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:merchant/core/constants/enum.dart';
-import 'package:merchant/shared/widgets/confirm_box.dart';
+import 'package:merchant/core/constants/app_spacing.dart';
 
 class DeleteAccountButton extends StatelessWidget {
   const DeleteAccountButton({super.key});
@@ -9,30 +7,17 @@ class DeleteAccountButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return ConfirmBox(
-              dialogType: DialogType.delete,
-              title: '',
-              body: '',
-              mainActionText: '',
-              mainAction: () {
-                context.pop();
-              },
-              secondaryActionText: '',
-              secondaryAction: () => context.pop(),
-            );
-          },
-        );
-      },
-      child: Align(
+      onTap: () {},
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.mediumSpacing),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.error,
+          borderRadius: AppSpacing.bigBorderRadiusCircular,
+        ),
         child: Text(
-          '',
-          style: Theme.of(context).textTheme.labelLarge!.copyWith(
-            color: Theme.of(context).colorScheme.error,
-          ),
+          'Delete Account',
+          style: Theme.of(context).textTheme.labelLarge,
           textAlign: TextAlign.center,
         ),
       ),

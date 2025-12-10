@@ -62,12 +62,6 @@ class _NotiPageState extends State<NotiPage> {
                           createdAt,
                           data,
                         ) {
-                          final isRecharge = data?.type?.toLowerCase().contains(
-                            'recharge',
-                          );
-                          final isEarn = data?.type?.toLowerCase().contains(
-                            'earn',
-                          );
                           final isRedeem = data?.type?.toLowerCase().contains(
                             'redeem',
                           );

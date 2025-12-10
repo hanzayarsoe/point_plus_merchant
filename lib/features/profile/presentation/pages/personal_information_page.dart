@@ -3,20 +3,24 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/constants/enum.dart';
 import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/utils/formatter.dart';
 import 'package:merchant/core/utils/validation.dart';
+import 'package:merchant/features/auth/domain/entities/manager.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:merchant/features/home/presentation/widgets/custom_icon.dart';
 import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
+import 'package:merchant/features/profile/presentation/widgets/delete_account_button.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/custom_cached_network_image.dart';
 import 'package:merchant/shared/widgets/custom_drop_down.dart';
 import 'package:merchant/shared/widgets/custom_text_form_field.dart';
 import 'package:merchant/shared/widgets/loading_overlay.dart';
+import 'package:toastification/toastification.dart';
 
 class PersonalInformationPage extends StatefulWidget {
   const PersonalInformationPage({super.key});
@@ -36,6 +40,27 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   File? _pickedImage;
+  Manager? _initialManager;
+  bool _isChanged = false;
+
+  void _initControllers(Manager manager) {
+    _initialManager = manager;
+    _nameController.text = manager.name;
+    _nrcController.text = Formatter.formatNrcToString(manager.nrc);
+    _mobileController.text = manager.phoneNumber ?? '';
+    _emialController.text = manager.email ?? '';
+    _genderController.text = manager.gender ?? '';
+    _dobController.text = Formatter.formatStringToDateOfBirth(
+      manager.dob ?? '',
+    );
+    _addressController.text = manager.address ?? '';
+
+    _nameController.addListener(_checkForChanges);
+    _mobileController.addListener(_checkForChanges);
+    _emialController.addListener(_checkForChanges);
+    _genderController.addListener(_checkForChanges);
+    _addressController.addListener(_checkForChanges);
+  }
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -44,6 +69,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
       setState(() {
         _pickedImage = File(image.path);
       });
+      _checkForChanges();
     }
   }
 
@@ -58,11 +84,59 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
       setState(() {
         _dobController.text = Formatter.formatDateOfBirth(date);
       });
+      _checkForChanges();
+    }
+  }
+
+  void _checkForChanges() {
+    if (_initialManager == null) {
+      debugPrint('_checkForChanges: _initialManager is null');
+      return;
+    }
+
+    final currentDob = _dobController.text;
+    final initialDob = _initialManager!.dob != null
+        ? Formatter.formatStringToDateOfBirth(_initialManager!.dob!)
+        : '';
+
+    final hasChanges =
+        _nameController.text != _initialManager!.name ||
+        _mobileController.text != (_initialManager!.phoneNumber ?? '') ||
+        _emialController.text != (_initialManager!.email ?? '') ||
+        _genderController.text != (_initialManager!.gender ?? '') ||
+        currentDob != initialDob ||
+        _addressController.text != (_initialManager!.address ?? '') ||
+        _pickedImage != null;
+
+    debugPrint('Has changes: $hasChanges');
+
+    if (_isChanged != hasChanges) {
+      setState(() {
+        _isChanged = hasChanges;
+      });
     }
   }
 
   void _updateInfo() {
     if (!_formKey.currentState!.validate()) return;
+    if (_initialManager == null) return;
+
+    final dobDate = DateFormat('d MMMM yyyy').parse(_dobController.text);
+    final formattedDob = DateFormat('yyyy-MM-dd').format(dobDate);
+
+    final updatedManager = _initialManager!.copyWith(
+      name: _nameController.text,
+      phoneNumber: _mobileController.text,
+      email: _emialController.text,
+      gender: _genderController.text,
+      dob: formattedDob,
+      address: _addressController.text,
+      profileUrl: _pickedImage?.path ?? _initialManager!.profileUrl,
+    );
+
+    context.read<BranchBloc>().add(
+      BranchEvent.updateManagerInfo(updatedManager),
+    );
   }
 
   @override
@@ -71,15 +145,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     final authState = context.read<AuthBloc>().state;
     final user = authState.whenOrNull(authenticated: (user) => user);
     if (user != null) {
-      _nameController.text = user.manager.name;
-      _nrcController.text = Formatter.formatNrcToString(user.manager.nrc);
-      _mobileController.text = user.manager.phoneNumber ?? '';
-      _emialController.text = user.manager.email ?? '';
-      _genderController.text = user.manager.gender ?? '';
-      _dobController.text = Formatter.formatStringToDateOfBirth(
-        user.manager.dob ?? '',
-      );
-      _addressController.text = user.manager.address ?? '';
+      _initControllers(user.manager);
     }
   }
 
@@ -99,14 +165,53 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
   Widget build(BuildContext context) {
     final authState = context.watch<AuthBloc>().state;
     final user = authState.whenOrNull(authenticated: (user) => user);
+
+    if (_initialManager == null && user != null) {
+      _initControllers(user.manager);
+    }
+
     return BlocConsumer<BranchBloc, BranchState>(
       listenWhen: (previous, current) => current.maybeWhen(
         orElse: () => false,
         updateBranchFailed: (failure) => true,
         updateBranchSuccessed: (updatedUser) => true,
+        updatedManagerSuccessful: () => true,
+        updatedManagerFailed: (failure) => true,
       ),
       listener: (context, state) {
-        // TODO: implement listener
+        state.maybeWhen(
+          orElse: () {},
+          updatedManagerSuccessful: () {
+            toastification.show(
+              context: context,
+              type: ToastificationType.success,
+              style: ToastificationStyle.fillColored,
+              title: const Text('Success'),
+              description: const Text('Profile updated successfully'),
+              alignment: Alignment.bottomCenter,
+              autoCloseDuration: const Duration(seconds: 3),
+            );
+            context.read<AuthBloc>().add(const AuthEvent.refreshUser());
+            context.read<BranchBloc>().add(
+              const BranchEvent.refreshBranchData(),
+            );
+            setState(() {
+              _isChanged = false;
+              _pickedImage = null;
+            });
+          },
+          updatedManagerFailed: (failure) {
+            toastification.show(
+              context: context,
+              type: ToastificationType.error,
+              style: ToastificationStyle.fillColored,
+              title: const Text('Error'),
+              description: Text(failure.message),
+              alignment: Alignment.bottomCenter,
+              autoCloseDuration: const Duration(seconds: 3),
+            );
+          },
+        );
       },
       builder: (context, state) {
         final isUserLoading = state.maybeWhen(
@@ -124,6 +229,21 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
             appBar: CustomAppBar(
               title: 'Personal Information',
               automaticallyImplyLeading: true,
+              actions: [
+                TextButton(
+                  onPressed: _isChanged ? _updateInfo : null,
+                  child: Text(
+                    'Save',
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: _isChanged
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withAlpha(100),
+                    ),
+                  ),
+                ),
+              ],
             ),
             body: SingleChildScrollView(
               padding: AppSpacing.defaultPadding,
@@ -219,6 +339,8 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                       controller: _addressController,
                       titleText: 'Address',
                     ),
+                    AppSpacing.largeSizedBox,
+                    DeleteAccountButton(),
                   ],
                 ),
               ),

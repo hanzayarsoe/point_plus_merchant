@@ -21,4 +21,8 @@ class BranchState with _$BranchState {
       _ChangePasswordSuccessed;
   const factory BranchState.changePasswordFailed(Failure failure) =
       _ChangePasswordFailed;
+  const factory BranchState.updatedManagerSuccessful() =
+      _UpdateManagerSuccessful;
+  const factory BranchState.updatedManagerFailed(Failure failure) =
+      _UpdatedManagerFailed;
 }

@@ -30,4 +30,5 @@ class ApiUrls {
   static final String requestPoints = "/api/branch/point-requests";
   static final String requestDetail = "/api/branch/point-requests/{id}";
   static final String noti = "/api/notifications/me/grouped";
+  static final String manager = "/api/branch/me/manager";
 }

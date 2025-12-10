@@ -14,4 +14,6 @@ class BranchEvent with _$BranchEvent {
     String newPassword,
   ) = _ChangePassword;
   const factory BranchEvent.refreshBranchData() = _RefreshBranchData;
+  const factory BranchEvent.updateManagerInfo(Manager updatedManager) =
+      _UpdateManagerInfo;
 }

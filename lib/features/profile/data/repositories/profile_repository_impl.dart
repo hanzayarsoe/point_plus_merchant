@@ -1,9 +1,9 @@
-
 import 'package:flutter/widgets.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:merchant/core/failure/failure.dart';
 import 'package:merchant/features/auth/data/models/branch_model.dart';
 import 'package:merchant/features/auth/domain/entities/branch.dart';
+import 'package:merchant/features/auth/domain/entities/manager.dart';
 import 'package:merchant/features/profile/data/datasources/profile_datasource.dart';
 import 'package:merchant/features/profile/domain/repositories/profile_repository.dart';
 
@@ -53,5 +53,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
     String newPassword,
   ) {
     return profileDatasource.changePassword(currentPassword, newPassword);
+  }
+
+  @override
+  TaskEither<Failure, void> updateManagerInfo(Manager updatedManger) {
+    return profileDatasource.updateManagerInfo(updatedManger);
   }
 }

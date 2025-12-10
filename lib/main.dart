@@ -20,7 +20,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final AppRouter _appRouter = sl<AppRouter>();
   final AuthBloc _authBloc = sl<AuthBloc>();
-  final BranchBloc _userBloc = sl<BranchBloc>();
+  final BranchBloc _branchBloc = sl<BranchBloc>();
   final NotiCubit _notiCubit = sl<NotiCubit>();
   final LocaleCubit _locale = sl<LocaleCubit>();
   final HistoryFilterCubit _historyFilterCubit = sl<HistoryFilterCubit>();
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           lazy: false,
-          create: (context) => _userBloc..add(BranchEvent.getBranchInfo()),
+          create: (context) => _branchBloc..add(BranchEvent.getBranchInfo()),
           child: Container(),
         ),
         BlocProvider(create: (context) => _locale..loadInitialLocale()),
