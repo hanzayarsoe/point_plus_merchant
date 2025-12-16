@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:merchant/core/config/app_initializer.dart';
 import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/router/app_router.dart';
+import 'package:merchant/core/storage/secure_storage.dart';
 import 'package:merchant/core/themes/app_theme.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:merchant/features/history/presentation/cubit/cubit/history_filter_cubit.dart';
+import 'package:merchant/features/home/presentation/cubits/noti_count_cubit/noti_count_cubit.dart';
 import 'package:merchant/features/home/presentation/cubits/request_filter_cubit/cubit/request_filter_cubit.dart';
 import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
 import 'package:merchant/features/profile/presentation/cubits/locale_cubit/locale_cubit.dart';
@@ -23,6 +26,7 @@ class MyApp extends StatelessWidget {
   final BranchBloc _branchBloc = sl<BranchBloc>();
   final NotiCubit _notiCubit = sl<NotiCubit>();
   final LocaleCubit _locale = sl<LocaleCubit>();
+  final NotiCountCubit _notiCountCubit = sl<NotiCountCubit>();
   final HistoryFilterCubit _historyFilterCubit = sl<HistoryFilterCubit>();
   final RequestFilterCubit _requestFilterCubit = sl<RequestFilterCubit>();
   MyApp({super.key});
@@ -44,12 +48,36 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => _notiCubit..loadNoti()),
         BlocProvider(create: (context) => _historyFilterCubit),
         BlocProvider(create: (context) => _requestFilterCubit),
+        BlocProvider(
+          create: (context) => _notiCountCubit..getUnreadCount(),
+          child: Container(),
+        ),
       ],
-      child: MaterialApp.router(
-        theme: AppTheme.darkTheme,
-        themeMode: ThemeMode.dark,
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            authenticated: (_) async {
+              final token = await FirebaseMessaging.instance.getToken();
 
-        routerConfig: _appRouter.router,
+              if (token != null && token.isNotEmpty) {
+                await sl<SecureStorage>().saveFcmToken(token);
+                final bool isNotiEnabled = await sl<NotiCubit>().loadNoti();
+                if (isNotiEnabled) {
+                  await sl<NotiCubit>().registerToken(token);
+                } else {
+                  await sl<NotiCubit>().unregisterToken(token);
+                }
+              }
+            },
+            orElse: () {},
+          );
+        },
+        child: MaterialApp.router(
+          theme: AppTheme.darkTheme,
+          themeMode: ThemeMode.dark,
+
+          routerConfig: _appRouter.router,
+        ),
       ),
     );
   }

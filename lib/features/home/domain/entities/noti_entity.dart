@@ -22,6 +22,7 @@ abstract class NotiEntity with _$NotiEntity {
 
 @freezed
 abstract class NotiDataEntity with _$NotiDataEntity {
+  const NotiDataEntity._();
   const factory NotiDataEntity({
     required String? type,
     required String? action,
@@ -29,33 +30,18 @@ abstract class NotiDataEntity with _$NotiDataEntity {
     required int? requestId,
     required String? merchantName,
     required String? merchantPfUrl,
+    required num? amount,
+    required String? transactionId,
+    required String? customerName,
+    required String? customerAccount,
   }) = _NotiDataEntity;
+  String? get navigationId {
+    if (requestId != null) {
+      return requestId.toString();
+    }
+    if (transactionId != null && transactionId!.isNotEmpty) {
+      return transactionId;
+    }
+    return null;
+  }
 }
-
-// {
-//     "success": true,
-//     "message": "Fetched notifications",
-//     "data": {
-//         "unreadCount": 21,
-//         "items": [
-//             {
-//                 "groupTitle": "Nov 20 2025",
-//                 "type": "dateHeader"
-//             },
-//             {
-//                 "id": 71,
-//                 "title": "Point Request Rejected by Merchant",
-//                 "message": "Point Request Rejected by Merchant",
-//                 "notificationType": "UNREADABLE",
-//                 "data": {
-//                     "type": "RECHARGE",
-//                     "action": "MERCHANT_REJECTED",
-//                     "message": "has rejected to recharge 2,450 points",
-//                     "requestId": 60,
-//                     "merchantName": "Digital Base Main",
-//                     "merchantPfUrl": "/uploads/users/merchants/a3d8903d-c4e2-42b9-9f59-4021cf524f1d.jpg"
-//                 },
-//                 "read": false,
-//                 "createdAt": "2025-11-20T11:42:06Z",
-//                 "type": "notification"
-//             },

@@ -5,7 +5,7 @@ class RequestTransactionDetailState with _$RequestTransactionDetailState {
   const factory RequestTransactionDetailState.initial() = _Initial;
   const factory RequestTransactionDetailState.loading() = _Loading;
   const factory RequestTransactionDetailState.loaded(
-    PointRequestEntity requestDetail,
+    PointRequestDetailEntity requestDetail,
   ) = _loaded;
   const factory RequestTransactionDetailState.failed(Failure failure) = _Failed;
 }

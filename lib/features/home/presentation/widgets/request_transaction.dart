@@ -90,7 +90,7 @@ class _RequestTransactionState extends State<RequestTransaction> {
                                   return InkWell(
                                     onTap: () => context.pushNamed(
                                       AppRoutes.requestTransactionDetail,
-                                      extra: item,
+                                      pathParameters: {'id': id.toString()},
                                     ),
                                     child: RequestTransactionRow(
                                       title: requestType,

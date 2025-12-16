@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "233182185988",
+    "project_id": "point-plus-4a006",
+    "storage_bucket": "point-plus-4a006.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233182185988:android:83ca570c3977e3ac604351",
+        "android_client_info": {
+          "package_name": "com.example.merchant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdQ5d1UzTsLjfUhhf2XCTiqKs9xG3JVBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233182185988:android:fe00b377044d9f8d604351",
+        "android_client_info": {
+          "package_name": "com.example.point_plus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdQ5d1UzTsLjfUhhf2XCTiqKs9xG3JVBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

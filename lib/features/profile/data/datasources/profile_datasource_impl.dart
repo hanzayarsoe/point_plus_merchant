@@ -3,8 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:merchant/core/constants/api_urls.dart';
 import 'package:merchant/core/failure/failure.dart';
+import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/network/dio_helper.dart';
 import 'package:merchant/core/storage/user_preference.dart';
+import 'package:merchant/core/utils/device_info.dart';
 import 'package:merchant/core/utils/task_either_helpers.dart';
 import 'package:merchant/features/auth/data/models/branch_model.dart';
 import 'package:merchant/features/auth/domain/entities/manager.dart';
@@ -112,6 +114,25 @@ class ProfileDatasourceImpl implements ProfileDatasource {
       }
 
       await dioHelper.put(ApiUrls.manager, formData);
+    });
+  }
+
+  @override
+  TaskEither<Failure, void> registerToken(String token) {
+    return tryCatchWithFailure(() async {
+      final deviceName = await sl<DeviceInfo>().getDeviceName();
+      await dioHelper.post(ApiUrls.registerToken, {
+        "token": token,
+        "role": 'branch',
+        "devicePlatform": deviceName,
+      });
+    });
+  }
+
+  @override
+  TaskEither<Failure, void> unregisterToken(String token) {
+    return tryCatchWithFailure(() async {
+      await dioHelper.post(ApiUrls.unregisterToken, {"token": token});
     });
   }
 }

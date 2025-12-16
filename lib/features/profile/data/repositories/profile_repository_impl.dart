@@ -59,4 +59,14 @@ class ProfileRepositoryImpl implements ProfileRepository {
   TaskEither<Failure, void> updateManagerInfo(Manager updatedManger) {
     return profileDatasource.updateManagerInfo(updatedManger);
   }
+
+  @override
+  TaskEither<Failure, void> registerToken(String token) {
+    return profileDatasource.registerToken(token);
+  }
+
+  @override
+  TaskEither<Failure, void> unregisterToken(String token) {
+    return profileDatasource.unregisterToken(token);
+  }
 }

@@ -31,4 +31,8 @@ class ApiUrls {
   static final String requestDetail = "/api/branch/point-requests/{id}";
   static final String noti = "/api/notifications/me/grouped";
   static final String manager = "/api/branch/me/manager";
+  static final String registerToken = "/api/notifications/register-token";
+  static final String unregisterToken = "/api/notifications/unregister-token";
+  static final String unreadCount = "/api/notifications/me/unread-count";
+  static final String readNoti = "/api/notifications/me/{notificationId}/read";
 }

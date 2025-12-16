@@ -17,4 +17,6 @@ abstract interface class ProfileDatasource {
     String newPassword,
   );
   TaskEither<Failure, void> updateManagerInfo(Manager updatedManger);
+  TaskEither<Failure, void> registerToken(String token);
+  TaskEither<Failure, void> unregisterToken(String token);
 }

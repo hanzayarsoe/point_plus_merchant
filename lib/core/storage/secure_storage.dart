@@ -50,6 +50,10 @@ class SecureStorage {
     await _storage.delete(key: _rememberMeKey);
   }
 
+  Future<void> saveFcmToken(String token) async {
+    await _storage.write(key: _fcmKey, value: token);
+  }
+
   Future<String?> getFcmToken() async {
     return await _storage.read(key: _fcmKey);
   }

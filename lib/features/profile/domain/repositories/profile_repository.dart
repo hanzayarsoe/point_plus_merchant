@@ -18,4 +18,6 @@ abstract interface class ProfileRepository {
     String newPassword,
   );
   TaskEither<Failure, void> updateManagerInfo(Manager updatedManager);
+  TaskEither<Failure, void> registerToken(String token);
+  TaskEither<Failure, void> unregisterToken(String token);
 }

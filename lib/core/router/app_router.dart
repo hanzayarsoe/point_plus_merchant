@@ -14,7 +14,6 @@ import 'package:merchant/features/auth/presentation/pages/verify_otp_page.dart';
 import 'package:merchant/features/auth/presentation/pages/welcome_page.dart';
 import 'package:merchant/features/history/presentation/pages/history_page.dart';
 import 'package:merchant/features/history/presentation/pages/transaction_detail_page.dart';
-import 'package:merchant/features/home/domain/entities/point_request_entity.dart';
 import 'package:merchant/features/home/domain/entities/point_transfer_entity.dart';
 import 'package:merchant/features/home/presentation/bloc/point_transfer_bloc/point_transfer_bloc.dart';
 import 'package:merchant/features/home/presentation/pages/home_page.dart';
@@ -213,13 +212,13 @@ class AppRouter {
                       routes: [
                         GoRoute(
                           name: AppRoutes.requestTransactionDetail,
-                          path: 'request-transaction-detail',
+                          path: 'request-transaction-detail/:id',
                           pageBuilder: (context, state) {
-                            final PointRequestEntity request =
-                                state.extra as PointRequestEntity;
+                            final String requestId =
+                                state.pathParameters['id']!;
                             return NoTransitionPage(
                               child: RequestTransactionDetailPage(
-                                request: request,
+                                requestId: requestId,
                               ),
                             );
                           },

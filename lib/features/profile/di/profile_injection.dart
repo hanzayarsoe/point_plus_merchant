@@ -8,7 +8,9 @@ import 'package:merchant/features/profile/domain/usecases/change_mobile_number_u
 import 'package:merchant/features/profile/domain/usecases/change_password_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/get_branch_info_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/load_locale.dart';
+import 'package:merchant/features/profile/domain/usecases/register_token_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/send_otp_to_change_number_usecase.dart';
+import 'package:merchant/features/profile/domain/usecases/unregister_token_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/update_branch_info_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/update_manager_info_usecase.dart';
 import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
@@ -33,8 +35,10 @@ class ProfileInjection {
       ..registerLazySingleton(() => ChangePasswordUsecase(sl()))
       ..registerLazySingleton(() => ChangeLocaleUseCase(sl()))
       ..registerLazySingleton(() => UpdateManagerInfoUsecase(sl()))
+      ..registerLazySingleton(() => RegisterTokenUsecase(sl()))
+      ..registerLazySingleton(() => UnregisterTokenUsecase(sl()))
       ..registerLazySingleton(() => LocaleCubit(sl(), sl()))
-      ..registerLazySingleton(() => NotiCubit(sl()))
+      ..registerLazySingleton(() => NotiCubit(sl(), sl(), sl(), sl()))
       ..registerLazySingleton(
         () => BranchBloc(sl(), sl(), sl(), sl(), sl(), sl()),
       );

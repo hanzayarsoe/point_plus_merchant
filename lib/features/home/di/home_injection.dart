@@ -7,6 +7,8 @@ import 'package:merchant/features/home/domain/usecases/get_notifs_usecase.dart';
 import 'package:merchant/features/home/domain/usecases/get_request_detail_usecase.dart';
 import 'package:merchant/features/home/domain/usecases/get_request_histories_usecase.dart';
 import 'package:merchant/features/home/domain/usecases/get_request_transaction_usecase.dart';
+import 'package:merchant/features/home/domain/usecases/get_unread_count_usecase.dart';
+import 'package:merchant/features/home/domain/usecases/mark_as_read_noti_usecase.dart';
 import 'package:merchant/features/home/domain/usecases/request_point_usecase.dart';
 import 'package:merchant/features/home/domain/usecases/search_customer_by_accout_number_usecase.dart';
 import 'package:merchant/features/home/domain/usecases/transfer_point_usecase.dart';
@@ -15,6 +17,7 @@ import 'package:merchant/features/home/presentation/bloc/request_history_bloc/re
 import 'package:merchant/features/home/presentation/bloc/point_request_bloc/point_request_bloc.dart';
 import 'package:merchant/features/home/presentation/bloc/point_transfer_bloc/point_transfer_bloc.dart';
 import 'package:merchant/features/home/presentation/bloc/request_transaction_detail_bloc/request_transaction_detail_bloc.dart';
+import 'package:merchant/features/home/presentation/cubits/noti_count_cubit/noti_count_cubit.dart';
 import 'package:merchant/features/home/presentation/cubits/request_filter_cubit/cubit/request_filter_cubit.dart';
 import 'package:merchant/features/home/presentation/cubits/search_customer_cubit/search_customer_cubit.dart';
 
@@ -31,12 +34,15 @@ class HomeInjection {
       ..registerLazySingleton(() => GetRequestDetailUsecase(sl()))
       ..registerLazySingleton(() => GetNotifsUsecase(sl()))
       ..registerLazySingleton(() => RequestPointUsecase(sl()))
+      ..registerLazySingleton(() => GetUnreadCountUsecase(sl()))
+      ..registerLazySingleton(() => MarkAsReadNotiUsecase(sl()))
       ..registerLazySingleton(() => PointTransferBloc(sl()))
       ..registerLazySingleton(() => PointRequestBloc(sl()))
       ..registerLazySingleton(() => RequestHistoryBloc(sl()))
       ..registerLazySingleton(() => SearchCustomerCubit(sl()))
       ..registerLazySingleton(() => RequestTransactionDetailBloc(sl()))
       ..registerLazySingleton(() => NotiBloc(sl()))
+      ..registerLazySingleton(() => NotiCountCubit(sl(), sl()))
       ..registerLazySingleton(() => RequestFilterCubit());
   }
 }

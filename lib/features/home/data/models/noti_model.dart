@@ -34,14 +34,17 @@ abstract class NotiDataModel with _$NotiDataModel {
     required int? requestId,
     required String? merchantName,
     required String? merchantPfUrl,
-    required String? txId,
     required num? amount,
+    required String? transactionId,
+    required String? customerName,
     required String? customerAccount,
   }) = _NotiDataModel;
 
   factory NotiDataModel.fromJson(Map<String, dynamic> json) =>
       _$NotiDataModelFromJson(json);
 }
+
+// --- MAPPERS ---
 
 extension NotiModelMapper on NotiModel {
   NotiEntity toEntity() {
@@ -70,6 +73,10 @@ extension NotiDataModelMapper on NotiDataModel {
       requestId: requestId,
       merchantName: merchantName,
       merchantPfUrl: merchantPfUrl,
+      amount: amount,
+      transactionId: transactionId,
+      customerName: customerName,
+      customerAccount: customerAccount,
     );
   }
 }

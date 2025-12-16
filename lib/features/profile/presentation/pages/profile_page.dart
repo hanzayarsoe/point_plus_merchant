@@ -32,7 +32,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final localeCode = context.watch<LocaleCubit>().state.locale.languageCode;
-    final isNotiEnabled = context.watch<NotiCubit>().state;
     return BlocConsumer<BranchBloc, BranchState>(
       listenWhen: (previous, current) => current.maybeWhen(
         orElse: () => false,
@@ -107,13 +106,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         return ProfileCardRow(
                           icon: LucideIcons.bell,
                           label: 'Notification',
-                          onTap: () {
-                            context.read<NotiCubit>().setNoti(!isNotiEnabled);
-                          },
+                          onTap: () {},
                           customRightWidget: CustomSwitch(
                             value: isEnabled,
                             onChanged: (value) {
-                              context.read<NotiCubit>().setNoti(value);
+                              context.read<NotiCubit>().toggleNotifications(
+                                value,
+                              );
                             },
                           ),
                         );

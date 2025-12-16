@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:merchant/core/constants/api_urls.dart';
 import 'package:merchant/core/constants/enum.dart';
@@ -7,6 +9,7 @@ import 'package:merchant/core/utils/task_either_helpers.dart';
 import 'package:merchant/features/home/data/datasources/home_datasource.dart';
 import 'package:merchant/features/home/data/models/customer_model.dart';
 import 'package:merchant/features/home/data/models/noti_model.dart';
+import 'package:merchant/features/home/data/models/point_request_detail_model.dart';
 import 'package:merchant/features/home/data/models/point_request_model.dart';
 import 'package:merchant/features/home/domain/entities/point_transfer_entity.dart';
 
@@ -116,14 +119,15 @@ class HomeDatasourceImpl implements HomeDatasource {
   }
 
   @override
-  TaskEither<Failure, PointRequestModel> getRequestDetail(int id) {
+  TaskEither<Failure, PointRequestDetailModel> getRequestDetail(int id) {
     return tryCatchWithFailure(() async {
       final response = await dioHelper.get(
         ApiUrls.requestDetail.replaceFirst('{id}', id.toString()),
         {},
       );
       final data = response.data['data'];
-      return PointRequestModel.fromJson(data);
+      log(data.toString());
+      return PointRequestDetailModel.fromJson(data);
     });
   }
 
@@ -137,6 +141,25 @@ class HomeDatasourceImpl implements HomeDatasource {
       );
       final List<dynamic> data = response.data['data']['items'];
       return data.map((noti) => NotiModel.fromJson(noti)).toList();
+    });
+  }
+
+  @override
+  TaskEither<Failure, int> getUnreadCount() {
+    return tryCatchWithFailure(() async {
+      final response = await dioHelper.get(ApiUrls.unreadCount, {});
+      final data = response.data['data'];
+      return data as int;
+    });
+  }
+
+  @override
+  TaskEither<Failure, void> markAsRead(String notiId) {
+    return tryCatchWithFailure(() async {
+      await dioHelper.post(
+        ApiUrls.readNoti.replaceFirst('{notificationId}', notiId.toString()),
+        {},
+      );
     });
   }
 }

@@ -4,9 +4,11 @@ import 'package:merchant/core/failure/failure.dart';
 import 'package:merchant/features/home/data/datasources/home_datasource.dart';
 import 'package:merchant/features/home/data/models/customer_model.dart';
 import 'package:merchant/features/home/data/models/noti_model.dart';
+import 'package:merchant/features/home/data/models/point_request_detail_model.dart';
 import 'package:merchant/features/home/data/models/point_request_model.dart';
 import 'package:merchant/features/home/domain/entities/customer_entity.dart';
 import 'package:merchant/features/home/domain/entities/noti_entity.dart';
+import 'package:merchant/features/home/domain/entities/point_request_detail_entity.dart';
 import 'package:merchant/features/home/domain/entities/point_request_entity.dart';
 import 'package:merchant/features/home/domain/entities/point_transfer_entity.dart';
 import 'package:merchant/features/home/domain/repositories/home_repository.dart';
@@ -50,9 +52,8 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  TaskEither<Failure, PointRequestEntity> getRequestDetail(int id) {
-    // TODO: implement getRequestDetail
-    throw UnimplementedError();
+  TaskEither<Failure, PointRequestDetailEntity> getRequestDetail(int id) {
+    return homeDatasource.getRequestDetail(id).map((item) => item.toEntity());
   }
 
   @override
@@ -63,5 +64,15 @@ class HomeRepositoryImpl implements HomeRepository {
     return homeDatasource
         .getNotifs(page, limit)
         .map((notifs) => notifs.map((noti) => noti.toEntity()).toList());
+  }
+
+  @override
+  TaskEither<Failure, int> getUnreadCount() {
+    return homeDatasource.getUnreadCount();
+  }
+
+  @override
+  TaskEither<Failure, void> markAsRead(String notiId) {
+    return homeDatasource.markAsRead(notiId);
   }
 }
