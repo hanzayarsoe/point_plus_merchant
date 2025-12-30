@@ -74,38 +74,38 @@ class _HistoryPageState extends State<HistoryPage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => HistoryBloc(sl()),
-      child: Scaffold(
-        appBar: CustomAppBar(
-          title: 'History',
-          isTitleLarge: true,
-          bottom: CustomTabBar(
-            isScrollable: true,
-            tabAlignment: TabAlignment.center,
-            dividerColor: Theme.of(context).colorScheme.onSurface,
-            dividerHeight: 0.5,
-            tabController: _tabController,
-            padding: EdgeInsets.only(top: AppSpacing.defaultSpacing),
-            tabs: [
-              ...HistoryTransactionType.values
-                  .take(5)
-                  .map((tab) => Text(tab.displayName)),
-            ],
-          ),
-          actions: [
-            GestureDetector(
-              onTap: () => _filterDate(),
-              child: Icon(LucideIcons.funnel, size: 20),
-            ),
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: 'History',
+        isTitleLarge: true,
+        bottom: CustomTabBar(
+          isScrollable: true,
+          tabAlignment: TabAlignment.center,
+          dividerColor: Theme.of(context).colorScheme.onSurface,
+          dividerHeight: 0.5,
+          tabController: _tabController,
+          padding: EdgeInsets.only(top: AppSpacing.defaultSpacing),
+          tabs: [
+            ...HistoryTransactionType.values
+                .take(5)
+                .map((tab) => Text(tab.displayName)),
           ],
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: HistoryTransactionType.values.map((_) {
-            return HistoryGroupList();
-          }).toList(),
-        ),
+        actions: [
+          GestureDetector(
+            onTap: () => _filterDate(),
+            child: Icon(LucideIcons.funnel, size: 20),
+          ),
+        ],
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: HistoryTransactionType.values.take(5).map((type) {
+          return BlocProvider(
+            create: (context) => HistoryBloc(sl()),
+            child: HistoryGroupList(historyType: type),
+          );
+        }).toList(),
       ),
     );
   }

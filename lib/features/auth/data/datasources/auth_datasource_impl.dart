@@ -20,7 +20,7 @@ class AuthDatasourceImpl implements AuthDatasource {
       if (accessToken == null) {
         throw Exception('token not found');
       }
-      final response = await dioHelper.get(ApiUrls.me, {});
+      final response = await dioHelper.get(ApiUrls.me);
       final data = response.data['data'];
       return BranchModel.fromJson(data);
     });
@@ -98,7 +98,7 @@ class AuthDatasourceImpl implements AuthDatasource {
   @override
   TaskEither<Failure, BranchModel> refreshUser() {
     return tryCatchWithFailure(() async {
-      final response = await dioHelper.get(ApiUrls.me, {});
+      final response = await dioHelper.get(ApiUrls.me);
       final data = response.data['data'];
       return BranchModel.fromJson(data);
     });

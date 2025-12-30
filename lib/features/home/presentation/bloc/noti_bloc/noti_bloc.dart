@@ -11,8 +11,56 @@ class NotiBloc extends Bloc<NotiEvent, PagingState<int, NotiEntity>> {
   final GetNotifsUsecase getNotifsUsecase;
   static const int _pageSize = 10;
   NotiBloc(this.getNotifsUsecase)
-    : super(PagingState(pages: [], keys: [], hasNextPage: true)) {
+    : super(
+        PagingState(
+          pages: null,
+          keys: null,
+          hasNextPage: true,
+          isLoading: false,
+        ),
+      ) {
     on<_getNotifs>(_onGetNotifs);
+    on<_MarkAsRead>(_onMarkAsRead);
+    on<_Reset>(_onReset);
+  }
+
+  void _onReset(_Reset event, Emitter<PagingState<int, NotiEntity>> emit) {
+    emit(
+      PagingState(pages: null, keys: null, hasNextPage: true, isLoading: false),
+    );
+  }
+
+  void _onMarkAsRead(
+    _MarkAsRead event,
+    Emitter<PagingState<int, NotiEntity>> emit,
+  ) {
+    if (state.pages == null) return;
+
+    final newPages = state.pages!.map((page) {
+      return page.map((item) {
+        return item.when(
+          dateHeader: (groupTitle) =>
+              NotiEntity.dateHeader(groupTitle: groupTitle),
+          notification:
+              (id, title, message, notificationType, read, createdAt, data) {
+                if (id.toString() == event.id) {
+                  return NotiEntity.notification(
+                    id: id,
+                    title: title,
+                    message: message,
+                    notificationType: notificationType,
+                    read: true,
+                    createdAt: createdAt,
+                    data: data,
+                  );
+                }
+                return item;
+              },
+        );
+      }).toList();
+    }).toList();
+
+    emit(state.copyWith(pages: newPages));
   }
 
   Future<void> _onGetNotifs(

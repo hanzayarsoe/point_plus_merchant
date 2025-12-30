@@ -35,4 +35,5 @@ class ApiUrls {
   static final String unregisterToken = "/api/notifications/unregister-token";
   static final String unreadCount = "/api/notifications/me/unread-count";
   static final String readNoti = "/api/notifications/me/{notificationId}/read";
+  static final String getDevices = "/api/{role}/devices";
 }

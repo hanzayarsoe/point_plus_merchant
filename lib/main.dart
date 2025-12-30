@@ -10,7 +10,7 @@ import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dar
 import 'package:merchant/features/history/presentation/cubit/cubit/history_filter_cubit.dart';
 import 'package:merchant/features/home/presentation/cubits/noti_count_cubit/noti_count_cubit.dart';
 import 'package:merchant/features/home/presentation/cubits/request_filter_cubit/cubit/request_filter_cubit.dart';
-import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
+import 'package:merchant/features/profile/presentation/bloc/branch_bloc/branch_bloc.dart';
 import 'package:merchant/features/profile/presentation/cubits/locale_cubit/locale_cubit.dart';
 import 'package:merchant/features/profile/presentation/cubits/noti_cubit/noti_cubit.dart';
 import 'package:toastification/toastification.dart';
@@ -57,6 +57,7 @@ class MyApp extends StatelessWidget {
         listener: (context, state) {
           state.maybeWhen(
             authenticated: (_) async {
+              context.read<BranchBloc>().add(const BranchEvent.getBranchInfo());
               final token = await FirebaseMessaging.instance.getToken();
 
               if (token != null && token.isNotEmpty) {

@@ -21,19 +21,22 @@ class AppLocalizationsMy extends AppLocalizations {
   String get welcome => 'Point Plus မှ ကြိုဆိုပါသည်';
 
   @override
-  String get getReward => 'သင်နှစ်သက်ရာဆိုင်များတွင် ဝယ်ယူအားပေးပြီး ပွိုင့်များစုဆောင်းလိုက်ပါ။';
+  String get getReward =>
+      'သင်နှစ်သက်ရာဆိုင်များတွင် ဝယ်ယူအားပေးပြီး ပွိုင့်များစုဆောင်းလိုက်ပါ။';
 
   @override
   String get earnPoint => 'နေရာတိုင်းမှာ ပွိုင့်များစုဆောင်းပါ';
 
   @override
-  String get shopAnyWhere => 'Point Plusနှင့် ချိတ်ဆက်ထားသော မည်သည့်ဆိုင်တွင်မဆို ဝယ်ယူမှုတိုင်းအတွက် ပွိုင့်များရယူလိုက်ပါ။';
+  String get shopAnyWhere =>
+      'Point Plusနှင့် ချိတ်ဆက်ထားသော မည်သည့်ဆိုင်တွင်မဆို ဝယ်ယူမှုတိုင်းအတွက် ပွိုင့်များရယူလိုက်ပါ။';
 
   @override
   String get spend => 'နေရာတိုင်းမှာ ပွိုင့်များသုံးစွဲလိုက်ပါ';
 
   @override
-  String get spendAnywhere => 'နှစ်သက်ရာဆိုင်များတွင် ပွိုင့်များကို သုံးစွဲနိုင်သည့်အတွက် ဆုလက်ဆောင်များသည် သင်နှင့်အတူ အမြဲရှိနေမည်။';
+  String get spendAnywhere =>
+      'နှစ်သက်ရာဆိုင်များတွင် ပွိုင့်များကို သုံးစွဲနိုင်သည့်အတွက် ဆုလက်ဆောင်များသည် သင်နှင့်အတူ အမြဲရှိနေမည်။';
 
   @override
   String get signIn => '';
@@ -60,7 +63,8 @@ class AppLocalizationsMy extends AppLocalizations {
   String get letSetUpYourAccount => 'အကောင့်ဖွင့်ရန်';
 
   @override
-  String get enterYourPhoneNumber => 'ကျေးဇူးပြု၍ ဖုန်းနံပါတ် ထည့်သွင်းပါ။ ထိုနံပါတ်သို့ တစ်ကြိမ်သုံးကုဒ်နံပါတ် ပေးပို့ပါမည်။';
+  String get enterYourPhoneNumber =>
+      'ကျေးဇူးပြု၍ ဖုန်းနံပါတ် ထည့်သွင်းပါ။ ထိုနံပါတ်သို့ တစ်ကြိမ်သုံးကုဒ်နံပါတ် ပေးပို့ပါမည်။';
 
   @override
   String get mobileNumber => 'ဖုန်းနံပါတ်';
@@ -69,7 +73,8 @@ class AppLocalizationsMy extends AppLocalizations {
   String get verifyYourNumber => 'ကုဒ်နံပါတ် အတည်ပြုရန်';
 
   @override
-  String get checkYourMessageForOneTimeCode => 'သင့်မက်ဆေ့ချ့်တွင် ကုဒ်နံပါတ်ကို စစ်ဆေးပြီး အကောင့်ဖွင့်ခြင်းအား ဆက်လက်လုပ်ဆောင်ရန် ဤနေရာတွင် ကုဒ်နံပါတ် ထည့်သွင်းပါ။';
+  String get checkYourMessageForOneTimeCode =>
+      'သင့်မက်ဆေ့ချ့်တွင် ကုဒ်နံပါတ်ကို စစ်ဆေးပြီး အကောင့်ဖွင့်ခြင်းအား ဆက်လက်လုပ်ဆောင်ရန် ဤနေရာတွင် ကုဒ်နံပါတ် ထည့်သွင်းပါ။';
 
   @override
   String get noReceiveOtpCode => 'ကုဒ်နံပါတ်မရရှိပါက';
@@ -92,7 +97,8 @@ class AppLocalizationsMy extends AppLocalizations {
   String get lefCreateYourProfile => 'ပရိုဖိုင် ဖန်းတီးရန်';
 
   @override
-  String get justFewDetailToGetYourAccount => 'သင်၏ကိုယ်ရေးအချက်အလက်များအား ဖြည့်စွက်ပါ။';
+  String get justFewDetailToGetYourAccount =>
+      'သင်၏ကိုယ်ရေးအချက်အလက်များအား ဖြည့်စွက်ပါ။';
 
   @override
   String get name => 'နာမည်';
@@ -137,13 +143,15 @@ class AppLocalizationsMy extends AppLocalizations {
   String get passwordRecovery => 'password Recovery';
 
   @override
-  String get enterYourMobileNumberToResetYourPassword => 'Enter your mobile number to reset your password.';
+  String get enterYourMobileNumberToResetYourPassword =>
+      'Enter your mobile number to reset your password.';
 
   @override
   String get enteryYourMobileNumber => 'Enter your mobile number';
 
   @override
-  String get enterYourEmailToResetYourPassword => 'Enter your email to reset your password.';
+  String get enterYourEmailToResetYourPassword =>
+      'Enter your email to reset your password.';
 
   @override
   String get submit => 'Submit';
@@ -172,7 +180,8 @@ class AppLocalizationsMy extends AppLocalizations {
   String get createNewPassword => 'Create New Password';
 
   @override
-  String get pleaseCreateNewPassword => 'Please create a new password for your account.';
+  String get pleaseCreateNewPassword =>
+      'Please create a new password for your account.';
 
   @override
   String get enterCurrentPassword => 'Enter Current Password';
@@ -187,7 +196,8 @@ class AppLocalizationsMy extends AppLocalizations {
   String get passwordUpdate => 'Password Updated';
 
   @override
-  String get passwordSuccessfullyUpdate => 'Your password has been successfully updated. Sign in with your new password.';
+  String get passwordSuccessfullyUpdate =>
+      'Your password has been successfully updated. Sign in with your new password.';
 
   @override
   String get resetPassword => 'Reset Password';
@@ -199,7 +209,8 @@ class AppLocalizationsMy extends AppLocalizations {
   String get deleteAccount_confirmBoxLabel => 'အကောင့်ဖျက်သိမ်းခြင်း';
 
   @override
-  String get deleteAccount_confrimBoxText => 'အကောင့်ဖျက်သိမ်းရာတွင် စုဆောင်းရရှိထားသော ပွိုင့်များအပါအဝင် သင်နှင့်သက်ဆိုင်သော အချက်အလက်များအားလုံးကိုပါ ဖျက်ပစ်မည် ဖြစ်ပါသည်။ ထို့ကြောင့် အကောင့်အား အပြီးတိုင်ဖျက်သိမ်းမည်ဆိုသည်မှာ သေချာပါသလား။';
+  String get deleteAccount_confrimBoxText =>
+      'အကောင့်ဖျက်သိမ်းရာတွင် စုဆောင်းရရှိထားသော ပွိုင့်များအပါအဝင် သင်နှင့်သက်ဆိုင်သော အချက်အလက်များအားလုံးကိုပါ ဖျက်ပစ်မည် ဖြစ်ပါသည်။ ထို့ကြောင့် အကောင့်အား အပြီးတိုင်ဖျက်သိမ်းမည်ဆိုသည်မှာ သေချာပါသလား။';
 
   @override
   String get deleteAccount_confrimBoxDeleteButtonText => 'ဖျက်မည်';
@@ -287,7 +298,8 @@ class AppLocalizationsMy extends AppLocalizations {
   String get walletScreen_scanQrCode => 'Scan QR Code';
 
   @override
-  String get walletScreen_scanThisQrCodeToEarn => 'Scan this QR code at the merchant to earn points';
+  String get walletScreen_scanThisQrCodeToEarn =>
+      'Scan this QR code at the merchant to earn points';
 
   @override
   String get walletScreen_cannotScan => 'Can’t scan? Use your account number';
@@ -302,7 +314,8 @@ class AppLocalizationsMy extends AppLocalizations {
   String get walletScreen_enterPoints => 'Enter points';
 
   @override
-  String get walletScreen_forYourSecurityEnterPassowrd => 'For your security, please enter your password to confirm this redemption.';
+  String get walletScreen_forYourSecurityEnterPassowrd =>
+      'For your security, please enter your password to confirm this redemption.';
 
   @override
   String walletScreen_redeemingPts(Object points) {
@@ -375,23 +388,28 @@ class AppLocalizationsMy extends AppLocalizations {
   String get mobileNubmer_validation_length => '*ဖုန်းနံပါတ် မှားယွင်းနေပါသည်။';
 
   @override
-  String get mobileNubmer_validation_alreadyExist => '*ဤဖုန်းနံပါတ်ဖြင့် အကောင့်ဖွင့်ထားပြီး ဖြစ်ပါသည်။';
+  String get mobileNubmer_validation_alreadyExist =>
+      '*ဤဖုန်းနံပါတ်ဖြင့် အကောင့်ဖွင့်ထားပြီး ဖြစ်ပါသည်။';
 
   @override
-  String get profileScreen_editPersonalInformation => 'Edit Personal Information';
+  String get profileScreen_editPersonalInformation =>
+      'Edit Personal Information';
 
   @override
   String get profileScreen_confirmYourPassword => 'Confirm Your Password';
 
   @override
-  String get profileScreen_forSecurityEnterPassword => 'For your security, please enter your password to confirm that you want to edit your personal information.';
+  String get profileScreen_forSecurityEnterPassword =>
+      'For your security, please enter your password to confirm that you want to edit your personal information.';
 
   @override
   String get profileScreen_changesSaved => 'Changes Saved';
 
   @override
-  String get profileScreen_changeYourMobileNumber => 'Change your mobile number';
+  String get profileScreen_changeYourMobileNumber =>
+      'Change your mobile number';
 
   @override
-  String get profileScreen_enterYourNewMobileNumber => 'Enter your new mobile number. We will send a verification code to it to confirm the change.';
+  String get profileScreen_enterYourNewMobileNumber =>
+      'Enter your new mobile number. We will send a verification code to it to confirm the change.';
 }

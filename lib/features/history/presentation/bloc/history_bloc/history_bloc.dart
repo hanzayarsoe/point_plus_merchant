@@ -13,7 +13,14 @@ class HistoryBloc
   static const _pageSize = 10;
   final GetHistoriesUsecase getHistoriesUsecase;
   HistoryBloc(this.getHistoriesUsecase)
-    : super(PagingState(pages: [], keys: [], hasNextPage: true)) {
+    : super(
+        PagingState(
+          pages: null,
+          keys: null,
+          hasNextPage: true,
+          isLoading: false,
+        ),
+      ) {
     on<_GetHistories>(_onGetHistories);
     on<_Reset>(_onReset);
   }
@@ -62,6 +69,6 @@ class HistoryBloc
     _Reset event,
     Emitter<PagingState<int, HistoryListItemEntity>> emit,
   ) async {
-    emit(PagingState(pages: [], keys: [], hasNextPage: true));
+    emit(PagingState(pages: null, keys: null, hasNextPage: true));
   }
 }

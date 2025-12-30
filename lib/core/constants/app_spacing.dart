@@ -95,7 +95,7 @@ class AppSpacing {
     right: 20,
   );
 
-  static const EdgeInsets customTabBarMargin = EdgeInsets.only(top: 35);
+  static const EdgeInsets customTabBarMargin = EdgeInsets.only(top: 30);
 
   static const EdgeInsets transitionTilePadding = EdgeInsets.symmetric(
     horizontal: 20,

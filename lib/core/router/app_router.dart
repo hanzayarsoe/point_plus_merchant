@@ -4,8 +4,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/router/app_routes.dart';
+import 'package:merchant/core/router/auto_transition_page.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:merchant/features/auth/presentation/pages/forget_password_page.dart';
 import 'package:merchant/features/auth/presentation/pages/login_page.dart';
@@ -101,26 +103,38 @@ class AppRouter {
         GoRoute(
           name: AppRoutes.initial,
           path: '/',
-          pageBuilder: (context, state) =>
-              NoTransitionPage(child: WelcomePage()),
+          pageBuilder: (context, state) => autoTransitionPage(
+            context: context,
+            state: state,
+            child: WelcomePage(),
+          ),
         ),
         GoRoute(
           name: AppRoutes.logIn,
           path: '/login',
-          pageBuilder: (context, state) => NoTransitionPage(child: LoginPage()),
+          pageBuilder: (context, state) => autoTransitionPage(
+            context: context,
+            state: state,
+            child: LoginPage(),
+          ),
         ),
         GoRoute(
           name: AppRoutes.forgetPassword,
           path: '/forget-password',
-          pageBuilder: (context, state) =>
-              NoTransitionPage(child: ForgetPasswordPage()),
+          pageBuilder: (context, state) => autoTransitionPage(
+            context: context,
+            state: state,
+            child: ForgetPasswordPage(),
+          ),
         ),
         GoRoute(
           name: AppRoutes.verifyNumber,
           path: '/verify-otp',
           pageBuilder: (context, state) {
             final phoneNumber = state.extra as String;
-            return NoTransitionPage(
+            return autoTransitionPage(
+              context: context,
+              state: state,
               child: VerifyOtpPage(phoneNumber: phoneNumber),
             );
           },
@@ -130,7 +144,9 @@ class AppRouter {
           path: '/reset-password',
           pageBuilder: (context, state) {
             final String phoneNumber = state.extra as String;
-            return NoTransitionPage(
+            return autoTransitionPage(
+              context: context,
+              state: state,
               child: ResetPasswordPage(phoneNumber: phoneNumber),
             );
           },
@@ -138,16 +154,23 @@ class AppRouter {
         GoRoute(
           name: AppRoutes.scanner,
           path: '/scanner',
-          pageBuilder: (context, state) =>
-              NoTransitionPage(child: ScannerPage()),
+          // Will use Bottom-to-Top Transition automatically
+          pageBuilder: (context, state) => autoTransitionPage(
+            context: context,
+            state: state,
+            child: ScannerPage(),
+          ),
         ),
         GoRoute(
           name: AppRoutes.searchAccount,
           path: '/search-account',
+          // Will use Bottom-to-Top Transition automatically
           pageBuilder: (context, state) {
             final String index = state.extra as String;
             final int initialIndex = int.tryParse(index) ?? 1;
-            return NoTransitionPage(
+            return autoTransitionPage(
+              context: context,
+              state: state,
               child: SearchWithAccountNumberPage(initialInde: initialIndex),
             );
           },
@@ -155,9 +178,12 @@ class AppRouter {
         GoRoute(
           name: AppRoutes.pointTransfer,
           path: '/point-transfer',
+          // Will use Bottom-to-Top Transition automatically
           pageBuilder: (context, state) {
             final transferType = state.extra as PointTransferEntity;
-            return NoTransitionPage(
+            return autoTransitionPage(
+              context: context,
+              state: state,
               child: BlocProvider(
                 create: (context) => PointTransferBloc(sl()),
                 child: PointTransferPage(pointTransferEntity: transferType),
@@ -168,47 +194,66 @@ class AppRouter {
         GoRoute(
           name: AppRoutes.withdraw,
           path: '/withdraw',
-          pageBuilder: (context, state) =>
-              NoTransitionPage(child: WithdrawPage()),
+          pageBuilder: (context, state) => autoTransitionPage(
+            context: context,
+            state: state,
+            child: WithdrawPage(),
+          ),
         ),
         GoRoute(
           name: AppRoutes.recharge,
           path: '/recharge',
-          pageBuilder: (context, state) =>
-              NoTransitionPage(child: RechargePage()),
+          pageBuilder: (context, state) => autoTransitionPage(
+            context: context,
+            state: state,
+            child: RechargePage(),
+          ),
         ),
         GoRoute(
           name: AppRoutes.changeMobileNumberVerifyOtp,
           path: '/change-mobile-number-verify-otp',
           pageBuilder: (context, state) {
             final phoneNumber = state.extra as String;
-            return NoTransitionPage(
+            return autoTransitionPage(
+              context: context,
+              state: state,
               child: ChangeMobileNumberVerifyOtpPage(phoneNumber: phoneNumber),
             );
           },
         ),
         StatefulShellRoute(
           branches: [
+            // BRANCH 1: HOME
             StatefulShellBranch(
               routes: [
                 GoRoute(
                   name: AppRoutes.home,
                   path: '/home',
-                  pageBuilder: (context, state) =>
-                      NoTransitionPage(child: HomePage()),
+                  pageBuilder: (context, state) => autoTransitionPage(
+                    context: context,
+                    state: state,
+                    child: HomePage(),
+                  ),
                   routes: [
                     GoRoute(
                       name: AppRoutes.noti,
                       path: 'noti',
                       pageBuilder: (context, state) {
-                        return NoTransitionPage(child: NotiPage());
+                        return autoTransitionPage(
+                          context: context,
+                          state: state,
+                          child: NotiPage(),
+                        );
                       },
                     ),
                     GoRoute(
                       name: AppRoutes.request,
                       path: 'request-transaction',
-                      pageBuilder: (context, state) =>
-                          NoTransitionPage(child: YourRequestPag()),
+                      pageBuilder: (context, state) => autoTransitionPage(
+                        context: context,
+                        state: state,
+                        child: YourRequestPag(),
+                      ),
                       routes: [
                         GoRoute(
                           name: AppRoutes.requestTransactionDetail,
@@ -216,7 +261,9 @@ class AppRouter {
                           pageBuilder: (context, state) {
                             final String requestId =
                                 state.pathParameters['id']!;
-                            return NoTransitionPage(
+                            return autoTransitionPage(
+                              context: context,
+                              state: state,
                               child: RequestTransactionDetailPage(
                                 requestId: requestId,
                               ),
@@ -229,13 +276,18 @@ class AppRouter {
                 ),
               ],
             ),
+
+            // BRANCH 2: HISTORY
             StatefulShellBranch(
               routes: [
                 GoRoute(
                   name: AppRoutes.history,
                   path: '/history',
-                  pageBuilder: (context, state) =>
-                      NoTransitionPage(child: HistoryPage()),
+                  pageBuilder: (context, state) => autoTransitionPage(
+                    context: context,
+                    state: state,
+                    child: HistoryPage(),
+                  ),
                   routes: [
                     GoRoute(
                       name: AppRoutes.transactionDetail,
@@ -243,7 +295,9 @@ class AppRouter {
                       pageBuilder: (context, state) {
                         final String? transactionId =
                             state.pathParameters['id'];
-                        return NoTransitionPage(
+                        return autoTransitionPage(
+                          context: context,
+                          state: state,
                           child: TransactionDetailPage(
                             transactionId: transactionId ?? '1',
                           ),
@@ -254,38 +308,54 @@ class AppRouter {
                 ),
               ],
             ),
+
+            // BRANCH 3: STORE
             StatefulShellBranch(
               routes: [
                 GoRoute(
                   name: AppRoutes.store,
                   path: '/store',
-                  pageBuilder: (context, state) =>
-                      NoTransitionPage(child: StorePage()),
+                  pageBuilder: (context, state) => autoTransitionPage(
+                    context: context,
+                    state: state,
+                    child: StorePage(),
+                  ),
                   routes: [
                     GoRoute(
                       name: AppRoutes.editStoreProfile,
                       path: 'edit-store-profile',
-                      pageBuilder: (context, state) =>
-                          NoTransitionPage(child: EditStoreProfilePage()),
+                      pageBuilder: (context, state) => autoTransitionPage(
+                        context: context,
+                        state: state,
+                        child: EditStoreProfilePage(),
+                      ),
                     ),
                     GoRoute(
                       name: AppRoutes.seeAllPromos,
                       path: 'see-all-promos',
-                      pageBuilder: (context, state) =>
-                          NoTransitionPage(child: SeeAllPromoPage()),
+                      pageBuilder: (context, state) => autoTransitionPage(
+                        context: context,
+                        state: state,
+                        child: SeeAllPromoPage(),
+                      ),
                     ),
                     GoRoute(
                       name: AppRoutes.seeAllItems,
                       path: 'see-all-items',
-                      pageBuilder: (context, state) =>
-                          NoTransitionPage(child: SeeAllItemsPage()),
+                      pageBuilder: (context, state) => autoTransitionPage(
+                        context: context,
+                        state: state,
+                        child: SeeAllItemsPage(),
+                      ),
                     ),
                     GoRoute(
                       name: AppRoutes.itemDetails,
                       path: 'item-details',
                       pageBuilder: (context, state) {
                         final item = state.extra as ItemEntity;
-                        return NoTransitionPage(
+                        return autoTransitionPage(
+                          context: context,
+                          state: state,
                           child: ItemDetailsPage(item: item),
                         );
                       },
@@ -294,55 +364,81 @@ class AppRouter {
                 ),
               ],
             ),
+
+            // BRANCH 4: PROFILE
             StatefulShellBranch(
               routes: [
                 GoRoute(
                   name: AppRoutes.profile,
                   path: '/profile',
-                  pageBuilder: (context, state) =>
-                      NoTransitionPage(child: ProfilePage()),
+                  pageBuilder: (context, state) => autoTransitionPage(
+                    context: context,
+                    state: state,
+                    child: ProfilePage(),
+                  ),
                   routes: [
                     GoRoute(
                       name: AppRoutes.personalInformation,
                       path: 'personal-information,',
-                      pageBuilder: (context, state) =>
-                          NoTransitionPage(child: PersonalInformationPage()),
+                      pageBuilder: (context, state) => autoTransitionPage(
+                        context: context,
+                        state: state,
+                        child: PersonalInformationPage(),
+                      ),
                     ),
                     GoRoute(
                       name: AppRoutes.changeMobileNumber,
                       path: 'change-mobile-number',
-                      pageBuilder: (context, state) =>
-                          NoTransitionPage(child: ChangeMobileNumberPage()),
+                      pageBuilder: (context, state) => autoTransitionPage(
+                        context: context,
+                        state: state,
+                        child: ChangeMobileNumberPage(),
+                      ),
                     ),
                     GoRoute(
                       name: AppRoutes.devices,
                       path: 'devices',
-                      pageBuilder: (context, state) =>
-                          NoTransitionPage(child: DevicesPage()),
+                      pageBuilder: (context, state) => autoTransitionPage(
+                        context: context,
+                        state: state,
+                        child: DevicesPage(),
+                      ),
                     ),
                     GoRoute(
                       name: AppRoutes.changePassword,
                       path: 'change-password',
-                      pageBuilder: (context, state) =>
-                          NoTransitionPage(child: ChangePasswordPage()),
+                      pageBuilder: (context, state) => autoTransitionPage(
+                        context: context,
+                        state: state,
+                        child: ChangePasswordPage(),
+                      ),
                     ),
                     GoRoute(
                       name: AppRoutes.changeLanguage,
                       path: 'change-language',
-                      pageBuilder: (context, state) =>
-                          NoTransitionPage(child: ChangeLanguagePage()),
+                      pageBuilder: (context, state) => autoTransitionPage(
+                        context: context,
+                        state: state,
+                        child: ChangeLanguagePage(),
+                      ),
                     ),
                     GoRoute(
                       name: AppRoutes.privacyPolicies,
                       path: 'privacy-policies',
-                      pageBuilder: (context, state) =>
-                          NoTransitionPage(child: PrivacyPoliciesPage()),
+                      pageBuilder: (context, state) => autoTransitionPage(
+                        context: context,
+                        state: state,
+                        child: PrivacyPoliciesPage(),
+                      ),
                     ),
                     GoRoute(
                       name: AppRoutes.aboutApp,
                       path: 'about-app',
-                      pageBuilder: (context, state) =>
-                          NoTransitionPage(child: AboutAppPage()),
+                      pageBuilder: (context, state) => autoTransitionPage(
+                        context: context,
+                        state: state,
+                        child: AboutAppPage(),
+                      ),
                     ),
                   ],
                 ),

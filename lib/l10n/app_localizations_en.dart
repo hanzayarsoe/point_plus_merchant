@@ -21,19 +21,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcome => 'Welcome To Point Plus';
 
   @override
-  String get getReward => 'Get rewarded for your loyalty. Earn points at all your favourite places.';
+  String get getReward =>
+      'Get rewarded for your loyalty. Earn points at all your favourite places.';
 
   @override
   String get earnPoint => 'Earn Points Everywhere';
 
   @override
-  String get shopAnyWhere => 'Shop anywhere in our network, collect points from every purchase.';
+  String get shopAnyWhere =>
+      'Shop anywhere in our network, collect points from every purchase.';
 
   @override
   String get spend => 'Spend Them Anywhere';
 
   @override
-  String get spendAnywhere => 'Use your points at any merchants you like — your rewards travel with you.';
+  String get spendAnywhere =>
+      'Use your points at any merchants you like — your rewards travel with you.';
 
   @override
   String get signIn => 'Sign In';
@@ -60,7 +63,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get letSetUpYourAccount => 'Let’s set up your account!';
 
   @override
-  String get enterYourPhoneNumber => 'Enter your phone number. We’ll send a one-time verification code there.';
+  String get enterYourPhoneNumber =>
+      'Enter your phone number. We’ll send a one-time verification code there.';
 
   @override
   String get mobileNumber => 'Mobile Number';
@@ -69,7 +73,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get verifyYourNumber => 'Verify your number';
 
   @override
-  String get checkYourMessageForOneTimeCode => 'Check your messages for a one-time verification code. Enter it here to continue.';
+  String get checkYourMessageForOneTimeCode =>
+      'Check your messages for a one-time verification code. Enter it here to continue.';
 
   @override
   String get noReceiveOtpCode => 'Didn\'t receive the OTP code?';
@@ -92,7 +97,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lefCreateYourProfile => 'Let’s create your profile!';
 
   @override
-  String get justFewDetailToGetYourAccount => 'Jus a few details to get your account set up.';
+  String get justFewDetailToGetYourAccount =>
+      'Jus a few details to get your account set up.';
 
   @override
   String get name => 'Name *';
@@ -137,13 +143,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordRecovery => 'password Recovery';
 
   @override
-  String get enterYourMobileNumberToResetYourPassword => 'Enter your mobile number to reset your password.';
+  String get enterYourMobileNumberToResetYourPassword =>
+      'Enter your mobile number to reset your password.';
 
   @override
   String get enteryYourMobileNumber => 'Enter your mobile number';
 
   @override
-  String get enterYourEmailToResetYourPassword => 'Enter your email to reset your password.';
+  String get enterYourEmailToResetYourPassword =>
+      'Enter your email to reset your password.';
 
   @override
   String get submit => 'Submit';
@@ -172,7 +180,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createNewPassword => 'Create New Password';
 
   @override
-  String get pleaseCreateNewPassword => 'Please create a new password for your account.';
+  String get pleaseCreateNewPassword =>
+      'Please create a new password for your account.';
 
   @override
   String get enterCurrentPassword => 'Enter Current Password';
@@ -187,7 +196,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordUpdate => 'Password Updated';
 
   @override
-  String get passwordSuccessfullyUpdate => 'Your password has been successfully updated. Sign in with your new password.';
+  String get passwordSuccessfullyUpdate =>
+      'Your password has been successfully updated. Sign in with your new password.';
 
   @override
   String get resetPassword => 'Reset Password';
@@ -199,7 +209,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteAccount_confirmBoxLabel => 'Delete Your Account?';
 
   @override
-  String get deleteAccount_confrimBoxText => 'This action is permanent and will delete all your data and points. Are you sure you want to delete your account?';
+  String get deleteAccount_confrimBoxText =>
+      'This action is permanent and will delete all your data and points. Are you sure you want to delete your account?';
 
   @override
   String get deleteAccount_confrimBoxDeleteButtonText => 'Delete';
@@ -287,7 +298,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletScreen_scanQrCode => 'Scan QR Code';
 
   @override
-  String get walletScreen_scanThisQrCodeToEarn => 'Scan this QR code at the merchant to earn points';
+  String get walletScreen_scanThisQrCodeToEarn =>
+      'Scan this QR code at the merchant to earn points';
 
   @override
   String get walletScreen_cannotScan => 'Can’t scan? Use your account number';
@@ -302,7 +314,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletScreen_enterPoints => 'Enter points';
 
   @override
-  String get walletScreen_forYourSecurityEnterPassowrd => 'For your security, please enter your password to confirm this redemption.';
+  String get walletScreen_forYourSecurityEnterPassowrd =>
+      'For your security, please enter your password to confirm this redemption.';
 
   @override
   String walletScreen_redeemingPts(Object points) {
@@ -375,23 +388,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobileNubmer_validation_length => 'Invalid phone number';
 
   @override
-  String get mobileNubmer_validation_alreadyExist => 'An account with this number already exist';
+  String get mobileNubmer_validation_alreadyExist =>
+      'An account with this number already exist';
 
   @override
-  String get profileScreen_editPersonalInformation => 'Edit Personal Information';
+  String get profileScreen_editPersonalInformation =>
+      'Edit Personal Information';
 
   @override
   String get profileScreen_confirmYourPassword => 'Confirm Your Password';
 
   @override
-  String get profileScreen_forSecurityEnterPassword => 'For your security, please enter your password to confirm that you want to edit your personal information.';
+  String get profileScreen_forSecurityEnterPassword =>
+      'For your security, please enter your password to confirm that you want to edit your personal information.';
 
   @override
   String get profileScreen_changesSaved => 'Changes Saved';
 
   @override
-  String get profileScreen_changeYourMobileNumber => 'Change your mobile number';
+  String get profileScreen_changeYourMobileNumber =>
+      'Change your mobile number';
 
   @override
-  String get profileScreen_enterYourNewMobileNumber => 'Enter your new mobile number. We will send a verification code to it to confirm the change.';
+  String get profileScreen_enterYourNewMobileNumber =>
+      'Enter your new mobile number. We will send a verification code to it to confirm the change.';
 }

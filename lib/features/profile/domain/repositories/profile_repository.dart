@@ -3,6 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:merchant/core/failure/failure.dart';
 import 'package:merchant/features/auth/domain/entities/branch.dart';
 import 'package:merchant/features/auth/domain/entities/manager.dart';
+import 'package:merchant/features/profile/domain/entities/device_entity.dart';
 
 abstract interface class ProfileRepository {
   Future<String> loadLocale();
@@ -20,4 +21,5 @@ abstract interface class ProfileRepository {
   TaskEither<Failure, void> updateManagerInfo(Manager updatedManager);
   TaskEither<Failure, void> registerToken(String token);
   TaskEither<Failure, void> unregisterToken(String token);
+  TaskEither<Failure, List<DeviceEntity>> getDevices();
 }

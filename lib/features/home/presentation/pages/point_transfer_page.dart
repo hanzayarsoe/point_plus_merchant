@@ -136,8 +136,8 @@ class _PointTransferPageState extends State<PointTransferPage> {
           ),
           success: () {
             showSuccessToast(context, 'Successfully Transfer!');
-            context.goNamed(AppRoutes.home);
             context.read<AuthBloc>().add(AuthEvent.refreshUser());
+            context.goNamed(AppRoutes.home);
           },
         );
       },

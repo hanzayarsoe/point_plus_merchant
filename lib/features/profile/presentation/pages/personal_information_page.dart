@@ -13,7 +13,7 @@ import 'package:merchant/core/utils/validation.dart';
 import 'package:merchant/features/auth/domain/entities/manager.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:merchant/features/home/presentation/widgets/custom_icon.dart';
-import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
+import 'package:merchant/features/profile/presentation/bloc/branch_bloc/branch_bloc.dart';
 import 'package:merchant/features/profile/presentation/widgets/delete_account_button.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/custom_cached_network_image.dart';
@@ -182,6 +182,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
         state.maybeWhen(
           orElse: () {},
           updatedManagerSuccessful: () {
+            FocusScope.of(context).unfocus();
             toastification.show(
               context: context,
               type: ToastificationType.success,
@@ -195,6 +196,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
             context.read<BranchBloc>().add(
               const BranchEvent.refreshBranchData(),
             );
+
             setState(() {
               _isChanged = false;
               _pickedImage = null;

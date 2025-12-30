@@ -7,7 +7,7 @@ import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/router/app_routes.dart';
 import 'package:merchant/core/utils/toast.dart';
 import 'package:merchant/features/auth/presentation/widgets/gradient_elevated_button.dart';
-import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
+import 'package:merchant/features/profile/presentation/bloc/branch_bloc/branch_bloc.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/icon_text_form_field.dart';
 import 'package:merchant/shared/widgets/loading_overlay.dart';

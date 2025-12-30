@@ -39,6 +39,8 @@ class CustomPinPutField extends StatelessWidget {
           keyboardType: TextInputType.number,
           controller: pinController,
           defaultPinTheme: defaultPinTheme,
+          focusedPinTheme: focusedPinTheme,
+          submittedPinTheme: submittedPinTheme,
           length: length,
           errorText: errorText,
           forceErrorState: errorText != null,

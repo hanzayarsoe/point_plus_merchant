@@ -7,13 +7,15 @@ import 'package:merchant/features/profile/domain/usecases/change_locale_usecase.
 import 'package:merchant/features/profile/domain/usecases/change_mobile_number_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/change_password_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/get_branch_info_usecase.dart';
+import 'package:merchant/features/profile/domain/usecases/get_devices_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/load_locale.dart';
 import 'package:merchant/features/profile/domain/usecases/register_token_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/send_otp_to_change_number_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/unregister_token_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/update_branch_info_usecase.dart';
 import 'package:merchant/features/profile/domain/usecases/update_manager_info_usecase.dart';
-import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
+import 'package:merchant/features/profile/presentation/bloc/branch_bloc/branch_bloc.dart';
+import 'package:merchant/features/profile/presentation/bloc/device_bloc/devices_bloc.dart';
 import 'package:merchant/features/profile/presentation/cubits/locale_cubit/locale_cubit.dart';
 import 'package:merchant/features/profile/presentation/cubits/noti_cubit/noti_cubit.dart';
 
@@ -37,8 +39,10 @@ class ProfileInjection {
       ..registerLazySingleton(() => UpdateManagerInfoUsecase(sl()))
       ..registerLazySingleton(() => RegisterTokenUsecase(sl()))
       ..registerLazySingleton(() => UnregisterTokenUsecase(sl()))
+      ..registerLazySingleton(() => GetDevicesUsecase(sl()))
       ..registerLazySingleton(() => LocaleCubit(sl(), sl()))
       ..registerLazySingleton(() => NotiCubit(sl(), sl(), sl(), sl()))
+      ..registerFactory(() => DevicesBloc(sl()))
       ..registerLazySingleton(
         () => BranchBloc(sl(), sl(), sl(), sl(), sl(), sl()),
       );

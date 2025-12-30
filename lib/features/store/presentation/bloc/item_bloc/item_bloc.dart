@@ -11,7 +11,7 @@ class ItemBloc extends Bloc<ItemEvent, PagingState<int, ItemEntity>> {
   static const int _pageSize = 10;
   final GetItemsUsecase getItemsUsecase;
   ItemBloc(this.getItemsUsecase)
-    : super(PagingState(pages: [], keys: [], hasNextPage: true)) {
+    : super(PagingState(pages: null, keys: null, hasNextPage: true)) {
     on<_FetchPage>(_onFetchPage);
   }
 
@@ -20,6 +20,7 @@ class ItemBloc extends Bloc<ItemEvent, PagingState<int, ItemEntity>> {
     if (currentState.isLoading || !currentState.hasNextPage) {
       return;
     }
+    emit(currentState.copyWith(isLoading: true));
     try {
       final pageKey = currentState.keys?.length ?? 0;
       final result = await getItemsUsecase

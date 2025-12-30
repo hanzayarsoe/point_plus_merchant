@@ -90,7 +90,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
 
         if (result['isSuccess'] == true) {
           if (!context.mounted) return;
-          showSuccessToast(context, 'Image saved successfully!');
+          showSuccessToast(context, 'Receipt saved to Gallery');
         } else {
           showToast(
             message: "Failed to save Image!",

@@ -45,7 +45,7 @@ class _RequestTransactionDetailPageState
           );
 
           if (transaction == null && isLoading) {
-             return Scaffold(
+            return Scaffold(
               appBar: CustomAppBar(
                 title: 'Details',
                 automaticallyImplyLeading: true,
@@ -53,7 +53,7 @@ class _RequestTransactionDetailPageState
               body: Center(child: CupertinoActivityIndicator()),
             );
           }
-          
+
           if (transaction == null) {
             return Scaffold(
               appBar: CustomAppBar(
@@ -67,7 +67,9 @@ class _RequestTransactionDetailPageState
           final isRecharge = transaction.type.toLowerCase().contains(
             'recharge',
           );
-          final isPending = transaction.status.toLowerCase().contains('pending');
+          final isPending = transaction.status.toLowerCase().contains(
+            'pending',
+          );
           final isReject = transaction.status.toLowerCase().contains('reject');
           return LoadingOverlay(
             isLoading: isLoading,
@@ -109,7 +111,9 @@ class _RequestTransactionDetailPageState
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           AppSpacing.largeSizedBox,
-                          Divider(color: Theme.of(context).colorScheme.secondary),
+                          Divider(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                           AppSpacing.smallSizedBox,
                           AppSpacing.smallSizedBox,
                           TransactionDetailRow(
@@ -127,15 +131,16 @@ class _RequestTransactionDetailPageState
                                       ? Theme.of(
                                           context,
                                         ).extension<AppColors>()!.pendingColor
-                                      : Theme.of(
-                                          context,
-                                        ).extension<AppColors>()!.actionBlueColor,
+                                      : Theme.of(context)
+                                            .extension<AppColors>()!
+                                            .actionBlueColor,
                                 ),
                           ),
                           AppSpacing.largeSizedBox,
                           TransactionDetailRow(
                             title: 'Total Points',
-                            text: '${isRecharge ? '+' : '-'} ${transaction.amount} pts',
+                            text:
+                                '${isRecharge ? '+' : '-'} ${transaction.amount} pts',
                           ),
                           AppSpacing.largeSizedBox,
                           TransactionDetailRow(
@@ -150,21 +155,25 @@ class _RequestTransactionDetailPageState
                           AppSpacing.largeSizedBox,
                           TransactionDetailRow(
                             title: 'Date',
-                            text: Formatter.formatUtcTimeToHistoryTransactionDate(
-                              transaction.createdAt,
-                            ),
+                            text:
+                                Formatter.formatUtcTimeToHistoryTransactionDate(
+                                  transaction.createdAt,
+                                ),
                           ),
                           AppSpacing.largeSizedBox,
                           TransactionDetailRow(
                             title: 'Time',
-                            text: Formatter.formatUtcTimeToHistoryTransactionTime(
-                              transaction.createdAt,
-                            ),
+                            text:
+                                Formatter.formatUtcTimeToHistoryTransactionTime(
+                                  transaction.createdAt,
+                                ),
                           ),
                           if (transaction.note != null) ...[
                             TransactionDetailRow(
                               title: 'Note',
-                              titleTextStyle: Theme.of(context).textTheme.bodyMedium!
+                              titleTextStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
                                   .copyWith(
                                     color: Theme.of(
                                       context,

@@ -6,6 +6,7 @@ import 'package:merchant/core/constants/app_assets.dart';
 import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/utils/formatter.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class HomePointBalanceCard extends StatefulWidget {
   const HomePointBalanceCard({super.key});
@@ -20,6 +21,10 @@ class _HomePointBalanceCardState extends State<HomePointBalanceCard> {
   Widget build(BuildContext context) {
     final userState = context.watch<AuthBloc>().state;
     final user = userState.whenOrNull(authenticated: (user) => user);
+    final isLoading = userState.maybeWhen(
+      orElse: () => false,
+      loading: () => true,
+    );
     return Container(
       padding: AppSpacing.defaultPadding,
       decoration: BoxDecoration(
@@ -33,70 +38,78 @@ class _HomePointBalanceCardState extends State<HomePointBalanceCard> {
         ),
         borderRadius: AppSpacing.normalBorderRadiusCircular,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            spacing: AppSpacing.extraSmallSpacing,
-            children: [
-              SvgPicture.asset(
-                AppAssets.starIcon,
-                width: 30,
-                height: 30,
-                fit: BoxFit.cover,
-              ),
-              Text(
-                'Points Balance',
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.surface,
+      child: Skeletonizer(
+        enabled: isLoading || user == null,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              spacing: AppSpacing.extraSmallSpacing,
+              children: [
+                SvgPicture.asset(
+                  AppAssets.starIcon,
+                  width: 30,
+                  height: 30,
+                  fit: BoxFit.cover,
                 ),
-              ),
-            ],
-          ),
-          AppSpacing.smallSizedBox,
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${_isObsurce ? Formatter.fromNumberAsHidden(user?.branchAmount ?? 0) : Formatter.formatNumber(user?.branchAmount ?? 0)} Pts',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.surface,
+                Text(
+                  'Points Balance',
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(width: AppSpacing.smallSpacing),
-              InkWell(
-                onTap: () => setState(() {
-                  _isObsurce = !_isObsurce;
-                }),
-                child: Icon(
-                  _isObsurce ? LucideIcons.eyeClosed : LucideIcons.eye,
-                  size: 30,
-                  color: Theme.of(context).colorScheme.surface,
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.largeSizedBox,
-          Text(
-            '${user?.manager.name}',
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-              color: Theme.of(context).colorScheme.surface,
+              ],
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          AppSpacing.smallSizedBox,
-          Text(
-            Formatter.formatAsCardNumber(user?.accountNumber ?? ''),
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            AppSpacing.smallSizedBox,
+            Skeletonizer(
+              enabled: isLoading || user == null,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      '${_isObsurce ? Formatter.fromNumberAsHidden(user?.branchAmount ?? 0) : Formatter.formatNumber(user?.branchAmount ?? 0)} Pts',
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(width: AppSpacing.smallSpacing),
+                  InkWell(
+                    onTap: () => setState(() {
+                      _isObsurce = !_isObsurce;
+                    }),
+                    child: Icon(
+                      _isObsurce ? LucideIcons.eyeClosed : LucideIcons.eye,
+                      size: 30,
+                      color: Theme.of(context).colorScheme.surface,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+            AppSpacing.largeSizedBox,
+            Text(
+              user?.manager.name ?? '',
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            AppSpacing.smallSizedBox,
+            Text(
+              Formatter.formatAsCardNumber(user?.accountNumber ?? ''),
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }

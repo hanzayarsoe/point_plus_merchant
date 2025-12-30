@@ -236,8 +236,8 @@ class DioHelper {
 
   /// ✅ GET Request
   Future<Response> get(
-    String endpoint,
-    dynamic data, {
+    String endpoint, {
+    dynamic data,
     Map<String, dynamic>? queryParameters,
   }) async {
     try {

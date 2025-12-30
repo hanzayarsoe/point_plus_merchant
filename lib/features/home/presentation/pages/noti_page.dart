@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +16,7 @@ import 'package:merchant/features/home/presentation/bloc/noti_bloc/noti_bloc.dar
 import 'package:merchant/features/home/presentation/cubits/noti_count_cubit/noti_count_cubit.dart';
 import 'package:merchant/features/home/presentation/widgets/custom_icon.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
+import 'package:merchant/shared/widgets/empty_state_widget.dart';
 
 class NotiPage extends StatefulWidget {
   const NotiPage({super.key});
@@ -32,7 +34,8 @@ class _NotiPageState extends State<NotiPage> {
   }) async {
     if (!read) {
       context.read<NotiCountCubit>().markAsRead(notiId);
-      context.read<NotiBloc>().add(NotiEvent.getNotifs());
+      context.read<NotiBloc>().add(NotiEvent.markAsRead(id: notiId));
+      context.read<NotiCountCubit>().getUnreadCount();
     }
     if (data.transactionId != null) {
       await Navigator.of(context).push(
@@ -50,6 +53,12 @@ class _NotiPageState extends State<NotiPage> {
     }
   }
 
+  Future<void> _refreshData(BuildContext context) async {
+    context.read<NotiBloc>().add(const NotiEvent.reset());
+    context.read<NotiBloc>().add(const NotiEvent.getNotifs());
+    await Future.delayed(const Duration(seconds: 1)); // Simulate network delay
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -65,113 +74,122 @@ class _NotiPageState extends State<NotiPage> {
               title: 'Notification',
               automaticallyImplyLeading: true,
             ),
-            body: PagedListView(
-              state: state,
-              fetchNextPage: fetchPage,
-              builderDelegate: PagedChildBuilderDelegate<NotiEntity>(
-                itemBuilder: (context, item, index) {
-                  return item.when(
-                    dateHeader: (dateHeader) {
-                      return Padding(
-                        padding: AppSpacing.defaultPadding,
-                        child: Text(
-                          HelperFunction.isNotiDateHeadIsToday(dateHeader)
-                              ? 'New'
-                              : dateHeader,
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      );
-                    },
-                    notification:
-                        (
-                          id,
-                          title,
-                          message,
-                          notificationType,
-                          read,
-                          createdAt,
-                          data,
-                        ) {
-                          final isRedeem = data?.type?.toLowerCase().contains(
-                            'redeem',
-                          );
-                          final isWithdraw = data?.type?.toLowerCase().contains(
-                            'withdraw',
-                          );
-                          if (data == null) return SizedBox.shrink();
-                          return InkWell(
-                            onTap: () => _handleNoti(
-                              context,
-                              notiId: id.toString(),
-                              data: data,
-                              read: read,
-                            ),
-                            child: Container(
-                              padding: AppSpacing.defaultPadding,
-                              decoration: BoxDecoration(
-                                color: !read
-                                    ? Theme.of(context).colorScheme.secondary
-                                    : null,
-                                border: Border.symmetric(
-                                  horizontal: BorderSide(
-                                    color: Theme.of(
-                                      context,
-                                    ).extension<AppColors>()!.dimGrayColor!,
+            body: RefreshIndicator(
+              onRefresh: () => _refreshData(context),
+              child: PagedListView(
+                state: state,
+                fetchNextPage: fetchPage,
+                builderDelegate: PagedChildBuilderDelegate<NotiEntity>(
+                  itemBuilder: (context, item, index) {
+                    return item.when(
+                      dateHeader: (dateHeader) {
+                        return Padding(
+                          padding: AppSpacing.defaultPadding,
+                          child: Text(
+                            HelperFunction.isNotiDateHeadIsToday(dateHeader)
+                                ? 'New'
+                                : dateHeader,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                        );
+                      },
+                      notification:
+                          (
+                            id,
+                            title,
+                            message,
+                            notificationType,
+                            read,
+                            createdAt,
+                            data,
+                          ) {
+                            final isRedeem = data?.type?.toLowerCase().contains(
+                              'redeem',
+                            );
+                            final isWithdraw = data?.type
+                                ?.toLowerCase()
+                                .contains('withdraw');
+                            if (data == null) return SizedBox.shrink();
+                            return InkWell(
+                              onTap: () => _handleNoti(
+                                context,
+                                notiId: id.toString(),
+                                data: data,
+                                read: read,
+                              ),
+                              child: Container(
+                                padding: AppSpacing.defaultPadding,
+                                decoration: BoxDecoration(
+                                  color: !read
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : null,
+                                  border: Border.symmetric(
+                                    horizontal: BorderSide(
+                                      color: Theme.of(
+                                        context,
+                                      ).extension<AppColors>()!.dimGrayColor!,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              child: Row(
-                                spacing: AppSpacing.smallSpacing,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  if (isWithdraw != null && isRedeem != null)
-                                    CustomIcon(
-                                      icon: Icon(
-                                        (isWithdraw || isRedeem)
-                                            ? LucideIcons.arrowUpRight
-                                            : LucideIcons.arrowDownRight,
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.surface,
-                                      ),
-                                      padding: AppSpacing.smallPadding,
-                                      paddingColor: Theme.of(
-                                        context,
-                                      ).colorScheme.primaryContainer,
-                                    ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    spacing: AppSpacing.smallSpacing,
-                                    children: [
-                                      Text(
-                                        '$title',
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.bodyMedium,
-                                      ),
-                                      Text(
-                                        Formatter.formatUtcTimeToTimeago(
-                                          createdAt,
+                                child: Row(
+                                  spacing: AppSpacing.smallSpacing,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    if (isWithdraw != null && isRedeem != null)
+                                      CustomIcon(
+                                        icon: Icon(
+                                          (isWithdraw || isRedeem)
+                                              ? LucideIcons.arrowUpRight
+                                              : LucideIcons.arrowDownRight,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.surface,
                                         ),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .copyWith(
-                                              color: Theme.of(
-                                                context,
-                                              ).hintColor,
-                                            ),
+                                        padding: AppSpacing.smallPadding,
+                                        paddingColor: Theme.of(
+                                          context,
+                                        ).colorScheme.primaryContainer,
                                       ),
-                                    ],
-                                  ),
-                                ],
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      spacing: AppSpacing.smallSpacing,
+                                      children: [
+                                        Text(
+                                          '$title',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium,
+                                        ),
+                                        Text(
+                                          Formatter.formatUtcTimeToTimeago(
+                                            createdAt,
+                                          ),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(
+                                                color: Theme.of(
+                                                  context,
+                                                ).hintColor,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                  );
-                },
+                            );
+                          },
+                    );
+                  },
+                  firstPageProgressIndicatorBuilder: (context) =>
+                      Center(child: CupertinoActivityIndicator()),
+                  noItemsFoundIndicatorBuilder: (context) => EmptyStateWidget(
+                    icon: LucideIcons.bellOff,
+                    title: 'No notifications yet',
+                  ),
+                ),
               ),
             ),
           );

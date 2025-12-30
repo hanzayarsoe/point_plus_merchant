@@ -5,6 +5,8 @@ import 'package:merchant/features/auth/data/models/branch_model.dart';
 import 'package:merchant/features/auth/domain/entities/branch.dart';
 import 'package:merchant/features/auth/domain/entities/manager.dart';
 import 'package:merchant/features/profile/data/datasources/profile_datasource.dart';
+import 'package:merchant/features/profile/data/models/device_model.dart';
+import 'package:merchant/features/profile/domain/entities/device_entity.dart';
 import 'package:merchant/features/profile/domain/repositories/profile_repository.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
@@ -68,5 +70,12 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   TaskEither<Failure, void> unregisterToken(String token) {
     return profileDatasource.unregisterToken(token);
+  }
+
+  @override
+  TaskEither<Failure, List<DeviceEntity>> getDevices() {
+    return profileDatasource.getDevices().map(
+      (devices) => devices.map((device) => device.toEntity()).toList(),
+    );
   }
 }

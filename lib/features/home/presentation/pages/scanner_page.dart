@@ -61,7 +61,9 @@ class _ScannerPageState extends State<ScannerPage> {
         _handleQrScan(_scannedValue!);
       }
     } else {
-      _isScanning = false;
+      setState(() {
+        _isScanning = false;
+      });
       showToast(
         message: "can't scan your image! please try again!",
         type: ToastificationType.info,
@@ -153,24 +155,31 @@ class _ScannerPageState extends State<ScannerPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
-                        onTap: () async {
-                          await _controller.toggleTorch();
-                          setState(() {});
-                        },
-                        child: CustomIcon(
-                          icon: Icon(
-                            _controller.torchEnabled
-                                ? LucideIcons.zap
-                                : LucideIcons.zapOff,
-                            size: 24,
-                            color: Theme.of(context).colorScheme.inverseSurface,
-                          ),
-                          padding: AppSpacing.normalPadding,
-                          paddingColor: Colors.black,
-                          linearGradientColor: [
-                            Theme.of(context).colorScheme.primary,
-                            Theme.of(context).colorScheme.onPrimaryContainer,
-                          ],
+                        onTap: () => _controller.toggleTorch(),
+                        child: ValueListenableBuilder(
+                          valueListenable: _controller,
+                          builder: (context, state, child) {
+                            final isEnabled = state.torchState == TorchState.on;
+                            return CustomIcon(
+                              icon: Icon(
+                                isEnabled
+                                    ? LucideIcons.zap
+                                    : LucideIcons.zapOff,
+                                size: 24,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.inverseSurface,
+                              ),
+                              padding: AppSpacing.normalPadding,
+                              paddingColor: Colors.black,
+                              linearGradientColor: [
+                                Theme.of(context).colorScheme.primary,
+                                Theme.of(
+                                  context,
+                                ).colorScheme.onPrimaryContainer,
+                              ],
+                            );
+                          },
                         ),
                       ),
                       InkWell(

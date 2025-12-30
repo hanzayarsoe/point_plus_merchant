@@ -132,6 +132,22 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
     context.pop();
   }
 
+  void _clearFilters() {
+    setState(() {
+      selectedIndexChip = -1;
+      _selectedStartDate = null;
+      _selectedEndDate = null;
+      _startDateController.clear();
+      _endDateController.clear();
+    });
+    if (widget.isHistoryFilter) {
+      context.read<HistoryFilterCubit>().clearFilters();
+    } else {
+      context.read<RequestFilterCubit>().clearFilters();
+    }
+    context.pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -140,7 +156,32 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Date Range', style: Theme.of(context).textTheme.titleMedium),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Date Range',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              TextButton(
+                onPressed: _clearFilters,
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  overlayColor: Colors.transparent,
+                ),
+                child: Text(
+                  'Clear Filter',
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Theme.of(context).colorScheme.error,
+                      ),
+                ),
+              ),
+            ],
+          ),
           AppSpacing.smallSizedBox,
           Row(
             spacing: AppSpacing.smallSpacing,

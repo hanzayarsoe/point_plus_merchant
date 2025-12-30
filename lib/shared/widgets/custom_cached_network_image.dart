@@ -54,7 +54,7 @@ class CustomCachedNetworkImage extends StatelessWidget {
         : Image.asset(
             errorImage ??
                 (isProfile
-                    ? AppAssets.profileErrorImage
+                    ? AppAssets.profilePlaceHolderImage
                     : AppAssets.errorImage),
             width: width,
             height: height,

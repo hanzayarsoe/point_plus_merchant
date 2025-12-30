@@ -11,6 +11,7 @@ import 'package:merchant/core/utils/task_either_helpers.dart';
 import 'package:merchant/features/auth/data/models/branch_model.dart';
 import 'package:merchant/features/auth/domain/entities/manager.dart';
 import 'package:merchant/features/profile/data/datasources/profile_datasource.dart';
+import 'package:merchant/features/profile/data/models/device_model.dart';
 
 class ProfileDatasourceImpl implements ProfileDatasource {
   final UserPreference userPreference;
@@ -45,7 +46,7 @@ class ProfileDatasourceImpl implements ProfileDatasource {
   @override
   TaskEither<Failure, BranchModel> getBranchInfo() {
     return tryCatchWithFailure(() async {
-      final response = await dioHelper.get(ApiUrls.me, {});
+      final response = await dioHelper.get(ApiUrls.me);
       final data = response.data['data'];
       return BranchModel.fromJson(data);
     });
@@ -133,6 +134,17 @@ class ProfileDatasourceImpl implements ProfileDatasource {
   TaskEither<Failure, void> unregisterToken(String token) {
     return tryCatchWithFailure(() async {
       await dioHelper.post(ApiUrls.unregisterToken, {"token": token});
+    });
+  }
+
+  @override
+  TaskEither<Failure, List<DeviceModel>> getDevices() {
+    return tryCatchWithFailure(() async {
+      final response = await dioHelper.get(
+        ApiUrls.getDevices.replaceFirst('{role}', 'branch'),
+      );
+      final List<dynamic> data = response.data['data'];
+      return data.map((device) => DeviceModel.fromJson(device)).toList();
     });
   }
 }

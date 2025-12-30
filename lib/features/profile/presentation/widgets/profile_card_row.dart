@@ -10,6 +10,7 @@ class ProfileCardRow extends StatelessWidget {
   final bool? bottomBorder;
   final VoidCallback onTap;
   final Widget? customRightWidget;
+  final bool? isRightArrow;
   const ProfileCardRow({
     super.key,
     required this.icon,
@@ -18,6 +19,7 @@ class ProfileCardRow extends StatelessWidget {
     this.bottomBorder,
     required this.onTap,
     this.customRightWidget,
+    this.isRightArrow,
   });
 
   @override

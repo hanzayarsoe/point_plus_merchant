@@ -109,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.phone,
                     hint: AppConstants.mobileTextFieldHintText,
                     prefixIcon: LucideIcons.smartphone,
+                    maxLength: AppConstants.maxPhoneNumber,
                     onChanged: (_) => setState(() {}),
                   ),
                   AppSpacing.extraLargeSizedBox,

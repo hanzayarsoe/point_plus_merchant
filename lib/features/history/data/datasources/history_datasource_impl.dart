@@ -30,7 +30,6 @@ class HistoryDatasourceImpl implements HistoryDatasource {
       };
       final response = await dioHelper.get(
         ApiUrls.historyTransaction,
-        {},
         queryParameters: {
           "page": page,
           "size": limit,
@@ -51,7 +50,6 @@ class HistoryDatasourceImpl implements HistoryDatasource {
     return tryCatchWithFailure(() async {
       final response = await dioHelper.get(
         ApiUrls.transactionDetail.replaceFirst('{id}', id.toString()),
-        {},
       );
       final data = response.data['data'];
       return TransactionModel.fromJson(data);

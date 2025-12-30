@@ -17,7 +17,7 @@ class ConfirmBox extends StatelessWidget {
     this.mainAction,
     this.secondaryAction,
     this.dialogType,
-    this.buttonWidth = 150.0,
+    this.buttonWidth = 140.0,
     this.buttonHeight = 40.0,
   });
 
@@ -41,50 +41,112 @@ class ConfirmBox extends StatelessWidget {
         textAlign: TextAlign.start,
       ),
       actions: [
-        if (secondaryActionText != null && secondaryAction != null)
-          ElevatedButton(
-            onPressed: secondaryAction,
-            style: ElevatedButton.styleFrom(
-              minimumSize: Size(buttonWidth, buttonHeight),
-              backgroundColor: Colors.transparent,
-              foregroundColor: Theme.of(context).colorScheme.inverseSurface,
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.inverseSurface,
+        if (secondaryActionText != null &&
+            secondaryAction != null &&
+            mainActionText != null &&
+            mainAction != null)
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: secondaryAction,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(0, buttonHeight),
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Theme.of(
+                      context,
+                    ).colorScheme.inverseSurface,
+                    side: BorderSide(
+                      color: Theme.of(context).colorScheme.inverseSurface,
+                    ),
+                  ),
+                  child: Text(
+                    secondaryActionText!,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: mainAction,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(0, buttonHeight),
+                    backgroundColor:
+                        dialogType != null && dialogType == DialogType.confirm
+                        ? Theme.of(context).colorScheme.primary
+                        : dialogType == DialogType.delete
+                        ? Theme.of(context).colorScheme.error
+                        : Theme.of(context).colorScheme.primary,
+                    foregroundColor:
+                        dialogType != null && dialogType == DialogType.delete
+                        ? Theme.of(context).colorScheme.inverseSurface
+                        : Theme.of(context).colorScheme.surface,
+                  ),
+                  child: Text(
+                    mainActionText!,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color:
+                          dialogType != null && dialogType == DialogType.delete
+                          ? Theme.of(context).colorScheme.inverseSurface
+                          : Theme.of(context).colorScheme.surface,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          )
+        else ...[
+          if (secondaryActionText != null && secondaryAction != null)
+            ElevatedButton(
+              onPressed: secondaryAction,
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(buttonWidth, buttonHeight),
+                backgroundColor: Colors.transparent,
+                foregroundColor: Theme.of(context).colorScheme.inverseSurface,
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.inverseSurface,
+                ),
+              ),
+              child: Text(
+                secondaryActionText!,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
-            child: Text(
-              secondaryActionText!,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
-            ),
-          ),
-        if (mainActionText != null && mainAction != null)
-          ElevatedButton(
-            onPressed: mainAction,
-            style: ElevatedButton.styleFrom(
-              minimumSize: Size(150, 40),
-              backgroundColor:
-                  dialogType != null && dialogType == DialogType.confirm
-                  ? Theme.of(context).colorScheme.primary
-                  : dialogType == DialogType.delete
-                  ? Theme.of(context).colorScheme.error
-                  : Theme.of(context).colorScheme.primary,
-              foregroundColor:
-                  dialogType != null && dialogType == DialogType.delete
-                  ? Theme.of(context).colorScheme.inverseSurface
-                  : Theme.of(context).colorScheme.surface,
-            ),
-            child: Text(
-              mainActionText!,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                color: dialogType != null && dialogType == DialogType.delete
+          if (mainActionText != null && mainAction != null)
+            ElevatedButton(
+              onPressed: mainAction,
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(buttonWidth, buttonHeight),
+                backgroundColor:
+                    dialogType != null && dialogType == DialogType.confirm
+                    ? Theme.of(context).colorScheme.primary
+                    : dialogType == DialogType.delete
+                    ? Theme.of(context).colorScheme.error
+                    : Theme.of(context).colorScheme.primary,
+                foregroundColor:
+                    dialogType != null && dialogType == DialogType.delete
                     ? Theme.of(context).colorScheme.inverseSurface
                     : Theme.of(context).colorScheme.surface,
-                fontWeight: FontWeight.bold,
+              ),
+              child: Text(
+                mainActionText!,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: dialogType != null && dialogType == DialogType.delete
+                      ? Theme.of(context).colorScheme.inverseSurface
+                      : Theme.of(context).colorScheme.surface,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
+        ],
       ],
     );
   }

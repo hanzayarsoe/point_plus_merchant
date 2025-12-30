@@ -13,7 +13,7 @@ class RequestHistoryBloc
   static const int _pageSize = 10;
   final GetRequestHistoriesUsecase getRequestHistoriesUsecase;
   RequestHistoryBloc(this.getRequestHistoriesUsecase)
-    : super(PagingState(pages: [], keys: [], hasNextPage: true)) {
+    : super(PagingState(pages: null, keys: null, hasNextPage: true)) {
     on<_GetRequestHistories>(_onGetRequestHistories);
     on<_Reset>(_onReset);
   }
@@ -62,6 +62,6 @@ class RequestHistoryBloc
     _Reset event,
     Emitter<PagingState<int, PointRequestEntity>> emit,
   ) async {
-    emit(PagingState(pages: [], keys: [], hasNextPage: true));
+    emit(PagingState(pages: null, keys: null, hasNextPage: true));
   }
 }

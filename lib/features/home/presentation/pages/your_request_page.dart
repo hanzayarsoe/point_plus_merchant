@@ -74,41 +74,41 @@ class _YourRequestPageState extends State<YourRequestPag>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => RequestHistoryBloc(sl()),
-      child: Scaffold(
-        appBar: CustomAppBar(
-          title: 'Your Request',
-          isTitleLarge: true,
-          automaticallyImplyLeading: true,
-          bottom: CustomTabBar(
-            tabAlignment: TabAlignment.start,
-            dividerColor: Theme.of(context).colorScheme.onSurface,
-            dividerHeight: 0.5,
-            tabController: _tabController,
-            padding: EdgeInsets.only(
-              top: AppSpacing.defaultSpacing,
-              left: AppSpacing.defaultSpacing,
-            ),
-            tabs: [
-              ...RequestTransactionType.values.map(
-                (tab) => Text(tab.displayName),
-              ),
-            ],
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: 'Your Request',
+        isTitleLarge: true,
+        automaticallyImplyLeading: true,
+        bottom: CustomTabBar(
+          tabAlignment: TabAlignment.start,
+          dividerColor: Theme.of(context).colorScheme.onSurface,
+          dividerHeight: 0.5,
+          tabController: _tabController,
+          padding: EdgeInsets.only(
+            top: AppSpacing.defaultSpacing,
+            left: AppSpacing.defaultSpacing,
           ),
-          actions: [
-            GestureDetector(
-              onTap: () => _filterDate(),
-              child: Icon(LucideIcons.funnel, size: 20),
+          tabs: [
+            ...RequestTransactionType.values.map(
+              (tab) => Text(tab.displayName),
             ),
           ],
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: RequestTransactionType.values.map((_) {
-            return RequestTransaction();
-          }).toList(),
-        ),
+        actions: [
+          GestureDetector(
+            onTap: () => _filterDate(),
+            child: Icon(LucideIcons.funnel, size: 20),
+          ),
+        ],
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: RequestTransactionType.values.map((type) {
+          return BlocProvider(
+            create: (context) => RequestHistoryBloc(sl()),
+            child: RequestTransaction(requestType: type),
+          );
+        }).toList(),
       ),
     );
   }

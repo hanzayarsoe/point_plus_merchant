@@ -9,7 +9,7 @@ import 'package:merchant/core/utils/toast.dart';
 import 'package:merchant/features/auth/domain/entities/branch.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:merchant/features/auth/presentation/widgets/gradient_elevated_button.dart';
-import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
+import 'package:merchant/features/profile/presentation/bloc/branch_bloc/branch_bloc.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/custom_cached_network_image.dart';
 import 'package:merchant/shared/widgets/custom_text_form_field.dart';
@@ -171,12 +171,12 @@ class _EditStoreProfilePageState extends State<EditStoreProfilePage> {
             type: ToastificationType.error,
           ),
           updateBranchSuccessed: (updatedBranch) async {
+            FocusScope.of(context).unfocus();
             showSuccessToast(context, 'Successfully changed!');
             context.read<AuthBloc>().add(
               AuthEvent.updateBranchInfo(updatedBranch),
             );
             context.read<BranchBloc>().add(BranchEvent.refreshBranchData());
-            await Future.delayed(const Duration(seconds: 2));
             if (!context.mounted) return;
             context.pop();
           },

@@ -20,7 +20,6 @@ class StoreDatasourceImpl implements StoreDatasource {
     return tryCatchWithFailure(() async {
       final response = await dioHelper.get(
         ApiUrls.items,
-        {},
         queryParameters: {
           "merchantId": merchantId,
           "page": page,

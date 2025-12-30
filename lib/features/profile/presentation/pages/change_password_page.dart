@@ -6,7 +6,7 @@ import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/utils/toast.dart';
 import 'package:merchant/core/utils/validation.dart';
 import 'package:merchant/features/auth/presentation/widgets/gradient_elevated_button.dart';
-import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
+import 'package:merchant/features/profile/presentation/bloc/branch_bloc/branch_bloc.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/custom_text_form_field.dart';
 import 'package:merchant/shared/widgets/show_success_toast.dart';

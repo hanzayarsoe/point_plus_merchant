@@ -8,7 +8,7 @@ import 'package:merchant/core/utils/formatter.dart';
 import 'package:merchant/core/utils/toast.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:merchant/features/auth/presentation/widgets/gradient_elevated_button.dart';
-import 'package:merchant/features/profile/presentation/bloc/bloc/branch_bloc.dart';
+import 'package:merchant/features/profile/presentation/bloc/branch_bloc/branch_bloc.dart';
 import 'package:merchant/shared/widgets/account_action_promt.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/custom_pin_put_field.dart';

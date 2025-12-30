@@ -65,7 +65,6 @@ class HomeDatasourceImpl implements HomeDatasource {
           "{accountNumber}",
           accountNumber,
         ),
-        {},
       );
       final data = response.data['data'];
       return CustomerModel.fromJson(data);
@@ -89,7 +88,6 @@ class HomeDatasourceImpl implements HomeDatasource {
       };
       final response = await dioHelper.get(
         ApiUrls.requestHistory,
-        {},
         queryParameters: {
           "page": page,
           "size": limit,
@@ -123,7 +121,6 @@ class HomeDatasourceImpl implements HomeDatasource {
     return tryCatchWithFailure(() async {
       final response = await dioHelper.get(
         ApiUrls.requestDetail.replaceFirst('{id}', id.toString()),
-        {},
       );
       final data = response.data['data'];
       log(data.toString());
@@ -136,7 +133,6 @@ class HomeDatasourceImpl implements HomeDatasource {
     return tryCatchWithFailure(() async {
       final response = await dioHelper.get(
         ApiUrls.noti,
-        {},
         queryParameters: {"page": page, "size": limit},
       );
       final List<dynamic> data = response.data['data']['items'];
@@ -147,7 +143,7 @@ class HomeDatasourceImpl implements HomeDatasource {
   @override
   TaskEither<Failure, int> getUnreadCount() {
     return tryCatchWithFailure(() async {
-      final response = await dioHelper.get(ApiUrls.unreadCount, {});
+      final response = await dioHelper.get(ApiUrls.unreadCount);
       final data = response.data['data'];
       return data as int;
     });
