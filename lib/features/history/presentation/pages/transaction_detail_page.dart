@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/injection/injection_container.dart';
@@ -57,17 +58,19 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
     String transactionId,
   ) async {
     try {
-      Map<Permission, PermissionStatus> statuses = await [
-        Permission.storage,
-        Permission.photos,
-      ].request();
+      bool isGranted = false;
 
-      bool isGranted =
-          (statuses[Permission.storage]?.isGranted ?? false) ||
-          (statuses[Permission.photos]?.isGranted ?? false);
-
-      if (!isGranted && Platform.isIOS) {
-        isGranted = (statuses[Permission.photos]?.isLimited ?? false);
+      if (Platform.isAndroid) {
+        final androidInfo = await DeviceInfoPlugin().androidInfo;
+        if (androidInfo.version.sdkInt >= 33) {
+          isGranted = true;
+        } else {
+          final status = await Permission.storage.request();
+          isGranted = status.isGranted;
+        }
+      } else {
+        final status = await Permission.photos.request();
+        isGranted = status.isGranted || status.isLimited;
       }
 
       if (isGranted) {
@@ -102,9 +105,14 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           message: 'Error: Storage or Photos Permission Denied',
           type: ToastificationType.error,
         );
-        if (statuses[Permission.storage] ==
-                PermissionStatus.permanentlyDenied ||
-            statuses[Permission.photos] == PermissionStatus.permanentlyDenied) {
+        // Open settings only if relevant permission is permanently denied
+        if (Platform.isAndroid) {
+          final androidInfo = await DeviceInfoPlugin().androidInfo;
+          if (androidInfo.version.sdkInt < 33 &&
+              await Permission.storage.isPermanentlyDenied) {
+            openAppSettings();
+          }
+        } else if (await Permission.photos.isPermanentlyDenied) {
           openAppSettings();
         }
       }

@@ -74,9 +74,9 @@ class MyApp extends StatelessWidget {
           );
         },
         child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
           theme: AppTheme.darkTheme,
           themeMode: ThemeMode.dark,
-
           routerConfig: _appRouter.router,
         ),
       ),
