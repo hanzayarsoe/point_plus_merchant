@@ -15,7 +15,6 @@ class AppAssets {
   // images
   static const String dashboardFirst = "$imagePath/dashboard_first.png";
   static const String dashboradSecond = "$imagePath/dashboard_second.png";
-  static const String userImage = "$imagePath/user_image.png";
   static const String scannerPageBackgroundImage = "$imagePath/scan.png";
   static const String profilePlaceHolderImage =
       "$imagePath/place_holder_profile_image.png";
