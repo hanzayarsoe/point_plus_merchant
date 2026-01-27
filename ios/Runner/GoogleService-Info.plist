@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>app.digitalbase.merchant</string>
+	<string>com.digitalbase.merchant</string>
 	<key>PROJECT_ID</key>
 	<string>point-plus-4a006</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:233182185988:ios:c6d2591d52dbdcd5604351</string>
+	<string>1:233182185988:ios:38640a8db0222e9d604351</string>
 </dict>
 </plist>
