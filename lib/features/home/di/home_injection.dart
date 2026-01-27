@@ -10,7 +10,7 @@ import 'package:merchant/features/home/domain/usecases/get_request_transaction_u
 import 'package:merchant/features/home/domain/usecases/get_unread_count_usecase.dart';
 import 'package:merchant/features/home/domain/usecases/mark_as_read_noti_usecase.dart';
 import 'package:merchant/features/home/domain/usecases/request_point_usecase.dart';
-import 'package:merchant/features/home/domain/usecases/search_customer_by_accout_number_usecase.dart';
+import 'package:merchant/features/home/domain/usecases/search_customer_by_phone_usecase.dart';
 import 'package:merchant/features/home/domain/usecases/transfer_point_usecase.dart';
 import 'package:merchant/features/home/presentation/bloc/noti_bloc/noti_bloc.dart';
 import 'package:merchant/features/home/presentation/bloc/request_history_bloc/request_history_bloc.dart';
@@ -28,7 +28,7 @@ class HomeInjection {
       ..registerLazySingleton<HomeDatasource>(() => HomeDatasourceImpl(sl()))
       ..registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl(sl()))
       ..registerLazySingleton(() => TransferPointUsecase(sl()))
-      ..registerLazySingleton(() => SearchCustomerByAccoutNumberUsecase(sl()))
+      ..registerLazySingleton(() => SearchCustomerByPhoneUsecase(sl()))
       ..registerLazySingleton(() => GetRequestTransactionUsecase(sl()))
       ..registerLazySingleton(() => GetRequestHistoriesUsecase(sl()))
       ..registerLazySingleton(() => GetRequestDetailUsecase(sl()))

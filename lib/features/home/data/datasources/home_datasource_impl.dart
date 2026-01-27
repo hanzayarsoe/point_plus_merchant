@@ -26,15 +26,15 @@ class HomeDatasourceImpl implements HomeDatasource {
       final isRedeem = type.contains('redeem');
       final amount = int.tryParse(pointTransferEntity.amount ?? '');
       final customerQrCode = pointTransferEntity.customerQrCode;
-      final accountNumber = pointTransferEntity.accountNumber;
+      final phoneNumber = pointTransferEntity.phoneNumber;
 
       if (amount == null) {
         throw const Failure.network('Invalid or missing amount.');
       }
 
       if (isRequest && customerQrCode == null) {
-        await dioHelper.post(ApiUrls.givePointByAccountNumber, {
-          "accountNumber": accountNumber,
+        await dioHelper.post(ApiUrls.givePointByPhoneNumber, {
+          "phoneNumber": phoneNumber,
           "amount": amount,
         });
       } else if (isRedeem &&
@@ -45,8 +45,8 @@ class HomeDatasourceImpl implements HomeDatasource {
           "amount": amount,
         });
       } else if (isRedeem && customerQrCode == null) {
-        await dioHelper.post(ApiUrls.claimPointByAccountNumber, {
-          "accountNumber": accountNumber,
+        await dioHelper.post(ApiUrls.claimPointByPhoneNumber, {
+          "phoneNumber": phoneNumber,
           "amount": amount,
         });
       } else {
@@ -61,8 +61,8 @@ class HomeDatasourceImpl implements HomeDatasource {
   TaskEither<Failure, CustomerModel> searchCustomer(String accountNumber) {
     return tryCatchWithFailure(() async {
       final response = await dioHelper.get(
-        ApiUrls.searchCustomerByAccountNumber.replaceFirst(
-          "{accountNumber}",
+        ApiUrls.searchCustomerByPhoneNumber.replaceFirst(
+          "{phoneNumber}",
           accountNumber,
         ),
       );

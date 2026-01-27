@@ -10,7 +10,6 @@ import 'package:merchant/features/profile/presentation/bloc/branch_bloc/branch_b
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/custom_text_form_field.dart';
 import 'package:merchant/shared/widgets/show_success_toast.dart';
-import 'package:toastification/toastification.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});
@@ -70,7 +69,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           orElse: () {},
           changePasswordFailed: (failure) => showToast(
             message: failure.message,
-            type: ToastificationType.error,
+            type: ToastType.error,
           ),
           changePasswordSuccessed: () {
             showSuccessToast(context, 'Successfully changed!');

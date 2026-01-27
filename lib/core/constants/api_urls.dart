@@ -9,13 +9,13 @@ class ApiUrls {
   static final String forgetPasswordVerifyOtp =
       "/api/auth/forgot-password/verify-otp";
   static final String forgetPasswordReset = "/api/auth/forgot-password/reset";
-  static final String searchCustomerByAccountNumber =
-      "/api/branch/customers/{accountNumber}";
-  static final String givePointByAccountNumber =
-      "/api/branch/points/give-by-account";
+  static final String searchCustomerByPhoneNumber =
+      "/api/branch/customers/{phoneNumber}";
+  static final String givePointByPhoneNumber =
+      "/api/branch/points/give-by-phone";
   static final String givePointByQr = "/api/branch/points/give-by-qr";
-  static final String claimPointByAccountNumber =
-      "/api/branch/points/claim-by-account";
+  static final String claimPointByPhoneNumber =
+      "/api/branch/points/claim-by-phone";
   static final String claimPointByQr = "/api/branch/points/claim-by-qr";
   static final String updateManagerInfo = "/api/branch/me/manager";
   static final String changeMobileNumberSendOtp =

@@ -11,7 +11,6 @@ import 'package:merchant/features/auth/presentation/widgets/gradient_elevated_bu
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/icon_text_form_field.dart';
 import 'package:merchant/shared/widgets/loading_overlay.dart';
-import 'package:toastification/toastification.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -73,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
           orElse: () {},
           failure: (failure) => showToast(
             message: failure.message,
-            type: ToastificationType.error,
+            type: ToastType.error,
           ),
         );
       },

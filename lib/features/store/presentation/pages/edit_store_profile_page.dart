@@ -15,7 +15,6 @@ import 'package:merchant/shared/widgets/custom_cached_network_image.dart';
 import 'package:merchant/shared/widgets/custom_text_form_field.dart';
 import 'package:merchant/shared/widgets/loading_overlay.dart';
 import 'package:merchant/shared/widgets/show_success_toast.dart';
-import 'package:toastification/toastification.dart';
 
 class EditStoreProfilePage extends StatefulWidget {
   const EditStoreProfilePage({super.key});
@@ -168,7 +167,7 @@ class _EditStoreProfilePageState extends State<EditStoreProfilePage> {
           orElse: () {},
           updateBranchFailed: (failure) => showToast(
             message: failure.message,
-            type: ToastificationType.error,
+            type: ToastType.error,
           ),
           updateBranchSuccessed: (updatedBranch) async {
             FocusScope.of(context).unfocus();

@@ -26,8 +26,8 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize {
-    final double verticalMergin = margin?.vertical ?? 0.0;
-    return Size.fromHeight(35.0 + verticalMergin);
+    final double verticalMargin = margin?.vertical ?? 0.0;
+    return Size.fromHeight(kTextTabBarHeight + verticalMargin);
   }
 
   @override

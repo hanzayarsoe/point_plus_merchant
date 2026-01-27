@@ -22,7 +22,6 @@ import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/loading_overlay.dart';
 import 'package:merchant/shared/widgets/show_success_toast.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:toastification/toastification.dart';
 
 class TransactionDetailPage extends StatefulWidget {
   final String transactionId;
@@ -78,7 +77,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         if (imageBytes == null) {
           showToast(
             message: "can't capture image!",
-            type: ToastificationType.error,
+            type: ToastType.error,
           );
           return;
         }
@@ -97,13 +96,13 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         } else {
           showToast(
             message: "Failed to save Image!",
-            type: ToastificationType.error,
+            type: ToastType.error,
           );
         }
       } else {
         showToast(
           message: 'Error: Storage or Photos Permission Denied',
-          type: ToastificationType.error,
+          type: ToastType.error,
         );
         // Open settings only if relevant permission is permanently denied
         if (Platform.isAndroid) {
@@ -117,7 +116,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         }
       }
     } catch (e) {
-      showToast(message: e.toString(), type: ToastificationType.error);
+      showToast(message: e.toString(), type: ToastType.error);
     }
   }
 

@@ -10,9 +10,9 @@ abstract class CustomerModel with _$CustomerModel {
     required int id,
     required String name,
     required String? email,
-    required String? phoneNumber,
+    required String phoneNumber,
     required String accountNumber,
-    required String? profileUrl,
+    required String? profile,
     required String? gender,
     required int? pointBalance,
   }) = _CustomerModel;
@@ -29,7 +29,7 @@ extension CustomerModelX on CustomerModel {
       email: email,
       phoneNumber: phoneNumber,
       accountNumber: accountNumber,
-      profileUrl: profileUrl,
+      profile: profile,
       gender: gender,
       pointBalance: pointBalance,
     );

@@ -41,6 +41,15 @@ class LocalNotificationsService {
   //Counter for generating unique notification IDs
   int _notificationIdCounter = 0;
 
+  // Handler for notification taps.
+  void Function(String? payload)? _onNotificationTap;
+
+  void setOnNotificationTapHandler(
+    void Function(String? payload) onNotificationTap,
+  ) {
+    _onNotificationTap = onNotificationTap;
+  }
+
   /// Initializes the local notifications plugin for Android and iOS.
   Future<void> init() async {
     // Check if already initialized to prevent redundant setup
@@ -65,6 +74,7 @@ class LocalNotificationsService {
         debugPrint(
           'Foreground notification has been tapped: ${response.payload}',
         );
+        _onNotificationTap?.call(response.payload);
       },
     );
 
@@ -94,8 +104,12 @@ class LocalNotificationsService {
       priority: Priority.high,
     );
 
-    // iOS-specific notification details
-    const iosDetails = DarwinNotificationDetails();
+    // iOS-specific notification details (show while app is in foreground)
+    const iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
 
     // Combine platform-specific details
     final notificationDetails = NotificationDetails(

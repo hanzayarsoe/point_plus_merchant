@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:merchant/core/config/app_initializer.dart';
 import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/router/app_router.dart';
-import 'package:merchant/core/storage/secure_storage.dart';
 import 'package:merchant/core/themes/app_theme.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:merchant/features/history/presentation/cubit/cubit/history_filter_cubit.dart';
@@ -58,17 +56,6 @@ class MyApp extends StatelessWidget {
           state.maybeWhen(
             authenticated: (_) async {
               context.read<BranchBloc>().add(const BranchEvent.getBranchInfo());
-              final token = await FirebaseMessaging.instance.getToken();
-
-              if (token != null && token.isNotEmpty) {
-                await sl<SecureStorage>().saveFcmToken(token);
-                final bool isNotiEnabled = await sl<NotiCubit>().loadNoti();
-                if (isNotiEnabled) {
-                  await sl<NotiCubit>().registerToken(token);
-                } else {
-                  await sl<NotiCubit>().unregisterToken(token);
-                }
-              }
             },
             orElse: () {},
           );

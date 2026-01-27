@@ -11,7 +11,6 @@ import 'package:merchant/features/auth/presentation/widgets/gradient_elevated_bu
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/custom_text_form_field.dart';
 import 'package:merchant/shared/widgets/loading_overlay.dart';
-import 'package:toastification/toastification.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   final String phoneNumber;
@@ -65,12 +64,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           orElse: () {},
           resetPasswordFailed: (failure) => showToast(
             message: failure.message,
-            type: ToastificationType.error,
+            type: ToastType.error,
           ),
           resetPasswordSuccessed: () {
             showToast(
               message: 'password changed successfully! please login again',
-              type: ToastificationType.success,
+              type: ToastType.success,
             );
             context.goNamed(AppRoutes.logIn);
           },

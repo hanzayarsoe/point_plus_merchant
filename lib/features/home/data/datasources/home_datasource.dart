@@ -11,7 +11,7 @@ abstract interface class HomeDatasource {
   TaskEither<Failure, void> transferPoints(
     PointTransferEntity pointTransferEntity,
   );
-  TaskEither<Failure, CustomerModel> searchCustomer(String accountNumber);
+  TaskEither<Failure, CustomerModel> searchCustomer(String phoneNumber);
   TaskEither<Failure, List<PointRequestModel>> getRequestHistories(
     int page,
     int limit,

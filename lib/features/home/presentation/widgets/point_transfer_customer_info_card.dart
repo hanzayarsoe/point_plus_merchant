@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/themes/extensions/app_colors.dart';
-import 'package:merchant/core/utils/formatter.dart';
 import 'package:merchant/shared/widgets/custom_cached_network_image.dart';
 
 class PointTransferCustomerInfoCard extends StatelessWidget {
@@ -9,13 +8,13 @@ class PointTransferCustomerInfoCard extends StatelessWidget {
     super.key,
     required this.isTypeRequest,
     required this.customerName,
-    required this.accountNumber,
+    required this.phoneNumber,
     required this.customerProfile,
   });
 
   final bool isTypeRequest;
   final String customerName;
-  final String accountNumber;
+  final String phoneNumber;
   final String? customerProfile;
 
   @override
@@ -57,7 +56,7 @@ class PointTransferCustomerInfoCard extends StatelessWidget {
               ),
               AppSpacing.smallSizedBox,
               Text(
-                "$customerName \n${Formatter.formatAsCardNumber(accountNumber)}",
+                "$customerName \n$phoneNumber",
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ],

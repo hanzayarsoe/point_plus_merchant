@@ -12,7 +12,6 @@ import 'package:merchant/features/home/domain/entities/point_transfer_entity.dar
 import 'package:merchant/features/home/presentation/cubits/search_customer_cubit/search_customer_cubit.dart';
 import 'package:merchant/shared/widgets/custom_text_form_field.dart';
 import 'package:merchant/shared/widgets/loading_overlay.dart';
-import 'package:toastification/toastification.dart';
 
 class SearchAccount extends StatefulWidget {
   final String type;
@@ -45,9 +44,9 @@ class _SearchAccountState extends State<SearchAccount> {
           orElse: () {},
           loadedCustomer: (customer) {
             final pointTransferEntity = PointTransferEntity(
-              accountNumber: customer.accountNumber,
+              phoneNumber: customer.phoneNumber,
               name: customer.name,
-              profileUrl: customer.profileUrl,
+              profileUrl: customer.profile,
               type: widget.type,
             );
             context.pushNamed(
@@ -57,7 +56,7 @@ class _SearchAccountState extends State<SearchAccount> {
           },
           failed: (failure) => showToast(
             message: failure.message,
-            type: ToastificationType.error,
+            type: ToastType.error,
           ),
         );
       },
@@ -80,12 +79,12 @@ class _SearchAccountState extends State<SearchAccount> {
                       CustomTextFormField(
                         controller: _accountController,
                         inputType: TextInputType.number,
-                        hintText: 'Enter Account Number',
+                        hintText: 'Enter Phone Number',
                         onChanged: (_) => setState(() {}),
                         validator: (value) => _errorText = sl<AppValidator>()
                             .validateAccountNumber(value!),
                         errorText: _errorText,
-                        maxLength: 20,
+                        maxLength: 11,
                         textInputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],

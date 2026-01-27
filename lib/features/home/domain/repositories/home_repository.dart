@@ -11,7 +11,7 @@ abstract interface class HomeRepository {
   TaskEither<Failure, void> transferPoint(
     PointTransferEntity pointTransferEntity,
   );
-  TaskEither<Failure, CustomerEntity> searchCustomer(String accountNumber);
+  TaskEither<Failure, CustomerEntity> searchCustomer(String phoneNumber);
   TaskEither<Failure, List<PointRequestEntity>> getRequestHistory(
     int page,
     int limit,

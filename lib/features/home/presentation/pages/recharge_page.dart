@@ -18,7 +18,6 @@ import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/custom_text_form_field.dart';
 import 'package:merchant/shared/widgets/loading_overlay.dart';
 import 'package:merchant/shared/widgets/show_success_toast.dart';
-import 'package:toastification/toastification.dart';
 
 class RechargePage extends StatefulWidget {
   const RechargePage({super.key});
@@ -83,7 +82,7 @@ class _RechargePageState extends State<RechargePage> {
             },
             failed: (failure) => showToast(
               message: failure.message,
-              type: ToastificationType.error,
+              type: ToastType.error,
             ),
           );
         },

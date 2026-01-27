@@ -32,7 +32,6 @@ class AppInitializer {
     ApiUrls.baseUrl = dotenv.env['ENV'] == 'dev'
         ? dotenv.env['DEV_BASE_URL']!
         : dotenv.env['BASE_URL']!;
-    await firebaseMessagingService.setupInteractedMessage();
     Bloc.observer = AppBlocObserver();
   }
 }

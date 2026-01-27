@@ -15,7 +15,6 @@ import 'package:merchant/features/home/presentation/widgets/custom_icon.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/loading_overlay.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:toastification/toastification.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ScannerPage extends StatefulWidget {
@@ -27,7 +26,7 @@ class ScannerPage extends StatefulWidget {
 
 class _ScannerPageState extends State<ScannerPage> {
   final MobileScannerController _controller = MobileScannerController(
-    autoStart: true,
+    autoStart: false,
   );
   String? _scannedValue;
   bool _isScanning = false;
@@ -66,7 +65,7 @@ class _ScannerPageState extends State<ScannerPage> {
       });
       showToast(
         message: "can't scan your image! please try again!",
-        type: ToastificationType.info,
+        type: ToastType.info,
       );
     }
   }
@@ -86,7 +85,7 @@ class _ScannerPageState extends State<ScannerPage> {
       var data = PointTransferModel.fromJson(jsonMap);
       context.pushNamed(AppRoutes.pointTransfer, extra: data.toEntity());
     } catch (e) {
-      showToast(message: 'qr code is invalid', type: ToastificationType.error);
+      showToast(message: 'qr code is invalid', type: ToastType.error);
     }
   }
 
@@ -127,23 +126,30 @@ class _ScannerPageState extends State<ScannerPage> {
                     textAlign: TextAlign.center,
                   ),
                   AppSpacing.extraLargeSizedBox,
-                  Center(
-                    child: AspectRatio(
-                      aspectRatio: 1.2,
-                      child: ClipRRect(
-                        borderRadius: AppSpacing.normalBorderRadiusCircular,
-                        child: VisibilityDetector(
-                          key: const Key('mobile-scanner'),
-                          onVisibilityChanged: (info) {
-                            if (info.visibleFraction == 0) {
-                              _controller.stop();
-                            } else {
-                              _controller.start();
-                            }
-                          },
-                          child: MobileScanner(
-                            controller: _controller,
-                            onDetect: (result) => _handleLiveScan(result),
+                  Flexible(
+                    child: Center(
+                      child: AspectRatio(
+                        aspectRatio: 1.2,
+                        child: ClipRRect(
+                          borderRadius: AppSpacing.normalBorderRadiusCircular,
+                          child: VisibilityDetector(
+                            key: const Key('mobile-scanner'),
+                            onVisibilityChanged: (info) {
+                              final state = _controller.value;
+                              if (info.visibleFraction == 0) {
+                                if (state.isRunning) {
+                                  _controller.stop();
+                                }
+                              } else {
+                                if (!state.isRunning && !state.isStarting) {
+                                  _controller.start();
+                                }
+                              }
+                            },
+                            child: MobileScanner(
+                              controller: _controller,
+                              onDetect: (result) => _handleLiveScan(result),
+                            ),
                           ),
                         ),
                       ),
@@ -219,7 +225,7 @@ class _ScannerPageState extends State<ScannerPage> {
                   GradientElevatedButton(
                     onPressed: () =>
                         context.pushNamed(AppRoutes.searchAccount, extra: '0'),
-                    text: 'Search With Account Number',
+                    text: 'Search With Phone Number',
                     isDisabled: false,
                   ),
                 ],

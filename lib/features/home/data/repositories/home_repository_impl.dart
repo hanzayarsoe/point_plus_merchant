@@ -24,9 +24,9 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  TaskEither<Failure, CustomerEntity> searchCustomer(String accountNumber) {
+  TaskEither<Failure, CustomerEntity> searchCustomer(String phoneNumber) {
     return homeDatasource
-        .searchCustomer(accountNumber)
+        .searchCustomer(phoneNumber)
         .map((customer) => customer.toEntity());
   }
 

@@ -8,9 +8,9 @@ abstract class CustomerEntity with _$CustomerEntity {
     required int id,
     required String name,
     required String? email,
-    required String? phoneNumber,
+    required String phoneNumber,
     required String accountNumber,
-    required String? profileUrl,
+    required String? profile,
     required String? gender,
     required int? pointBalance,
   }) = _CustomerEntity;

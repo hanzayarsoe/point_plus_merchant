@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:233182185988:android:83ca570c3977e3ac604351",
+        "mobilesdk_app_id": "1:233182185988:android:e832b3c5a39d991b604351",
         "android_client_info": {
           "package_name": "app.digitalbase.merchant"
         }
@@ -26,9 +26,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:233182185988:android:fe00b377044d9f8d604351",
+        "mobilesdk_app_id": "1:233182185988:android:92e14dba9dc4ff95604351",
         "android_client_info": {
-          "package_name": "app.digitalbase.merchant"
+          "package_name": "app.digitalbase.point_plus"
         }
       },
       "oauth_client": [],

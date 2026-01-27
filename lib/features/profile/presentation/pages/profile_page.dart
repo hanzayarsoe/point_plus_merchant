@@ -17,7 +17,6 @@ import 'package:merchant/features/profile/presentation/widgets/profile_card_row.
 import 'package:merchant/features/profile/presentation/widgets/profile_header.dart';
 import 'package:merchant/shared/widgets/confirm_box.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
-import 'package:toastification/toastification.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -66,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
           orElse: () {},
           updateBranchFailed: (failure) => showToast(
             message: failure.message,
-            type: ToastificationType.error,
+            type: ToastType.error,
           ),
           updateBranchSuccessed: (updatedUser) => context.read<AuthBloc>().add(
             AuthEvent.updateBranchInfo(updatedUser),

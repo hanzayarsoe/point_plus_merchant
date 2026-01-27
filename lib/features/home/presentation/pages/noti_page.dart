@@ -134,6 +134,7 @@ class _NotiPageState extends State<NotiPage> {
                                 child: Row(
                                   spacing: AppSpacing.smallSpacing,
                                   mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     if (isWithdraw != null && isRedeem != null)
                                       CustomIcon(
@@ -153,7 +154,7 @@ class _NotiPageState extends State<NotiPage> {
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      spacing: AppSpacing.smallSpacing,
+                                      spacing: AppSpacing.extraSmallSpacing,
                                       children: [
                                         Text(
                                           '$title',

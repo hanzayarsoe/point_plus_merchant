@@ -9,6 +9,7 @@ import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/constants/enum.dart';
 import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/utils/formatter.dart';
+import 'package:merchant/core/utils/toast.dart';
 import 'package:merchant/core/utils/validation.dart';
 import 'package:merchant/features/auth/domain/entities/manager.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
@@ -20,7 +21,6 @@ import 'package:merchant/shared/widgets/custom_cached_network_image.dart';
 import 'package:merchant/shared/widgets/custom_drop_down.dart';
 import 'package:merchant/shared/widgets/custom_text_form_field.dart';
 import 'package:merchant/shared/widgets/loading_overlay.dart';
-import 'package:toastification/toastification.dart';
 
 class PersonalInformationPage extends StatefulWidget {
   const PersonalInformationPage({super.key});
@@ -183,14 +183,11 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
           orElse: () {},
           updatedManagerSuccessful: () {
             FocusScope.of(context).unfocus();
-            toastification.show(
-              context: context,
-              type: ToastificationType.success,
-              style: ToastificationStyle.fillColored,
-              title: const Text('Success'),
-              description: const Text('Profile updated successfully'),
+            showToast(
+              title: 'Success',
+              message: 'Profile updated successfully',
+              type: ToastType.success,
               alignment: Alignment.bottomCenter,
-              autoCloseDuration: const Duration(seconds: 3),
             );
             context.read<AuthBloc>().add(const AuthEvent.refreshUser());
             context.read<BranchBloc>().add(
@@ -203,14 +200,11 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
             });
           },
           updatedManagerFailed: (failure) {
-            toastification.show(
-              context: context,
-              type: ToastificationType.error,
-              style: ToastificationStyle.fillColored,
-              title: const Text('Error'),
-              description: Text(failure.message),
+            showToast(
+              title: 'Error',
+              message: failure.message,
+              type: ToastType.error,
               alignment: Alignment.bottomCenter,
-              autoCloseDuration: const Duration(seconds: 3),
             );
           },
         );

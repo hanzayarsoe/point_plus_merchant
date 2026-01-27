@@ -6,7 +6,7 @@ part 'point_transfer_model.g.dart';
 @freezed
 abstract class PointTransferModel with _$PointTransferModel {
   const factory PointTransferModel({
-    required String accountNumber,
+    required String phoneNumber,
     required String name,
     required String? profileUrl,
     int? amount,
@@ -21,7 +21,7 @@ abstract class PointTransferModel with _$PointTransferModel {
 extension PointTransferModelX on PointTransferModel {
   PointTransferEntity toEntity() {
     return PointTransferEntity(
-      accountNumber: accountNumber,
+      phoneNumber: phoneNumber,
       name: name,
       profileUrl: profileUrl,
       amount: amount.toString(),

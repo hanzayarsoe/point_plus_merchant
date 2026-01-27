@@ -14,7 +14,6 @@ import 'package:merchant/shared/widgets/account_action_promt.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/custom_pin_put_field.dart';
 import 'package:merchant/shared/widgets/loading_overlay.dart';
-import 'package:toastification/toastification.dart';
 
 class VerifyOtpPage extends StatefulWidget {
   final String phoneNumber;
@@ -87,7 +86,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
           ),
           verifyOtpFailed: (failure) => showToast(
             message: failure.message,
-            type: ToastificationType.error,
+            type: ToastType.error,
           ),
         );
       },

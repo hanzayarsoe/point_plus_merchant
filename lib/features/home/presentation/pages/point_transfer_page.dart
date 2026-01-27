@@ -6,7 +6,6 @@ import 'package:merchant/core/constants/app_spacing.dart';
 import 'package:merchant/core/constants/enum.dart';
 import 'package:merchant/core/router/app_routes.dart';
 import 'package:merchant/core/themes/extensions/app_colors.dart';
-import 'package:merchant/core/utils/formatter.dart';
 import 'package:merchant/core/utils/toast.dart';
 import 'package:merchant/features/auth/domain/entities/branch.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
@@ -19,7 +18,6 @@ import 'package:merchant/shared/widgets/custom_app_bar.dart';
 import 'package:merchant/shared/widgets/custom_text_form_field.dart';
 import 'package:merchant/shared/widgets/loading_overlay.dart';
 import 'package:merchant/shared/widgets/show_success_toast.dart';
-import 'package:toastification/toastification.dart';
 
 class PointTransferPage extends StatefulWidget {
   final PointTransferEntity pointTransferEntity;
@@ -84,7 +82,7 @@ class _PointTransferPageState extends State<PointTransferPage> {
                 ? 'send'
                 : _isTypeRedeem
                 ? 'receive'
-                : ''} ${_pointController.text.trim()} points to ${widget.pointTransferEntity.name} (${Formatter.formatAsCardNumber(widget.pointTransferEntity.accountNumber)}) ?",
+                : ''} ${_pointController.text.trim()} points to ${widget.pointTransferEntity.name} (${widget.pointTransferEntity.phoneNumber}) ?",
         mainActionText: _isTypeRequest
             ? 'Send'
             : _isTypeRedeem
@@ -130,10 +128,8 @@ class _PointTransferPageState extends State<PointTransferPage> {
       listener: (context, state) {
         state.maybeWhen(
           orElse: () {},
-          failed: (failure) => showToast(
-            message: failure.message,
-            type: ToastificationType.error,
-          ),
+          failed: (failure) =>
+              showToast(message: failure.message, type: ToastType.error),
           success: () {
             showSuccessToast(context, 'Successfully Transfer!');
             context.read<AuthBloc>().add(AuthEvent.refreshUser());
@@ -165,7 +161,7 @@ class _PointTransferPageState extends State<PointTransferPage> {
                       SizedBox(height: constraints.maxHeight * 0.05),
                       PointTransferCustomerInfoCard(
                         customerName: widget.pointTransferEntity.name,
-                        accountNumber: widget.pointTransferEntity.accountNumber,
+                        phoneNumber: widget.pointTransferEntity.phoneNumber,
                         customerProfile: widget.pointTransferEntity.profileUrl,
                         isTypeRequest: isTypeRequest,
                       ),
@@ -181,8 +177,15 @@ class _PointTransferPageState extends State<PointTransferPage> {
                         errorText: _errorText,
                         onChanged: (_) {
                           setState(() {
+                            final parsedPoints = int.tryParse(
+                              _pointController.text.trim(),
+                            );
                             if (isTypeRequest && _inSufficientBalance(branch)) {
                               _errorText = 'InSufficient Balance';
+                            } else if (parsedPoints == null) {
+                              _errorText = null;
+                            } else if (parsedPoints <= 0) {
+                              _errorText = 'Invalid Amount';
                             } else {
                               _errorText = null;
                             }
