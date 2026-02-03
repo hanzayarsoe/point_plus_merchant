@@ -67,9 +67,16 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
           final status = await Permission.storage.request();
           isGranted = status.isGranted;
         }
+      } else if (Platform.isIOS) {
+        final addOnlyStatus = await Permission.photosAddOnly.request();
+        if (addOnlyStatus.isGranted) {
+          isGranted = true;
+        } else {
+          final status = await Permission.photos.request();
+          isGranted = status.isGranted || status.isLimited;
+        }
       } else {
-        final status = await Permission.photos.request();
-        isGranted = status.isGranted || status.isLimited;
+        isGranted = true;
       }
 
       if (isGranted) {
@@ -111,8 +118,13 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
               await Permission.storage.isPermanentlyDenied) {
             openAppSettings();
           }
-        } else if (await Permission.photos.isPermanentlyDenied) {
-          openAppSettings();
+        } else if (Platform.isIOS) {
+          final addOnlyDenied =
+              await Permission.photosAddOnly.isPermanentlyDenied;
+          final photosDenied = await Permission.photos.isPermanentlyDenied;
+          if (addOnlyDenied || photosDenied) {
+            openAppSettings();
+          }
         }
       }
     } catch (e) {

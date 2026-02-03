@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCdQ5d1UzTsLjfUhhf2XCTiqKs9xG3JVBI',
-    appId: '1:233182185988:android:68e113e6aebfadaf604351',
+    appId: '1:233182185988:android:e832b3c5a39d991b604351',
     messagingSenderId: '233182185988',
     projectId: 'point-plus-4a006',
     storageBucket: 'point-plus-4a006.firebasestorage.app',
@@ -66,11 +66,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCa9YUmt4kE_Wh8lTs4GRDV67Mu_aPGJGo',
-    appId: '1:233182185988:ios:4d6698aab977dab5604351',
+    appId: '1:233182185988:ios:38640a8db0222e9d604351',
     messagingSenderId: '233182185988',
     projectId: 'point-plus-4a006',
     storageBucket: 'point-plus-4a006.firebasestorage.app',
-    iosBundleId: 'app.digitalbase.merchant',
+    iosBundleId: 'com.digitalbase.merchant',
   );
 
 }

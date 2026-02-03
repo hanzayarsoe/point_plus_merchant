@@ -17,6 +17,10 @@ class AppInitializer {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    await dotenv.load(fileName: '.env');
+    ApiUrls.baseUrl = dotenv.env['ENV'] == 'dev'
+        ? dotenv.env['DEV_BASE_URL']!
+        : dotenv.env['BASE_URL']!;
     final LocalNotificationsService localNotificationsService =
         LocalNotificationsService.instance();
     await localNotificationsService.init();
@@ -28,10 +32,6 @@ class AppInitializer {
     await firebaseMessagingService.init(
       localNotificationsService: localNotificationsService,
     );
-    await dotenv.load(fileName: '.env');
-    ApiUrls.baseUrl = dotenv.env['ENV'] == 'dev'
-        ? dotenv.env['DEV_BASE_URL']!
-        : dotenv.env['BASE_URL']!;
     Bloc.observer = AppBlocObserver();
   }
 }

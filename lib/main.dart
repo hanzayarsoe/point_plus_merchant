@@ -11,6 +11,7 @@ import 'package:merchant/features/home/presentation/cubits/request_filter_cubit/
 import 'package:merchant/features/profile/presentation/bloc/branch_bloc/branch_bloc.dart';
 import 'package:merchant/features/profile/presentation/cubits/locale_cubit/locale_cubit.dart';
 import 'package:merchant/features/profile/presentation/cubits/noti_cubit/noti_cubit.dart';
+import 'package:merchant/features/store/presentation/bloc/store_bloc/store_bloc.dart';
 import 'package:toastification/toastification.dart';
 
 void main() async {
@@ -50,16 +51,40 @@ class MyApp extends StatelessWidget {
           create: (context) => _notiCountCubit..getUnreadCount(),
           child: Container(),
         ),
+        BlocProvider(
+          lazy: false,
+          create: (context) => sl<StoreBloc>(),
+        ),
       ],
-      child: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            authenticated: (_) async {
-              context.read<BranchBloc>().add(const BranchEvent.getBranchInfo());
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                authenticated: (_) async {
+                  context
+                      .read<BranchBloc>()
+                      .add(const BranchEvent.getBranchInfo());
+                },
+                orElse: () {},
+              );
             },
-            orElse: () {},
-          );
-        },
+          ),
+          BlocListener<BranchBloc, BranchState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                loadedBranch: (branch) {
+                  context.read<StoreBloc>().add(
+                        StoreEvent.fetchStoreData(
+                          merchantId: branch.merchantId,
+                        ),
+                      );
+                },
+                orElse: () {},
+              );
+            },
+          ),
+        ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.darkTheme,

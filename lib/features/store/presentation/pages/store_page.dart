@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:merchant/core/constants/app_assets.dart';
 import 'package:merchant/core/constants/app_spacing.dart';
-import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/router/app_routes.dart';
 import 'package:merchant/core/themes/extensions/app_colors.dart';
 import 'package:merchant/features/auth/domain/entities/branch.dart';
@@ -75,48 +74,44 @@ class _StorePageState extends State<StorePage> {
   }
 
   Widget _buildLoadedState(BuildContext context, Branch branch) {
-    return BlocProvider(
-      create: (context) =>
-          StoreBloc(sl())
-            ..add(StoreEvent.fetchStoreData(merchantId: branch.merchantId)),
-      child: Scaffold(
-        extendBody: true,
-        body: RefreshIndicator.adaptive(
-          onRefresh: _refreshData,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Image.asset(
-                  AppAssets.mapImage,
-                  width: double.infinity,
-                  height: topImageSize,
-                  fit: BoxFit.cover,
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: topImageSize - overlap),
-                  padding: AppSpacing.defaultPadding,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(AppSpacing.largeSpacing),
-                      topRight: Radius.circular(AppSpacing.largeSpacing),
-                    ),
-                  ),
-                  child: BlocBuilder<StoreBloc, StoreState>(
-                    builder: (context, state) {
-                      final (promoItems, allItems) = state.maybeWhen(
-                        orElse: () => (const <ItemEntity>[], <ItemEntity>[]),
-                        loadedStoreData: (promoItems, allItems) =>
-                            (promoItems, allItems),
-                      );
-                      final isLoading = state.maybeWhen(
-                        orElse: () => false,
-                        loading: () => true,
-                      );
-                      return LoadingOverlay(
-                        isLoading: isLoading,
+    return BlocBuilder<StoreBloc, StoreState>(
+      builder: (context, state) {
+        final (promoItems, allItems) = state.maybeWhen(
+          orElse: () => (const <ItemEntity>[], <ItemEntity>[]),
+          loadedStoreData: (promoItems, allItems) => (promoItems, allItems),
+        );
+        final isLoading = state.maybeWhen(
+          orElse: () => false,
+          loading: () => true,
+        );
+        return Scaffold(
+          extendBody: true,
+          body: LoadingOverlay(
+            isLoading: isLoading,
+            child: SizedBox.expand(
+              child: RefreshIndicator.adaptive(
+                onRefresh: _refreshData,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Image.asset(
+                        AppAssets.mapImage,
+                        width: double.infinity,
+                        height: topImageSize,
+                        fit: BoxFit.cover,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: topImageSize - overlap),
+                        padding: AppSpacing.defaultPadding,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(AppSpacing.largeSpacing),
+                            topRight: Radius.circular(AppSpacing.largeSpacing),
+                          ),
+                        ),
                         child: SingleChildScrollView(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,28 +159,28 @@ class _StorePageState extends State<StorePage> {
                             ],
                           ),
                         ),
-                      );
-                    },
+                      ),
+                      Positioned(
+                        top: 30,
+                        right: 20,
+                        child: CustomIcon(
+                          onPressed: () =>
+                              context.pushNamed(AppRoutes.editStoreProfile),
+                          icon: Icon(LucideIcons.squarePen, size: 24),
+                          padding: AppSpacing.normalPadding,
+                          paddingColor: Theme.of(
+                            context,
+                          ).extension<AppColors>()!.actionBlueColor!,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Positioned(
-                  top: 30,
-                  right: 20,
-                  child: CustomIcon(
-                    onPressed: () =>
-                        context.pushNamed(AppRoutes.editStoreProfile),
-                    icon: Icon(LucideIcons.squarePen, size: 24),
-                    padding: AppSpacing.normalPadding,
-                    paddingColor: Theme.of(
-                      context,
-                    ).extension<AppColors>()!.actionBlueColor!,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

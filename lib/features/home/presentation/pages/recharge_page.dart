@@ -80,10 +80,8 @@ class _RechargePageState extends State<RechargePage> {
               showSuccessToast(context, 'Successfully request sent!');
               _pointController.clear();
             },
-            failed: (failure) => showToast(
-              message: failure.message,
-              type: ToastType.error,
-            ),
+            failed: (failure) =>
+                showToast(message: failure.message, type: ToastType.error),
           );
         },
         builder: (context, state) {
@@ -95,7 +93,7 @@ class _RechargePageState extends State<RechargePage> {
             isLoading: isLoading,
             child: Scaffold(
               appBar: CustomAppBar(
-                title: 'Withdraw Points',
+                title: 'Recharge',
                 automaticallyImplyLeading: true,
               ),
               body: LayoutBuilder(

@@ -12,6 +12,7 @@ import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dar
 import 'package:merchant/features/auth/presentation/widgets/gradient_elevated_button.dart';
 import 'package:merchant/features/home/domain/entities/point_transfer_entity.dart';
 import 'package:merchant/features/home/presentation/bloc/point_transfer_bloc/point_transfer_bloc.dart';
+import 'package:merchant/features/home/presentation/cubits/noti_count_cubit/noti_count_cubit.dart';
 import 'package:merchant/features/home/presentation/widgets/point_transfer_customer_info_card.dart';
 import 'package:merchant/shared/widgets/confirm_box.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
@@ -132,6 +133,7 @@ class _PointTransferPageState extends State<PointTransferPage> {
               showToast(message: failure.message, type: ToastType.error),
           success: () {
             showSuccessToast(context, 'Successfully Transfer!');
+            context.read<NotiCountCubit>().getUnreadCount();
             context.read<AuthBloc>().add(AuthEvent.refreshUser());
             context.goNamed(AppRoutes.home);
           },

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
@@ -34,7 +35,7 @@ class FirebaseMessagingService {
     );
 
     // Request user permission for notifications
-    _requestPermission();
+    final permissionSettings = await _requestPermission();
 
     // Disable system notifications while app is in the foreground (iOS).
     await FirebaseMessaging.instance
@@ -44,8 +45,12 @@ class FirebaseMessagingService {
           sound: false,
         );
 
-    // Handle FCM token
-    _handlePushNotificationsToken();
+    // Handle FCM token after permission is granted
+    final status = permissionSettings.authorizationStatus;
+    if (status == AuthorizationStatus.authorized ||
+        status == AuthorizationStatus.provisional) {
+      await _handlePushNotificationsToken();
+    }
 
     // Register handler for background messages (app terminated)
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -64,10 +69,28 @@ class FirebaseMessagingService {
   }
 
   Future<void> _handlePushNotificationsToken() async {
+    if (Platform.isIOS) {
+      final apnsToken = await _waitForApnsToken();
+      if (apnsToken == null) {
+        debugPrint(
+          'APNs token not available yet; skipping initial FCM token fetch.',
+        );
+      } else {
+        debugPrint('APNs token ready.');
+      }
+    }
+
     // Get the FCM token for the device
-    final token = await FirebaseMessaging.instance.getToken();
-    if (token != null && token.isNotEmpty) {
-      await _storeAndSyncToken(token);
+    try {
+      if (!Platform.isIOS ||
+          await FirebaseMessaging.instance.getAPNSToken() != null) {
+        final token = await FirebaseMessaging.instance.getToken();
+        if (token != null && token.isNotEmpty) {
+          await _storeAndSyncToken(token);
+        }
+      }
+    } catch (error) {
+      debugPrint('Error fetching FCM token: $error');
     }
 
     // Listen for token refresh events
@@ -82,6 +105,20 @@ class FirebaseMessagingService {
         });
   }
 
+  Future<String?> _waitForApnsToken({
+    int maxAttempts = 20,
+    Duration delay = const Duration(milliseconds: 300),
+  }) async {
+    for (int attempt = 0; attempt < maxAttempts; attempt++) {
+      final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+      if (apnsToken != null && apnsToken.isNotEmpty) {
+        return apnsToken;
+      }
+      await Future.delayed(delay);
+    }
+    return null;
+  }
+
   Future<void> _storeAndSyncToken(String token) async {
     await sl<SecureStorage>().saveFcmToken(token);
     final bool isNotiEnabled = await sl<NotiCubit>().loadNoti();
@@ -93,7 +130,7 @@ class FirebaseMessagingService {
   }
 
   /// Requests notification permission from the user
-  Future<void> _requestPermission() async {
+  Future<NotificationSettings> _requestPermission() async {
     // Request permission for alerts, badges, and sounds
     final result = await FirebaseMessaging.instance.requestPermission(
       alert: true,
@@ -103,14 +140,14 @@ class FirebaseMessagingService {
 
     // Log the user's permission decision
     debugPrint('User granted permission: ${result.authorizationStatus}');
+    return result;
   }
 
   /// Handles messages received while the app is in the foreground
   void _onForegroundMessage(RemoteMessage message) {
     debugPrint('Foreground message received: ${message.data.toString()}');
     final notificationData = message.notification;
-    final payload =
-        message.data.isNotEmpty ? jsonEncode(message.data) : null;
+    final payload = message.data.isNotEmpty ? jsonEncode(message.data) : null;
     // Display a local notification using the service.
     _localNotificationsService?.showNotification(
       notificationData?.title ?? message.data['title']?.toString(),

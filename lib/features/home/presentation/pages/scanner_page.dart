@@ -30,6 +30,8 @@ class _ScannerPageState extends State<ScannerPage> {
   );
   String? _scannedValue;
   bool _isScanning = false;
+  bool _isHandlingScan = false;
+  static const Duration _scanCooldown = Duration(seconds: 1);
 
   @override
   void dispose() {
@@ -71,21 +73,31 @@ class _ScannerPageState extends State<ScannerPage> {
   }
 
   void _handleLiveScan(BarcodeCapture capture) {
-    if (capture.barcodes.isNotEmpty) {
-      _controller.stop();
-      _scannedValue = capture.barcodes.first.rawValue;
-      log(_scannedValue.toString());
-      _handleQrScan(_scannedValue!);
-    }
+    if (_isHandlingScan || capture.barcodes.isEmpty) return;
+    final value = capture.barcodes.first.rawValue;
+    if (value == null || value.isEmpty) return;
+    _isHandlingScan = true;
+    _scannedValue = value;
+    log(_scannedValue.toString());
+    _handleQrScan(_scannedValue!);
   }
 
   void _handleQrScan(String scannedValue) {
     try {
       final Map<String, dynamic> jsonMap = jsonDecode(scannedValue);
       var data = PointTransferModel.fromJson(jsonMap);
+      _controller.stop();
       context.pushNamed(AppRoutes.pointTransfer, extra: data.toEntity());
     } catch (e) {
       showToast(message: 'qr code is invalid', type: ToastType.error);
+      if (!_controller.value.isRunning) {
+        _controller.start();
+      }
+    } finally {
+      Future.delayed(_scanCooldown, () {
+        if (!mounted) return;
+        _isHandlingScan = false;
+      });
     }
   }
 

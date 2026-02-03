@@ -68,6 +68,7 @@ class _NotiPageState extends State<NotiPage> {
           void fetchPage() {
             context.read<NotiBloc>().add(NotiEvent.getNotifs());
           }
+          final items = state.items ?? const <NotiEntity>[];
 
           return Scaffold(
             appBar: CustomAppBar(
@@ -83,6 +84,21 @@ class _NotiPageState extends State<NotiPage> {
                   itemBuilder: (context, item, index) {
                     return item.when(
                       dateHeader: (dateHeader) {
+                        final hasPreviousSameHeader =
+                            index > 0 &&
+                            index <= items.length - 1 &&
+                            items.take(index).any((previous) {
+                              return previous.when(
+                                dateHeader: (groupTitle) =>
+                                    groupTitle == dateHeader,
+                                notification: (_, __, ___, ____, _____, ______,
+                                        _______) =>
+                                    false,
+                              );
+                            });
+                        if (hasPreviousSameHeader) {
+                          return const SizedBox.shrink();
+                        }
                         return Padding(
                           padding: AppSpacing.defaultPadding,
                           child: Text(
