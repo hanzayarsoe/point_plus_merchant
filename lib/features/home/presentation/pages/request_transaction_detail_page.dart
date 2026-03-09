@@ -11,7 +11,6 @@ import 'package:merchant/features/home/domain/entities/point_request_detail_enti
 import 'package:merchant/features/home/presentation/bloc/request_transaction_detail_bloc/request_transaction_detail_bloc.dart';
 import 'package:merchant/features/home/presentation/widgets/custom_icon.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
-import 'package:merchant/shared/widgets/loading_overlay.dart';
 
 class RequestTransactionDetailPage extends StatefulWidget {
   final String requestId;
@@ -26,33 +25,60 @@ class _RequestTransactionDetailPageState
     extends State<RequestTransactionDetailPage> {
   @override
   Widget build(BuildContext context) {
+    final parsedRequestId = int.tryParse(widget.requestId);
+    if (parsedRequestId == null) {
+      return Scaffold(
+        appBar: CustomAppBar(title: 'Details', automaticallyImplyLeading: true),
+        body: const Center(child: Text('Invalid request id')),
+      );
+    }
+
     return BlocProvider(
       create: (context) => RequestTransactionDetailBloc(sl())
         ..add(
           RequestTransactionDetailEvent.getTransactionDetail(
-            id: int.parse(widget.requestId),
+            id: parsedRequestId,
           ),
         ),
       child: BlocBuilder<RequestTransactionDetailBloc, RequestTransactionDetailState>(
         builder: (context, state) {
-          final isLoading = state.maybeWhen(
-            orElse: () => false,
-            loading: () => true,
+          final failedMessage = state.maybeWhen(
+            failed: (failure) => failure.message,
+            orElse: () => null,
           );
-
-          final PointRequestDetailEntity? transaction = state.whenOrNull(
-            loaded: (requestDetail) => requestDetail,
-          );
-
-          if (transaction == null && isLoading) {
+          if (failedMessage != null) {
             return Scaffold(
               appBar: CustomAppBar(
                 title: 'Details',
                 automaticallyImplyLeading: true,
               ),
-              body: Center(child: CupertinoActivityIndicator()),
+              body: Center(
+                child: Padding(
+                  padding: AppSpacing.defaultPadding,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(failedMessage, textAlign: TextAlign.center),
+                      AppSpacing.mediumSizedBox,
+                      ElevatedButton(
+                        onPressed: () =>
+                            context.read<RequestTransactionDetailBloc>().add(
+                              RequestTransactionDetailEvent.getTransactionDetail(
+                                id: parsedRequestId,
+                              ),
+                            ),
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             );
           }
+
+          final PointRequestDetailEntity? transaction = state.whenOrNull(
+            loaded: (requestDetail) => requestDetail,
+          );
 
           if (transaction == null) {
             return Scaffold(
@@ -60,7 +86,7 @@ class _RequestTransactionDetailPageState
                 title: 'Details',
                 automaticallyImplyLeading: true,
               ),
-              body: SizedBox.shrink(),
+              body: const Center(child: CupertinoActivityIndicator()),
             );
           }
 
@@ -71,128 +97,121 @@ class _RequestTransactionDetailPageState
             'pending',
           );
           final isReject = transaction.status.toLowerCase().contains('reject');
-          return LoadingOverlay(
-            isLoading: isLoading,
-            child: Scaffold(
-              appBar: CustomAppBar(
-                title: 'Details',
-                automaticallyImplyLeading: true,
-              ),
-              body: SingleChildScrollView(
-                padding: AppSpacing.defaultPadding,
-                child: Column(
-                  children: [
-                    Container(
-                      padding: AppSpacing.transactionDetailCardPadding,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                        borderRadius: AppSpacing.smallCircularBorderRadius,
+          return Scaffold(
+            appBar: CustomAppBar(
+              title: 'Details',
+              automaticallyImplyLeading: true,
+            ),
+            body: SingleChildScrollView(
+              padding: AppSpacing.defaultPadding,
+              child: Column(
+                children: [
+                  Container(
+                    padding: AppSpacing.transactionDetailCardPadding,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
-                      child: Column(
-                        children: [
-                          CustomIcon(
-                            icon: Icon(
-                              isRecharge
-                                  ? LucideIcons.arrowDownLeft
-                                  : LucideIcons.sparkle,
-                              color: Theme.of(context).colorScheme.surface,
-                            ),
-                            padding: AppSpacing.smallPadding,
-                            paddingColor: Theme.of(
-                              context,
-                            ).colorScheme.primaryContainer,
-                          ),
-                          AppSpacing.smallSizedBox,
-                          Text(
-                            'Points ${isRecharge ? 'Recharge' : 'Withdraw'}',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          AppSpacing.largeSizedBox,
-                          Divider(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          AppSpacing.smallSizedBox,
-                          AppSpacing.smallSizedBox,
-                          TransactionDetailRow(
-                            title: 'Status',
-                            text: isReject
-                                ? 'Reject'
-                                : isPending
-                                ? 'Pending'
-                                : 'Accept',
-                            textStyle: Theme.of(context).textTheme.labelMedium!
-                                .copyWith(
-                                  color: isReject
-                                      ? Theme.of(context).colorScheme.error
-                                      : isPending
-                                      ? Theme.of(
-                                          context,
-                                        ).extension<AppColors>()!.pendingColor
-                                      : Theme.of(context)
-                                            .extension<AppColors>()!
-                                            .actionBlueColor,
-                                ),
-                          ),
-                          AppSpacing.largeSizedBox,
-                          TransactionDetailRow(
-                            title: 'Total Points',
-                            text:
-                                '${isRecharge ? '+' : '-'} ${transaction.amount} pts',
-                          ),
-                          AppSpacing.largeSizedBox,
-                          TransactionDetailRow(
-                            title: 'Request Id',
-                            text: '${transaction.id}',
-                          ),
-                          AppSpacing.largeSizedBox,
-                          TransactionDetailRow(
-                            title: 'Transaction Type',
-                            text: isRecharge ? 'Recharge' : 'Withdraw',
-                          ),
-                          AppSpacing.largeSizedBox,
-                          TransactionDetailRow(
-                            title: 'Date',
-                            text:
-                                Formatter.formatUtcTimeToHistoryTransactionDate(
-                                  transaction.createdAt,
-                                ),
-                          ),
-                          AppSpacing.largeSizedBox,
-                          TransactionDetailRow(
-                            title: 'Time',
-                            text:
-                                Formatter.formatUtcTimeToHistoryTransactionTime(
-                                  transaction.createdAt,
-                                ),
-                          ),
-                          if (transaction.note != null) ...[
-                            TransactionDetailRow(
-                              title: 'Note',
-                              titleTextStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).extension<AppColors>()!.pendingColor,
-                                  ),
-                              text: transaction.note!,
-                              textStyle: Theme.of(context).textTheme.bodyMedium!
-                                  .copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).extension<AppColors>()!.pendingColor,
-                                  ),
-                            ),
-                          ],
-                        ],
-                      ),
+                      borderRadius: AppSpacing.smallCircularBorderRadius,
                     ),
-                  ],
-                ),
+                    child: Column(
+                      children: [
+                        CustomIcon(
+                          icon: Icon(
+                            isRecharge
+                                ? LucideIcons.arrowDownLeft
+                                : LucideIcons.sparkle,
+                            color: Theme.of(context).colorScheme.surface,
+                          ),
+                          padding: AppSpacing.smallPadding,
+                          paddingColor: Theme.of(
+                            context,
+                          ).colorScheme.primaryContainer,
+                        ),
+                        AppSpacing.smallSizedBox,
+                        Text(
+                          'Points ${isRecharge ? 'Recharge' : 'Withdraw'}',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        AppSpacing.largeSizedBox,
+                        Divider(color: Theme.of(context).colorScheme.secondary),
+                        AppSpacing.smallSizedBox,
+                        AppSpacing.smallSizedBox,
+                        TransactionDetailRow(
+                          title: 'Status',
+                          text: isReject
+                              ? 'Reject'
+                              : isPending
+                              ? 'Pending'
+                              : 'Accept',
+                          textStyle: Theme.of(context).textTheme.labelMedium!
+                              .copyWith(
+                                color: isReject
+                                    ? Theme.of(context).colorScheme.error
+                                    : isPending
+                                    ? Theme.of(
+                                        context,
+                                      ).extension<AppColors>()!.pendingColor
+                                    : Theme.of(
+                                        context,
+                                      ).extension<AppColors>()!.actionBlueColor,
+                              ),
+                        ),
+                        AppSpacing.largeSizedBox,
+                        TransactionDetailRow(
+                          title: 'Total Points',
+                          text:
+                              '${isRecharge ? '+' : '-'} ${transaction.amount} pts',
+                        ),
+                        AppSpacing.largeSizedBox,
+                        TransactionDetailRow(
+                          title: 'Request Id',
+                          text: '${transaction.id}',
+                        ),
+                        AppSpacing.largeSizedBox,
+                        TransactionDetailRow(
+                          title: 'Transaction Type',
+                          text: isRecharge ? 'Recharge' : 'Withdraw',
+                        ),
+                        AppSpacing.largeSizedBox,
+                        TransactionDetailRow(
+                          title: 'Date',
+                          text: Formatter.formatUtcTimeToHistoryTransactionDate(
+                            transaction.createdAt,
+                          ),
+                        ),
+                        AppSpacing.largeSizedBox,
+                        TransactionDetailRow(
+                          title: 'Time',
+                          text: Formatter.formatUtcTimeToHistoryTransactionTime(
+                            transaction.createdAt,
+                          ),
+                        ),
+                        if (transaction.note != null) ...[
+                          TransactionDetailRow(
+                            title: 'Note',
+                            titleTextStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).extension<AppColors>()!.pendingColor,
+                                ),
+                            text: transaction.note!,
+                            textStyle: Theme.of(context).textTheme.bodyMedium!
+                                .copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).extension<AppColors>()!.pendingColor,
+                                ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           );

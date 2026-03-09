@@ -33,7 +33,6 @@ class _HomePageState extends State<HomePage> {
         endDate: null,
       ),
     );
-    await Future.delayed(const Duration(seconds: 1));
   }
 
   @override

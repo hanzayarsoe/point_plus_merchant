@@ -54,6 +54,7 @@ class CustomTextFormField extends StatelessWidget {
           controller: controller,
           keyboardType: inputType,
           inputFormatters: textInputFormatters,
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
           decoration: InputDecoration(
             hintText: hintText,
             counterText: '',

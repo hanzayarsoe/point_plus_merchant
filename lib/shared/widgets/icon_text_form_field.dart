@@ -45,6 +45,7 @@ class IconTextFormField extends StatelessWidget {
       keyboardType: keyboardType,
       obscureText: isObsurce ?? false,
       obscuringCharacter: '*',
+      onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       inputFormatters: inputFormatter,
       maxLength: maxLength,
       onChanged: onChanged,

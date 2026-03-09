@@ -11,6 +11,7 @@ import 'package:merchant/features/home/presentation/cubits/request_filter_cubit/
 import 'package:merchant/features/profile/presentation/bloc/branch_bloc/branch_bloc.dart';
 import 'package:merchant/features/profile/presentation/cubits/locale_cubit/locale_cubit.dart';
 import 'package:merchant/features/profile/presentation/cubits/noti_cubit/noti_cubit.dart';
+import 'package:merchant/features/store/presentation/bloc/store_bloc/store_bloc.dart';
 import 'package:merchant/main.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -32,6 +33,8 @@ class MockRequestFilterCubit extends Mock implements RequestFilterCubit {}
 
 class MockSecureStorage extends Mock implements SecureStorage {}
 
+class MockStoreBloc extends Mock implements StoreBloc {}
+
 void main() {
   final sl = GetIt.instance;
   late MockAuthBloc mockAuthBloc;
@@ -42,6 +45,7 @@ void main() {
   late MockHistoryFilterCubit mockHistoryFilterCubit;
   late MockRequestFilterCubit mockRequestFilterCubit;
   late MockAppRouter mockAppRouter;
+  late MockStoreBloc mockStoreBloc;
 
   setUpAll(() {
     registerFallbackValue(const AuthEvent.checkAuthStatus());
@@ -51,6 +55,8 @@ void main() {
     registerFallbackValue(const LocaleState(locale: Locale('en')));
     registerFallbackValue(const HistoryFilterState());
     registerFallbackValue(const RequestFilterState());
+    registerFallbackValue(const StoreEvent.fetchStoreData(merchantId: 1));
+    registerFallbackValue(const StoreState.initial());
   });
 
   setUp(() {
@@ -62,6 +68,7 @@ void main() {
     mockHistoryFilterCubit = MockHistoryFilterCubit();
     mockRequestFilterCubit = MockRequestFilterCubit();
     mockAppRouter = MockAppRouter();
+    mockStoreBloc = MockStoreBloc();
 
     sl.registerLazySingleton<AuthBloc>(() => mockAuthBloc);
     sl.registerLazySingleton<BranchBloc>(() => mockBranchBloc);
@@ -72,6 +79,7 @@ void main() {
     sl.registerLazySingleton<RequestFilterCubit>(() => mockRequestFilterCubit);
     sl.registerLazySingleton<AppRouter>(() => mockAppRouter);
     sl.registerLazySingleton<SecureStorage>(() => MockSecureStorage());
+    sl.registerLazySingleton<StoreBloc>(() => mockStoreBloc);
 
     when(() => mockAuthBloc.state).thenReturn(const AuthState.initial());
     when(
@@ -125,6 +133,13 @@ void main() {
       () => mockRequestFilterCubit.stream,
     ).thenAnswer((_) => Stream.value(const RequestFilterState()));
     when(() => mockRequestFilterCubit.close()).thenAnswer((_) async {});
+
+    when(() => mockStoreBloc.state).thenReturn(const StoreState.initial());
+    when(
+      () => mockStoreBloc.stream,
+    ).thenAnswer((_) => Stream.value(const StoreState.initial()));
+    when(() => mockStoreBloc.close()).thenAnswer((_) async {});
+    when(() => mockStoreBloc.add(any())).thenReturn(null);
 
     final router = GoRouter(
       routes: [

@@ -28,7 +28,21 @@ class RechargePage extends StatefulWidget {
 
 class _RechargePageState extends State<RechargePage> {
   final TextEditingController _pointController = TextEditingController();
+  late final PointRequestBloc _pointRequestBloc;
   String? _errorText;
+
+  @override
+  void initState() {
+    super.initState();
+    _pointRequestBloc = PointRequestBloc(sl());
+  }
+
+  @override
+  void dispose() {
+    _pointController.dispose();
+    _pointRequestBloc.close();
+    super.dispose();
+  }
 
   bool _lessThanMinimumRequest() {
     final int amountToWithdraw =
@@ -65,8 +79,8 @@ class _RechargePageState extends State<RechargePage> {
   Widget build(BuildContext context) {
     final branchState = context.watch<AuthBloc>().state;
     final branch = branchState.whenOrNull(authenticated: (branch) => branch);
-    return BlocProvider(
-      create: (context) => PointRequestBloc(sl()),
+    return BlocProvider.value(
+      value: _pointRequestBloc,
       child: BlocConsumer<PointRequestBloc, PointRequestState>(
         listenWhen: (previous, current) => current.maybeWhen(
           orElse: () => false,

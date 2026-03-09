@@ -19,7 +19,6 @@ import 'package:merchant/features/history/presentation/widgets/transaction_detai
 import 'package:merchant/features/history/presentation/widgets/transfer_info.dart';
 import 'package:merchant/features/home/presentation/widgets/custom_icon.dart';
 import 'package:merchant/shared/widgets/custom_app_bar.dart';
-import 'package:merchant/shared/widgets/loading_overlay.dart';
 import 'package:merchant/shared/widgets/show_success_toast.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -82,29 +81,28 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
       if (isGranted) {
         final Uint8List? imageBytes = await _captureWidget();
         if (imageBytes == null) {
-          showToast(
-            message: "can't capture image!",
-            type: ToastType.error,
-          );
+          showToast(message: "can't capture image!", type: ToastType.error);
           return;
         }
+        // iOS Photos can behave inconsistently with path-like names.
         final String fileName =
-            "$transactionId/${DateTime.now().millisecondsSinceEpoch}.png";
+            "${transactionId}_${DateTime.now().millisecondsSinceEpoch}";
+
+        // image_gallery_saver_plus iOS implementation treats values < 100 as
+        // very low quality due to integer division; keep iOS at full quality.
+        final int quality = Platform.isIOS ? 100 : 90;
 
         final result = await ImageGallerySaverPlus.saveImage(
           imageBytes,
           name: fileName,
-          quality: 90,
+          quality: quality,
         );
 
         if (result['isSuccess'] == true) {
           if (!context.mounted) return;
           showSuccessToast(context, 'Receipt saved to Gallery');
         } else {
-          showToast(
-            message: "Failed to save Image!",
-            type: ToastType.error,
-          );
+          showToast(message: "Failed to save Image!", type: ToastType.error);
         }
       } else {
         showToast(
@@ -143,15 +141,51 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         ),
       child: BlocBuilder<TransactionDetailBloc, TransactionDetailState>(
         builder: (context, state) {
-          final isLoading = state.maybeWhen(
-            orElse: () => false,
-            loading: () => true,
+          final failedMessage = state.maybeWhen(
+            failed: (failure) => failure.message,
+            orElse: () => null,
           );
+          if (failedMessage != null) {
+            return Scaffold(
+              appBar: CustomAppBar(
+                title: 'Transaction Detail',
+                automaticallyImplyLeading: true,
+              ),
+              body: Center(
+                child: Padding(
+                  padding: AppSpacing.defaultPadding,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(failedMessage, textAlign: TextAlign.center),
+                      AppSpacing.mediumSizedBox,
+                      ElevatedButton(
+                        onPressed: () =>
+                            context.read<TransactionDetailBloc>().add(
+                              TransactionDetailEvent.getTransactionDetail(
+                                id: int.parse(widget.transactionId),
+                              ),
+                            ),
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
+
           final transaction = state.whenOrNull(
             loaded: (transaction) => transaction,
           );
           if (transaction == null) {
-            return Center(child: CupertinoActivityIndicator());
+            return Scaffold(
+              appBar: CustomAppBar(
+                title: 'Transaction Detail',
+                automaticallyImplyLeading: true,
+              ),
+              body: const Center(child: CupertinoActivityIndicator()),
+            );
           }
           final isWithdraw = transaction.type.toLowerCase().contains(
             'withdraw',
@@ -160,145 +194,145 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             'redemption',
           );
           final isReceived = transaction.type.toLowerCase().contains('earn');
-          return LoadingOverlay(
-            isLoading: isLoading,
-            child: Scaffold(
-              appBar: CustomAppBar(
-                title: 'Transaction Detail',
-                automaticallyImplyLeading: true,
-              ),
-              body: SingleChildScrollView(
-                padding: AppSpacing.defaultPadding,
-                child: Column(
-                  children: [
-                    RepaintBoundary(
-                      key: _globalKey,
-                      child: Container(
-                        padding: AppSpacing.transactionDetailCardPadding,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border.all(
+          return Scaffold(
+            appBar: CustomAppBar(
+              title: 'Transaction Detail',
+              automaticallyImplyLeading: true,
+            ),
+            body: SingleChildScrollView(
+              padding: AppSpacing.defaultPadding,
+              child: Column(
+                children: [
+                  RepaintBoundary(
+                    key: _globalKey,
+                    child: Container(
+                      padding: AppSpacing.transactionDetailCardPadding,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        // Keep exported receipt background predictable across
+                        // gallery apps (transparent PNG can render as black).
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        borderRadius: AppSpacing.smallCircularBorderRadius,
+                      ),
+                      child: Column(
+                        children: [
+                          CustomIcon(
+                            icon: Icon(
+                              isTransfer
+                                  ? LucideIcons.arrowUpRight
+                                  : isReceived
+                                  ? LucideIcons.arrowDownRight
+                                  : LucideIcons.sparkle,
+                              color: Theme.of(context).colorScheme.surface,
+                            ),
+                            padding: AppSpacing.smallPadding,
+                            paddingColor: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer,
+                          ),
+                          AppSpacing.smallSizedBox,
+                          Text(
+                            isReceived
+                                ? 'Points Received'
+                                : isTransfer
+                                ? 'Points Transfer'
+                                : isWithdraw
+                                ? 'Withdraw'
+                                : 'Recharge',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          AppSpacing.largeSizedBox,
+                          Divider(
                             color: Theme.of(context).colorScheme.secondary,
                           ),
-                          borderRadius: AppSpacing.smallCircularBorderRadius,
-                        ),
-                        child: Column(
-                          children: [
-                            CustomIcon(
-                              icon: Icon(
-                                isTransfer
-                                    ? LucideIcons.arrowUpRight
-                                    : isReceived
-                                    ? LucideIcons.arrowDownRight
-                                    : LucideIcons.sparkle,
-                                color: Theme.of(context).colorScheme.surface,
+                          AppSpacing.smallSizedBox,
+                          Row(
+                            children: [
+                              TransferInfo(
+                                type: 'From',
+                                accountNumber: transaction.fromAccount,
+                                name: transaction.fromAccountName ?? '',
                               ),
-                              padding: AppSpacing.smallPadding,
-                              paddingColor: Theme.of(
-                                context,
-                              ).colorScheme.primaryContainer,
-                            ),
-                            AppSpacing.smallSizedBox,
-                            Text(
-                              isReceived
-                                  ? 'Points Received'
-                                  : isTransfer
-                                  ? 'Points Transfer'
-                                  : isWithdraw
-                                  ? 'Withdraw'
-                                  : 'Recharge',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            AppSpacing.largeSizedBox,
-                            Divider(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            AppSpacing.smallSizedBox,
-                            Row(
-                              children: [
-                                TransferInfo(
-                                  type: 'From',
-                                  accountNumber: transaction.fromAccount,
-                                  name: transaction.fromAccountName ?? '',
-                                ),
-                                Padding(
-                                  padding: AppSpacing.smallPadding,
-                                  child: CustomIcon(
-                                    icon: Icon(
-                                      LucideIcons.arrowLeftRight,
-                                      size: 20,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.surface,
-                                    ),
-                                    padding: AppSpacing.extraSmallPadding,
-                                    paddingColor: Theme.of(
+                              Padding(
+                                padding: AppSpacing.smallPadding,
+                                child: CustomIcon(
+                                  icon: Icon(
+                                    LucideIcons.arrowLeftRight,
+                                    size: 20,
+                                    color: Theme.of(
                                       context,
-                                    ).colorScheme.primaryContainer,
+                                    ).colorScheme.surface,
                                   ),
+                                  padding: AppSpacing.extraSmallPadding,
+                                  paddingColor: Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
                                 ),
-                                TransferInfo(
-                                  type: 'To',
-                                  accountNumber: transaction.toAccount,
-                                  name: transaction.toAccountName ?? '',
+                              ),
+                              TransferInfo(
+                                type: 'To',
+                                accountNumber: transaction.toAccount,
+                                name: transaction.toAccountName ?? '',
+                              ),
+                            ],
+                          ),
+                          AppSpacing.smallSizedBox,
+                          Divider(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          AppSpacing.smallSizedBox,
+                          TransactionDetailRow(
+                            title: 'Total Points',
+                            text:
+                                '${isTransfer || isWithdraw ? '-' : '+'}${transaction.amount} pts',
+                          ),
+                          AppSpacing.largeSizedBox,
+                          TransactionDetailRow(
+                            title: 'Transaction ID',
+                            text: transaction.id.toString(),
+                          ),
+                          AppSpacing.largeSizedBox,
+                          TransactionDetailRow(
+                            title: 'Transaction Type',
+                            text: isTransfer
+                                ? 'Points Transfer'
+                                : isReceived
+                                ? 'Points Received'
+                                : isWithdraw
+                                ? 'Withdraw'
+                                : 'Recharge',
+                          ),
+                          AppSpacing.largeSizedBox,
+                          TransactionDetailRow(
+                            title: 'Date',
+                            text:
+                                Formatter.formatUtcTimeToHistoryTransactionDate(
+                                  transaction.createdAt,
                                 ),
-                              ],
-                            ),
-                            AppSpacing.smallSizedBox,
-                            Divider(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            AppSpacing.smallSizedBox,
-                            TransactionDetailRow(
-                              title: 'Total Points',
-                              text:
-                                  '${isTransfer || isWithdraw ? '-' : '+'}${transaction.amount} pts',
-                            ),
-                            AppSpacing.largeSizedBox,
-                            TransactionDetailRow(
-                              title: 'Transaction ID',
-                              text: transaction.id.toString(),
-                            ),
-                            AppSpacing.largeSizedBox,
-                            TransactionDetailRow(
-                              title: 'Transaction Type',
-                              text: isTransfer
-                                  ? 'Points Transfer'
-                                  : isReceived
-                                  ? 'Points Received'
-                                  : isWithdraw
-                                  ? 'Withdraw'
-                                  : 'Recharge',
-                            ),
-                            AppSpacing.largeSizedBox,
-                            TransactionDetailRow(
-                              title: 'Date',
-                              text:
-                                  Formatter.formatUtcTimeToHistoryTransactionDate(
-                                    transaction.createdAt,
-                                  ),
-                            ),
-                            AppSpacing.largeSizedBox,
-                            TransactionDetailRow(
-                              title: 'Time',
-                              text:
-                                  Formatter.formatUtcTimeToHistoryTransactionTime(
-                                    transaction.createdAt,
-                                  ),
-                            ),
-                          ],
-                        ),
+                          ),
+                          AppSpacing.largeSizedBox,
+                          TransactionDetailRow(
+                            title: 'Time',
+                            text:
+                                Formatter.formatUtcTimeToHistoryTransactionTime(
+                                  transaction.createdAt,
+                                ),
+                          ),
+                        ],
                       ),
                     ),
-                    AppSpacing.largeSizedBox,
-                    SaveReceiptButton(
-                      onPressed: () => _captureWidgetAndSave(
-                        context,
-                        transaction.id.toString(),
-                      ),
+                  ),
+                  AppSpacing.largeSizedBox,
+                  SaveReceiptButton(
+                    onPressed: () => _captureWidgetAndSave(
+                      context,
+                      transaction.id.toString(),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );

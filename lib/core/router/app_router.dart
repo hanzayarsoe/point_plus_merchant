@@ -379,7 +379,7 @@ class AppRouter {
                   routes: [
                     GoRoute(
                       name: AppRoutes.personalInformation,
-                      path: 'personal-information,',
+                      path: 'personal-information',
                       pageBuilder: (context, state) => autoTransitionPage(
                         context: context,
                         state: state,
@@ -446,7 +446,10 @@ class AppRouter {
             ),
           ],
           navigatorContainerBuilder: (context, navigationShell, children) {
-            return children[navigationShell.currentIndex];
+            return IndexedStack(
+              index: navigationShell.currentIndex,
+              children: children,
+            );
           },
           builder: (context, state, navigationShell) {
             return Scaffold(

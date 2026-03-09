@@ -56,7 +56,6 @@ class _NotiPageState extends State<NotiPage> {
   Future<void> _refreshData(BuildContext context) async {
     context.read<NotiBloc>().add(const NotiEvent.reset());
     context.read<NotiBloc>().add(const NotiEvent.getNotifs());
-    await Future.delayed(const Duration(seconds: 1)); // Simulate network delay
   }
 
   @override
@@ -68,6 +67,7 @@ class _NotiPageState extends State<NotiPage> {
           void fetchPage() {
             context.read<NotiBloc>().add(NotiEvent.getNotifs());
           }
+
           final items = state.items ?? const <NotiEntity>[];
 
           return Scaffold(
@@ -91,9 +91,16 @@ class _NotiPageState extends State<NotiPage> {
                               return previous.when(
                                 dateHeader: (groupTitle) =>
                                     groupTitle == dateHeader,
-                                notification: (_, __, ___, ____, _____, ______,
-                                        _______) =>
-                                    false,
+                                notification:
+                                    (
+                                      _,
+                                      __,
+                                      ___,
+                                      ____,
+                                      _____,
+                                      ______,
+                                      _______,
+                                    ) => false,
                               );
                             });
                         if (hasPreviousSameHeader) {

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:merchant/core/constants/api_urls.dart';
 import 'package:merchant/core/failure/failure.dart';
 import 'package:merchant/core/storage/secure_storage.dart';
@@ -118,14 +119,16 @@ class DioHelper {
         },
       ),
     );
-    _dio.interceptors.add(
-      LogInterceptor(
-        requestHeader: true,
-        requestBody: true,
-        responseHeader: true,
-        responseBody: true,
-      ),
-    );
+    if (kDebugMode) {
+      _dio.interceptors.add(
+        LogInterceptor(
+          requestHeader: false,
+          requestBody: true,
+          responseHeader: false,
+          responseBody: true,
+        ),
+      );
+    }
   }
 
   /// Check if endpoint is auth-related

@@ -17,7 +17,7 @@ class LocalNotificationsService {
 
   //Android-specific initialization settings using app launcher icon
   final _androidInitializationSettings = const AndroidInitializationSettings(
-    '@mipmap/ic_launcher',
+    'ic_launcher_foreground',
   );
 
   //iOS-specific initialization settings with permission requests

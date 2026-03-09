@@ -48,7 +48,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _refreshData() async {
     context.read<AuthBloc>().add(const AuthEvent.refreshUser());
-    await Future.delayed(const Duration(seconds: 1)); // Simulate network delay
   }
 
   @override
@@ -63,10 +62,8 @@ class _ProfilePageState extends State<ProfilePage> {
       listener: (context, state) {
         state.maybeWhen(
           orElse: () {},
-          updateBranchFailed: (failure) => showToast(
-            message: failure.message,
-            type: ToastType.error,
-          ),
+          updateBranchFailed: (failure) =>
+              showToast(message: failure.message, type: ToastType.error),
           updateBranchSuccessed: (updatedUser) => context.read<AuthBloc>().add(
             AuthEvent.updateBranchInfo(updatedUser),
           ),

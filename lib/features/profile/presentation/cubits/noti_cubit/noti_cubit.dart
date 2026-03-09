@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/network/dio_helper.dart';
 import 'package:merchant/core/storage/secure_storage.dart';
@@ -25,11 +26,19 @@ class NotiCubit extends Cubit<bool> {
   }
 
   Future<void> registerToken(String token) async {
-    await registerTokenUsecase.call(token).run();
+    final result = await registerTokenUsecase.call(token).run();
+    result.fold(
+      (failure) => debugPrint('Register token failed: $failure'),
+      (_) => debugPrint('Register token success'),
+    );
   }
 
   Future<void> unregisterToken(String token) async {
-    await unregisterTokenUsecase.call(token).run();
+    final result = await unregisterTokenUsecase.call(token).run();
+    result.fold(
+      (failure) => debugPrint('Unregister token failed: $failure'),
+      (_) => debugPrint('Unregister token success'),
+    );
   }
 
   Future<void> toggleNotifications(bool enable) async {

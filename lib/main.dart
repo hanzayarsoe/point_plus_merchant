@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:merchant/core/config/app_initializer.dart';
 import 'package:merchant/core/injection/injection_container.dart';
 import 'package:merchant/core/router/app_router.dart';
+import 'package:merchant/core/storage/secure_storage.dart';
 import 'package:merchant/core/themes/app_theme.dart';
 import 'package:merchant/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:merchant/features/history/presentation/cubit/cubit/history_filter_cubit.dart';
@@ -51,10 +52,7 @@ class MyApp extends StatelessWidget {
           create: (context) => _notiCountCubit..getUnreadCount(),
           child: Container(),
         ),
-        BlocProvider(
-          lazy: false,
-          create: (context) => sl<StoreBloc>(),
-        ),
+        BlocProvider(lazy: false, create: (context) => sl<StoreBloc>()),
       ],
       child: MultiBlocListener(
         listeners: [
@@ -62,9 +60,10 @@ class MyApp extends StatelessWidget {
             listener: (context, state) {
               state.maybeWhen(
                 authenticated: (_) async {
-                  context
-                      .read<BranchBloc>()
-                      .add(const BranchEvent.getBranchInfo());
+                  context.read<BranchBloc>().add(
+                    const BranchEvent.getBranchInfo(),
+                  );
+                  await _syncStoredFcmToken();
                 },
                 orElse: () {},
               );
@@ -75,10 +74,8 @@ class MyApp extends StatelessWidget {
               state.maybeWhen(
                 loadedBranch: (branch) {
                   context.read<StoreBloc>().add(
-                        StoreEvent.fetchStoreData(
-                          merchantId: branch.merchantId,
-                        ),
-                      );
+                    StoreEvent.fetchStoreData(merchantId: branch.merchantId),
+                  );
                 },
                 orElse: () {},
               );
@@ -89,9 +86,30 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: AppTheme.darkTheme,
           themeMode: ThemeMode.dark,
+          builder: (context, child) {
+            return GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+              child: child,
+            );
+          },
           routerConfig: _appRouter.router,
         ),
       ),
     );
+  }
+
+  Future<void> _syncStoredFcmToken() async {
+    final fcmToken = await sl<SecureStorage>().getFcmToken();
+    if (fcmToken == null || fcmToken.isEmpty) {
+      return;
+    }
+
+    final isNotiEnabled = await _notiCubit.loadNoti();
+    if (isNotiEnabled) {
+      await _notiCubit.registerToken(fcmToken);
+    } else {
+      await _notiCubit.unregisterToken(fcmToken);
+    }
   }
 }

@@ -20,21 +20,30 @@ class _SearchWithAccountNumberPageState
     extends State<SearchWithAccountNumberPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late final SearchCustomerCubit _searchCustomerCubit;
 
   @override
   void initState() {
+    super.initState();
     _tabController = TabController(
       length: 2,
       vsync: this,
       initialIndex: widget.initialInde,
     );
-    super.initState();
+    _searchCustomerCubit = SearchCustomerCubit(sl());
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _searchCustomerCubit.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SearchCustomerCubit(sl()),
+    return BlocProvider.value(
+      value: _searchCustomerCubit,
       child: Scaffold(
         appBar: CustomAppBar(
           title: 'Search with Account Number',
