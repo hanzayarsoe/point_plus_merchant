@@ -5,9 +5,9 @@ Flutter project scaffold for the Point Plus merchant companion app (package name
 ## Features (current codebase)
 
 - Runnable Flutter demo app (`lib/main.dart` counter sample)
-- Asset folders for fonts, icons, images, logo, and loading media
+- Asset folders present on disk: `assets/fonts/`, `assets/logo/`, `assets/loading/`
 - Declared dependencies for GoRouter, flutter_bloc, Dio (with cookie manager), maps/geolocation, Firebase Messaging/Remote Config, flutter_secure_storage, qr_flutter, Shorebird, and `.env` loading
-- Localization generation enabled (`flutter: generate: true`)
+- Localization generation enabled (`flutter: generate: true`), but no `l10n/` directory or ARB files are present yet
 
 ## Tech Stack
 
@@ -20,9 +20,13 @@ Flutter project scaffold for the Point Plus merchant companion app (package name
 lib/
   main.dart                 # Default Flutter counter app (current entry)
 assets/
-  fonts/ icons/ images/ logo/ loading/
+  fonts/                    # Walone TTF files
+  logo/
+  loading/
 android/ ios/ web/ macos/ linux/ windows/
 ```
+
+`pubspec.yaml` also lists `assets/icons/` and `assets/images/`, but those directories are not on disk yet. `flutter: generate: true` is set without a `l10n/` tree or ARB files.
 
 ## Getting Started
 
