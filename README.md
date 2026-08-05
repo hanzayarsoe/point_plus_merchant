@@ -1,16 +1,48 @@
-# merchant
+# Point Plus Merchant
 
-A new Flutter project.
+Flutter project scaffold for the Point Plus merchant companion app (package name: `merchant`). The runnable entry point is still the default Flutter counter sample. `pubspec.yaml` declares a merchant-oriented stack including BLoC, maps, Firebase, secure storage, QR generation, and Shorebird.
+
+## Features (current codebase)
+
+- Runnable Flutter demo app (`lib/main.dart` counter sample)
+- Asset folders for fonts, icons, images, logo, and loading media
+- Declared dependencies for GoRouter, flutter_bloc, Dio (with cookie manager), maps/geolocation, Firebase Messaging/Remote Config, flutter_secure_storage, qr_flutter, Shorebird, and `.env` loading
+- Localization generation enabled (`flutter: generate: true`)
+
+## Tech Stack
+
+- Flutter (Dart SDK `^3.9.0`; FVM pin in `.fvmrc`)
+- Intended stack from `pubspec.yaml`: go_router, flutter_bloc/bloc, dio, cookie_jar, firebase_*, flutter_map, flutter_dotenv, shorebird_code_push, fpdart, equatable, qr_flutter
+
+## Project Structure
+
+```text
+lib/
+  main.dart                 # Default Flutter counter app (current entry)
+assets/
+  fonts/ icons/ images/ logo/ loading/
+android/ ios/ web/ macos/ linux/ windows/
+```
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter SDK matching `.fvmrc` / `sdk: ^3.9.0`
+- Create a root `.env` when integrating dotenv-backed configuration
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Install and run
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter pub get
+flutter run
+```
+
+## Configuration
+
+- `.env` is listed under Flutter assets; add local keys when wiring API clients.
+- Firebase / Shorebird setup will be required once merchant features are implemented beyond the scaffold.
+
+## Status
+
+Early scaffold only: merchant feature modules are not present under `lib/` yet. The declared dependency set indicates planned rewards/merchant workflows (auth, maps, QR, push notifications), but those screens are not implemented in this snapshot.
